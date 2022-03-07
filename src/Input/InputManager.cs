@@ -1,15 +1,14 @@
 using System;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace URPMk2
 {
-    public class InputManager : MonoBehaviour
+    public static class InputManager
     {
         public static PlayerInputActions playerInputActions = new PlayerInputActions();
         public static event Action<InputActionMap> actionMapChange;
 
-        private void Start()
+        public static void Start()
         {
             ToggleActionMap(playerInputActions.Humanoid);
         }
