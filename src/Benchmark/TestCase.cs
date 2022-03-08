@@ -24,7 +24,7 @@ namespace URPMk2
         private void PrimaryTestCase()
         {
             Vector2 artificialInput = InitializeTestVec2();
-            if (artificialInput.x == 0.0f && artificialInput.y == 0.0f)
+            if (artificialInput.x != 0.0f || artificialInput.y != 0.0f)
             {
                 DoSomeJob();
             }
@@ -32,10 +32,11 @@ namespace URPMk2
         private void AlternativeTestCase()
         {
             Vector2 artificialInput = InitializeTestVec2();
-            if (artificialInput != new Vector2(0, 0))
+            if (artificialInput.x == 0.0f && artificialInput.y == 0.0f)
             {
-                DoSomeJob();
+                return;
             }
+            DoSomeJob();
         }
         public void RunPrimaryTestCase()
         {
