@@ -17,5 +17,6 @@ namespace URPMk2
         public float jumpSpeed;
         public float stickToGroundForce;
         public float gravityMultiplayer;
+        public float inertiaCoefficient;
     }
 }

@@ -129,6 +129,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""7e64ed83-52ef-4d0d-b87e-c7c4af527883"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -241,6 +250,17 @@ namespace URPMk2
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""182980dc-caba-4ccb-b3d5-7ff1e90f525a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -254,6 +274,7 @@ namespace URPMk2
             // Humanoid
             m_Humanoid = asset.FindActionMap("Humanoid", throwIfNotFound: true);
             m_Humanoid_Move = m_Humanoid.FindAction("Move", throwIfNotFound: true);
+            m_Humanoid_Jump = m_Humanoid.FindAction("Jump", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -355,11 +376,13 @@ namespace URPMk2
         private readonly InputActionMap m_Humanoid;
         private IHumanoidActions m_HumanoidActionsCallbackInterface;
         private readonly InputAction m_Humanoid_Move;
+        private readonly InputAction m_Humanoid_Jump;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
             public HumanoidActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Humanoid_Move;
+            public InputAction @Jump => m_Wrapper.m_Humanoid_Jump;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -372,6 +395,9 @@ namespace URPMk2
                     @Move.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnMove;
                     @Move.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnMove;
                     @Move.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnMove;
+                    @Jump.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnJump;
+                    @Jump.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnJump;
+                    @Jump.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnJump;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -379,6 +405,9 @@ namespace URPMk2
                     @Move.started += instance.OnMove;
                     @Move.performed += instance.OnMove;
                     @Move.canceled += instance.OnMove;
+                    @Jump.started += instance.OnJump;
+                    @Jump.performed += instance.OnJump;
+                    @Jump.canceled += instance.OnJump;
                 }
             }
         }
@@ -391,6 +420,7 @@ namespace URPMk2
         public interface IHumanoidActions
         {
             void OnMove(InputAction.CallbackContext context);
+            void OnJump(InputAction.CallbackContext context);
         }
     }
 }
