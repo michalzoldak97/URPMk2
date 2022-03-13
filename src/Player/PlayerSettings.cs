@@ -18,5 +18,6 @@ namespace URPMk2
         public float stickToGroundForce;
         public float gravityMultiplayer;
         public float inertiaCoefficient;
+        public float[] lookSensitivity; // x, y
     }
 }
