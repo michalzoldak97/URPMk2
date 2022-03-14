@@ -38,7 +38,8 @@ namespace URPMk2
         {
             _bobTimer += Time.deltaTime * _headBobSpeed[speedIdx];
             float headShift = Mathf.Sin(_bobTimer) * _headBobMagnitude[speedIdx];
-            _cameraPosToSet.x = _fpsCamera.localPosition.x + (headShift * _verHorBobMultiplayer[1]); _cameraPosToSet.y = _cameraYXPos[0] + (headShift * _verHorBobMultiplayer[0]); _cameraPosToSet.z =  _fpsCamera.localPosition.z;
+            _cameraPosToSet.x = _fpsCamera.localPosition.x + (headShift * _verHorBobMultiplayer[1]); _cameraPosToSet.y = _cameraYXPos[0] + 
+                (headShift * _verHorBobMultiplayer[0]); _cameraPosToSet.z =  _fpsCamera.localPosition.z;
             _fpsCamera.localPosition = _cameraPosToSet;
         }
         private void ResetDefaultCaameraPos(int dummy)

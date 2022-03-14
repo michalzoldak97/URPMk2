@@ -22,6 +22,10 @@ namespace URPMk2
         public float[] headBobSpeed; // walk run
         public float[] headBobMagnitude; // walk run
         public float[] verHorBobMultiplayer;
+        public float[] stepSpeed;
         public float lookClamp;
+        public string[] stoneSurfaceTags;
+        public string[] metalSurfaceTags;
+        public string[] grassSurfaceTags;
     }
 }
