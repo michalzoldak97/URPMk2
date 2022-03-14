@@ -50,8 +50,11 @@ namespace URPMk2
         private void OnDisable()
         {
             _move.Disable();
+            InputManager.playerInputActions.Humanoid.Jump.performed -= HandleJump;
             InputManager.playerInputActions.Humanoid.Jump.Disable();
+            InputManager.playerInputActions.Humanoid.RunStart.performed -= StartRun;
             InputManager.playerInputActions.Humanoid.RunStart.Disable();
+            InputManager.playerInputActions.Humanoid.RunFinish.performed -= EndRun;
             InputManager.playerInputActions.Humanoid.RunFinish.Disable();
         }
         public void SetMoveSpeed(float[] toSet) 

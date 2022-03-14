@@ -8,6 +8,14 @@ namespace URPMk2
     public class PlayerSettings : ScriptableObject
     {
         public PlayerMoveSettings playerMoveSettings;
+        public PlayerInventorySettings playerInventorySettings;
+    }
+    [System.Serializable]
+    public class PlayerInventorySettings
+    {
+        public int labelFontSize;
+        public float itemCheckRate;
+        public float[] itemLabelWidthHeight;
     }
     [System.Serializable]
     public class PlayerMoveSettings

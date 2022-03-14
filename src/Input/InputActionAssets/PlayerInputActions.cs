@@ -234,6 +234,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ItemInteract"",
+                    ""type"": ""Button"",
+                    ""id"": ""2982b9f9-f533-420c-a723-1618eb18da34"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -401,6 +410,17 @@ namespace URPMk2
                     ""action"": ""RunFinish"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0aec56ac-b1d6-4037-9620-b573aa7090d7"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ItemInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -422,6 +442,7 @@ namespace URPMk2
             m_Humanoid_Jump = m_Humanoid.FindAction("Jump", throwIfNotFound: true);
             m_Humanoid_MouseX = m_Humanoid.FindAction("MouseX", throwIfNotFound: true);
             m_Humanoid_MouseY = m_Humanoid.FindAction("MouseY", throwIfNotFound: true);
+            m_Humanoid_ItemInteract = m_Humanoid.FindAction("ItemInteract", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -552,6 +573,7 @@ namespace URPMk2
         private readonly InputAction m_Humanoid_Jump;
         private readonly InputAction m_Humanoid_MouseX;
         private readonly InputAction m_Humanoid_MouseY;
+        private readonly InputAction m_Humanoid_ItemInteract;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -562,6 +584,7 @@ namespace URPMk2
             public InputAction @Jump => m_Wrapper.m_Humanoid_Jump;
             public InputAction @MouseX => m_Wrapper.m_Humanoid_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Humanoid_MouseY;
+            public InputAction @ItemInteract => m_Wrapper.m_Humanoid_ItemInteract;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -589,6 +612,9 @@ namespace URPMk2
                     @MouseY.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnMouseY;
                     @MouseY.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnMouseY;
                     @MouseY.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnMouseY;
+                    @ItemInteract.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemInteract;
+                    @ItemInteract.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemInteract;
+                    @ItemInteract.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemInteract;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -611,6 +637,9 @@ namespace URPMk2
                     @MouseY.started += instance.OnMouseY;
                     @MouseY.performed += instance.OnMouseY;
                     @MouseY.canceled += instance.OnMouseY;
+                    @ItemInteract.started += instance.OnItemInteract;
+                    @ItemInteract.performed += instance.OnItemInteract;
+                    @ItemInteract.canceled += instance.OnItemInteract;
                 }
             }
         }
@@ -631,6 +660,7 @@ namespace URPMk2
             void OnJump(InputAction.CallbackContext context);
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
+            void OnItemInteract(InputAction.CallbackContext context);
         }
     }
 }
