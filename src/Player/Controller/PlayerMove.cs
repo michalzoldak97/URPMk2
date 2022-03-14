@@ -7,23 +7,23 @@ namespace URPMk2
 {
     public class PlayerMove : MonoBehaviour
     {
+        private bool _isMoving;
         private int _speedIdx = 0;
-        private float _walkSpeed, _runSpeed, _jumpSpeed, _runStepLenght, _characterRadius, _gravityMultiplayer, _inertiaCoeff;
+        private float _walkSpeed, _runSpeed, _jumpSpeed, _characterRadius, _gravityMultiplayer, _inertiaCoeff;
         private float[] _speedVec;
         private Vector3 _upDir = Vector3.up;
         private Vector3 _moveDir = Vector3.zero;
         private Vector3 _gravity = Physics.gravity;
         private Transform _myTransform;
         private CharacterController _myCharacterController;
-        private PlayerMaster _playerMaster;
         private InputAction _move;
+        private FPSMovementEventsHandler _movementEventsHandler;
         private void SetInit()
         {
             _myTransform = gameObject.transform;
             _myCharacterController = GetComponent<CharacterController>();
             _characterRadius = _myCharacterController.radius;
-            _playerMaster = GetComponent<PlayerMaster>();
-            PlayerMoveSettings playerSettings = _playerMaster.GetPlayerSettings().playerMoveSettings;
+            PlayerMoveSettings playerSettings = GetComponent<PlayerMaster>().GetPlayerSettings().playerMoveSettings;
             _walkSpeed = playerSettings.walkSpeed;
             _runSpeed = playerSettings.runSpeed;
             _jumpSpeed = playerSettings.jumpSpeed;
@@ -31,6 +31,7 @@ namespace URPMk2
             _gravityMultiplayer = playerSettings.gravityMultiplayer;
             _inertiaCoeff = playerSettings.inertiaCoefficient;
             _move = InputManager.playerInputActions.Humanoid.Move;
+            _movementEventsHandler = GetComponent<FPSMovementEventsHandler>();
         }
         private void OnEnable()
         {
@@ -86,6 +87,9 @@ namespace URPMk2
                 moveDir = Vector3.ProjectOnPlane(moveDir, hitInfo.normal).normalized;
                 _moveDir.x = moveDir.x * _speedVec[_speedIdx];
                 _moveDir.z = moveDir.z * _speedVec[_speedIdx];
+
+                _movementEventsHandler.CallEventStep(_speedIdx);
+                _isMoving = true;
             }
             else if (areControlsPressed)
             {
@@ -96,6 +100,11 @@ namespace URPMk2
             {
                 _moveDir.x = 0f;
                 _moveDir.z = 0f;
+                if (_isMoving)
+                {
+                    _movementEventsHandler.CallEventStoppedMoving(_speedIdx);
+                    _isMoving = false;
+                }
             }
         }
         private void StickPlayerToTheGround()

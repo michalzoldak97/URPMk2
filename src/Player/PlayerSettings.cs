@@ -19,5 +19,9 @@ namespace URPMk2
         public float gravityMultiplayer;
         public float inertiaCoefficient;
         public float[] lookSensitivity; // x, y
+        public float[] headBobSpeed; // walk run
+        public float[] headBobMagnitude; // walk run
+        public float[] verHorBobMultiplayer;
+        public float lookClamp;
     }
 }

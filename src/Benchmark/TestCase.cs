@@ -6,13 +6,17 @@ namespace URPMk2
 {
     public class TestCase : ITestable
     {
-        private Vector2 vecZero = Vector2.zero;
-        private Vector2 InitializeTestVec2()
+        private Vector3 _left = Vector3.left;
+        private float testX = 23.5f;
+        private float testY = 23.5f;
+        private float[] testXY = new float[] { 23.5f, 23.5f };
+        private Vector3 InitializeTestVec3()
         {
-            Vector2 artificialInput = Vector2.zero;
-            artificialInput.x = -2.5f;
-            artificialInput.y = 2.5f;
-            return artificialInput;
+            Vector3 someVals = Vector3.zero;
+            someVals.x = -2.5f;
+            someVals.y = 2.5f;
+            someVals.z = 4.7f;
+            return someVals;
         }
         private void DoSomeJob()
         {
@@ -23,19 +27,14 @@ namespace URPMk2
         }
         private void PrimaryTestCase()
         {
-            Vector2 artificialInput = InitializeTestVec2();
-            if (artificialInput.x != 0.0f || artificialInput.y != 0.0f)
-            {
-                DoSomeJob();
-            }
+            Vector3 someVal = InitializeTestVec3();
+            someVal = _left * (Mathf.Sqrt(testXY[0]) + Mathf.Sqrt(testXY[1]));
+            DoSomeJob();
         }
         private void AlternativeTestCase()
         {
-            Vector2 artificialInput = InitializeTestVec2();
-            if (artificialInput.x == 0.0f && artificialInput.y == 0.0f)
-            {
-                return;
-            }
+            Vector3 someVal = InitializeTestVec3();
+            someVal = _left * (Mathf.Sqrt(testX) + Mathf.Sqrt(testY));
             DoSomeJob();
         }
         public void RunPrimaryTestCase()
