@@ -70,11 +70,20 @@ namespace URPMk2
         {
             _speedIdx = 0;
         }
+        private IEnumerator OverseeJumpState()
+        {
+            yield return new WaitForFixedUpdate();
+            WaitUntil waitUntillLand = new WaitUntil(() => _myCharacterController.isGrounded);
+            yield return waitUntillLand;
+            _movementEventsHandler.CallEventLand(_speedIdx);
+        }
         private void HandleJump(InputAction.CallbackContext obj)
         {
             if (!_myCharacterController.isGrounded)
                 return;
             _moveDir.y = _speedVec[2];
+            _movementEventsHandler.CallEventJump(_speedIdx);
+            StartCoroutine(OverseeJumpState());
         }
         private void CalcMovVecXZ(Vector2 moveVector)
         {

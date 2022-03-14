@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace URPMk2
 {
@@ -12,6 +13,8 @@ namespace URPMk2
         [SerializeField] private AudioClip[] _stoneStepSounds;
         [SerializeField] private AudioClip[] _metalStepSounds;
         [SerializeField] private AudioClip[] _grassStepSounds;
+        [SerializeField] private AudioClip _jumpSound;
+        [SerializeField] private AudioClip _landSound;
         private float _stepTimer;
         private float[] _stepSpeed;
         private string _defaultTag = "Untagged";
@@ -33,12 +36,23 @@ namespace URPMk2
         {
             SetInit();
             _eventsHandler.EventStep += PlayFootStepSound;
+            _eventsHandler.EventLand += PlayLandSound;
+            InputManager.playerInputActions.Humanoid.Jump.performed += PlayJumpSound;
         }
         private void OnDisable()
         {
             _eventsHandler.EventStep -= PlayFootStepSound;
+            InputManager.playerInputActions.Humanoid.Jump.performed -= PlayJumpSound;
+            _eventsHandler.EventLand -= PlayLandSound;
         }
-        
+        private void PlayJumpSound(InputAction.CallbackContext obj)
+        {
+            _playerAudioSource.PlayOneShot(_jumpSound);
+        }
+        private void PlayLandSound(int dummy)
+        {
+            _playerAudioSource.PlayOneShot(_landSound);
+        }
         private void PlayFootStepSound(int stateIdx)
         {
             _stepTimer -= Time.deltaTime;
