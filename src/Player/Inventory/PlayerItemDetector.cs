@@ -15,10 +15,8 @@ namespace URPMk2
 		private Transform _itemInRange;
 		private Rect _labelRect;
 		private GUIStyle _labelStyle = new GUIStyle();
-		private PlayerInventoryMaster _inventoryMaster;
 		private void SetInit()
 		{
-			_inventoryMaster = GetComponent<PlayerInventoryMaster>();
 			PlayerInventorySettings playerSettings = GetComponent<PlayerMaster>().GetPlayerSettings().playerInventorySettings;
 			_checkRate = playerSettings.itemCheckRate;
 			_itemLabelWidthHeight = playerSettings.itemLabelWidthHeight;
@@ -26,6 +24,7 @@ namespace URPMk2
 				Screen.height / 2, _itemLabelWidthHeight[0], _itemLabelWidthHeight[1]);
 			_labelStyle.fontSize = playerSettings.labelFontSize;
 			_labelStyle.normal.textColor = Color.white;
+			// ignore player layer when checking if the item is visible
 			_ignorePlayerlayerMask = 1 << Utils.GetLayerIndexFromSingleLayer(_playerLayer);
 			_ignorePlayerlayerMask = ~_ignorePlayerlayerMask;
 		}
@@ -45,7 +44,7 @@ namespace URPMk2
         {
 			if (_isItemInRange && _itemInRange.GetComponent<ItemMaster>() != null)
             {
-				_itemInRange.GetComponent<ItemMaster>().CallEventInteractionReqiested(_fpsCamera);
+				_itemInRange.GetComponent<ItemMaster>().CallEventInteractionRequested(_fpsCamera);
 			}
         }
         private void ManageItemSearch()
@@ -66,9 +65,7 @@ namespace URPMk2
 			if (Physics.Linecast(_fpsCamera.position, itemTransform.position, out RaycastHit hit, _ignorePlayerlayerMask))
 			{
 				if (hit.transform != itemTransform)
-                {
 					return false;
-				}
 				else
 					return true;
 			}
