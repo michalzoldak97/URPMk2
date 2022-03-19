@@ -7,5 +7,7 @@ namespace URPMk2
 	{
 		public bool deactivateObjOnPickUp;
 		public bool deactivateCollOnPickUp;
+		public float[] onPlayerPosition;
+		public float[] onPlayerRotation;
 	}
 }
