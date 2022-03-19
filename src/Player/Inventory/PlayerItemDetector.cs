@@ -5,12 +5,12 @@ namespace URPMk2
 {
 	public class PlayerItemDetector : MonoBehaviour
 	{
-		[SerializeField] private LayerMask _itemLayer;
 		[SerializeField] private Transform _fpsCamera;
 		private bool _isItemInRange;
 		private int _ignorePlayerlayerMask;
 		private float _nextCheck, _checkRate;
 		private float[] _itemLabelWidthHeight;
+		private LayerMask _itemLayer;
 		private Transform _itemInRange;
 		private Rect _labelRect;
 		private GUIStyle _labelStyle = new GUIStyle();
@@ -23,6 +23,8 @@ namespace URPMk2
 				Screen.height / 2, _itemLabelWidthHeight[0], _itemLabelWidthHeight[1]);
 			_labelStyle.fontSize = playerSettings.labelFontSize;
 			_labelStyle.normal.textColor = Color.white;
+
+			_itemLayer = 1 << LayerMask.NameToLayer("Item");
 			// mask to ignore player layer when checking if the item is visible
 			_ignorePlayerlayerMask = 1 << LayerMask.NameToLayer("Player");
 			_ignorePlayerlayerMask = ~_ignorePlayerlayerMask;
