@@ -27,6 +27,11 @@ namespace URPMk2
 
 			gameObject.transform.SetParent(origin);
 			_itemMaster.CallEventItemPickedUp(origin);
-        }
+			origin.root.GetComponent<IInventoryMaster>().CallEventItemPickUp(gameObject.transform);
+			// set obj state
+			if (!_itemMaster.GetItemSettings().deactivateObjOnPickUp)
+				return;
+			gameObject.SetActive(false);
+		}
 	}
 }
