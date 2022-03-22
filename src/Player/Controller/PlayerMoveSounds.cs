@@ -8,81 +8,81 @@ namespace URPMk2
 {
     public class PlayerMoveSounds : MonoBehaviour
     {
-        [SerializeField] private Transform _fpsCamera;
-        [SerializeField] private AudioSource _playerAudioSource;
-        [SerializeField] private AudioClip[] _stoneStepSounds;
-        [SerializeField] private AudioClip[] _metalStepSounds;
-        [SerializeField] private AudioClip[] _grassStepSounds;
-        [SerializeField] private AudioClip _jumpSound;
-        [SerializeField] private AudioClip _landSound;
-        private float _stepTimer;
-        private float[] _stepSpeed;
-        private string _defaultTag = "Untagged";
-        private Vector3 _down = Vector3.down;
-        private string[] _stoneSurfaceTags;
-        private string[] _metalSurfaceTags;
-        private string[] _grassSurfaceTags;
-        private FPSMovementEventsHandler _eventsHandler;
+        [SerializeField] private Transform fpsCamera;
+        [SerializeField] private AudioSource playerAudioSource;
+        [SerializeField] private AudioClip jumpSound;
+        [SerializeField] private AudioClip landSound;
+        [SerializeField] private AudioClip[] stoneStepSounds;
+        [SerializeField] private AudioClip[] metalStepSounds;
+        [SerializeField] private AudioClip[] grassStepSounds;
+        private float stepTimer;
+        private float[] stepSpeed;
+        private string defaultTag = "Untagged";
+        private string[] stoneSurfaceTags;
+        private string[] metalSurfaceTags;
+        private string[] grassSurfaceTags;
+        private Vector3 down = Vector3.down;
+        private FPSMovementEventsHandler eventsHandler;
         private void SetInit()
         {
-            _eventsHandler = GetComponent<FPSMovementEventsHandler>();
+            eventsHandler = GetComponent<FPSMovementEventsHandler>();
             PlayerMoveSettings playerSettings = GetComponent<PlayerMaster>().GetPlayerSettings().playerMoveSettings;
-            _stepSpeed = playerSettings.stepSpeed;
-            _stoneSurfaceTags = playerSettings.stoneSurfaceTags;
-            _metalSurfaceTags = playerSettings.metalSurfaceTags;
-            _grassSurfaceTags = playerSettings.grassSurfaceTags;
+            stepSpeed = playerSettings.stepSpeed;
+            stoneSurfaceTags = playerSettings.stoneSurfaceTags;
+            metalSurfaceTags = playerSettings.metalSurfaceTags;
+            grassSurfaceTags = playerSettings.grassSurfaceTags;
         }
         private void OnEnable()
         {
             SetInit();
-            _eventsHandler.EventStep += PlayFootStepSound;
-            _eventsHandler.EventLand += PlayLandSound;
+            eventsHandler.EventStep += PlayFootStepSound;
+            eventsHandler.EventLand += PlayLandSound;
             InputManager.playerInputActions.Humanoid.Jump.performed += PlayJumpSound;
         }
         private void OnDisable()
         {
-            _eventsHandler.EventStep -= PlayFootStepSound;
+            eventsHandler.EventStep -= PlayFootStepSound;
             InputManager.playerInputActions.Humanoid.Jump.performed -= PlayJumpSound;
-            _eventsHandler.EventLand -= PlayLandSound;
+            eventsHandler.EventLand -= PlayLandSound;
         }
         private void PlayJumpSound(InputAction.CallbackContext obj)
         {
-            _playerAudioSource.PlayOneShot(_jumpSound);
+            playerAudioSource.PlayOneShot(jumpSound);
         }
         private void PlayLandSound(int dummy)
         {
-            _playerAudioSource.PlayOneShot(_landSound);
+            playerAudioSource.PlayOneShot(landSound);
         }
         private void PlayFootStepSound(int stateIdx)
         {
-            _stepTimer -= Time.deltaTime;
-            if (_stepTimer <= 0)
+            stepTimer -= Time.deltaTime;
+            if (stepTimer <= 0)
             {
-                if(Physics.Raycast(_fpsCamera.position, _down, out RaycastHit hit, 3))
+                if(Physics.Raycast(fpsCamera.position, down, out RaycastHit hit, 3))
                 {
                     string surfaceTag = hit.collider.tag;
-                    if (surfaceTag == _defaultTag)
+                    if (surfaceTag == defaultTag)
                     {
-                        _playerAudioSource.PlayOneShot(_stoneStepSounds[UnityEngine.Random.Range(0, _stoneStepSounds.Length - 1)]);
+                        playerAudioSource.PlayOneShot(stoneStepSounds[UnityEngine.Random.Range(0, stoneStepSounds.Length - 1)]);
                     }
-                    else if (Array.Exists(_stoneSurfaceTags, el => el == surfaceTag))
+                    else if (Array.Exists(stoneSurfaceTags, el => el == surfaceTag))
                     {
-                        _playerAudioSource.PlayOneShot(_stoneStepSounds[UnityEngine.Random.Range(0, _stoneStepSounds.Length - 1)]);
+                        playerAudioSource.PlayOneShot(stoneStepSounds[UnityEngine.Random.Range(0, stoneStepSounds.Length - 1)]);
                     }
-                    else if (Array.Exists(_metalSurfaceTags, el => el == surfaceTag))
+                    else if (Array.Exists(metalSurfaceTags, el => el == surfaceTag))
                     {
-                        _playerAudioSource.PlayOneShot(_metalStepSounds[UnityEngine.Random.Range(0, _metalStepSounds.Length - 1)]);
+                        playerAudioSource.PlayOneShot(metalStepSounds[UnityEngine.Random.Range(0, metalStepSounds.Length - 1)]);
                     }
-                    else if (Array.Exists(_grassSurfaceTags, el => el == surfaceTag))
+                    else if (Array.Exists(grassSurfaceTags, el => el == surfaceTag))
                     {
-                        _playerAudioSource.PlayOneShot(_grassStepSounds[UnityEngine.Random.Range(0, _grassStepSounds.Length - 1)]);
+                        playerAudioSource.PlayOneShot(grassStepSounds[UnityEngine.Random.Range(0, grassStepSounds.Length - 1)]);
                     }
                     else
                     {
-                        _playerAudioSource.PlayOneShot(_stoneStepSounds[UnityEngine.Random.Range(0, _stoneStepSounds.Length - 1)]);
+                        playerAudioSource.PlayOneShot(stoneStepSounds[UnityEngine.Random.Range(0, stoneStepSounds.Length - 1)]);
                     }
                 }
-                _stepTimer = _stepSpeed[stateIdx];
+                stepTimer = stepSpeed[stateIdx];
             }
         }
     }

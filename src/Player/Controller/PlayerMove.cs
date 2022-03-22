@@ -7,36 +7,36 @@ namespace URPMk2
 {
     public class PlayerMove : MonoBehaviour
     {
-        private bool _isMoving;
-        private int _speedIdx = 0;
-        private float _walkSpeed, _runSpeed, _jumpSpeed, _characterRadius, _gravityMultiplayer, _inertiaCoeff;
-        private float[] _speedVec;
-        private Vector3 _upDir = Vector3.up;
-        private Vector3 _moveDir = Vector3.zero;
-        private Vector3 _gravity = Physics.gravity;
-        private Transform _myTransform;
-        private CharacterController _myCharacterController;
-        private InputAction _move;
-        private FPSMovementEventsHandler _movementEventsHandler;
+        private bool isMoving;
+        private int speedIdx = 0;
+        private float walkSpeed, runSpeed, jumpSpeed, characterRadius, gravityMultiplayer, inertiaCoeff;
+        private float[] speedVec;
+        private Vector3 upDir = Vector3.up;
+        private Vector3 moveDir = Vector3.zero;
+        private Vector3 gravity = Physics.gravity;
+        private Transform myTransform;
+        private CharacterController myCharacterController;
+        private InputAction move;
+        private FPSMovementEventsHandler movementEventsHandler;
         private void SetInit()
         {
-            _myTransform = gameObject.transform;
-            _myCharacterController = GetComponent<CharacterController>();
-            _characterRadius = _myCharacterController.radius;
+            myTransform = gameObject.transform;
+            myCharacterController = GetComponent<CharacterController>();
+            characterRadius = myCharacterController.radius;
             PlayerMoveSettings playerSettings = GetComponent<PlayerMaster>().GetPlayerSettings().playerMoveSettings;
-            _walkSpeed = playerSettings.walkSpeed;
-            _runSpeed = playerSettings.runSpeed;
-            _jumpSpeed = playerSettings.jumpSpeed;
-            _speedVec = new float[] { _walkSpeed, _runSpeed, _jumpSpeed };
-            _gravityMultiplayer = playerSettings.gravityMultiplayer;
-            _inertiaCoeff = playerSettings.inertiaCoefficient;
-            _move = InputManager.playerInputActions.Humanoid.Move;
-            _movementEventsHandler = GetComponent<FPSMovementEventsHandler>();
+            walkSpeed = playerSettings.walkSpeed;
+            runSpeed = playerSettings.runSpeed;
+            jumpSpeed = playerSettings.jumpSpeed;
+            speedVec = new float[] { walkSpeed, runSpeed, jumpSpeed };
+            gravityMultiplayer = playerSettings.gravityMultiplayer;
+            inertiaCoeff = playerSettings.inertiaCoefficient;
+            move = InputManager.playerInputActions.Humanoid.Move;
+            movementEventsHandler = GetComponent<FPSMovementEventsHandler>();
         }
         private void OnEnable()
         {
             SetInit();
-            _move.Enable();
+            move.Enable();
 
             InputManager.playerInputActions.Humanoid.Jump.performed += HandleJump;
             InputManager.playerInputActions.Humanoid.Jump.Enable();
@@ -49,7 +49,7 @@ namespace URPMk2
         }
         private void OnDisable()
         {
-            _move.Disable();
+            move.Disable();
             InputManager.playerInputActions.Humanoid.Jump.performed -= HandleJump;
             InputManager.playerInputActions.Humanoid.Jump.Disable();
             InputManager.playerInputActions.Humanoid.RunStart.performed -= StartRun;
@@ -59,80 +59,80 @@ namespace URPMk2
         }
         public void SetMoveSpeed(float[] toSet) 
         {
-            _speedVec = toSet;
+            speedVec = toSet;
         }
         public float[] GetMoveSpeed()
         {
-            return _speedVec;
+            return speedVec;
         }
         private void StartRun(InputAction.CallbackContext obj)
         {
-            _speedIdx = 1;
+            speedIdx = 1;
         }
         private void EndRun(InputAction.CallbackContext obj)
         {
-            _speedIdx = 0;
+            speedIdx = 0;
         }
         private IEnumerator OverseeJumpState()
         {
             yield return new WaitForFixedUpdate();
-            WaitUntil waitUntillLand = new WaitUntil(() => _myCharacterController.isGrounded);
+            WaitUntil waitUntillLand = new WaitUntil(() => myCharacterController.isGrounded);
             yield return waitUntillLand;
-            _movementEventsHandler.CallEventLand(_speedIdx);
+            movementEventsHandler.CallEventLand(speedIdx);
         }
         private void HandleJump(InputAction.CallbackContext obj)
         {
-            if (!_myCharacterController.isGrounded)
+            if (!myCharacterController.isGrounded)
                 return;
-            _moveDir.y = _speedVec[2];
-            _movementEventsHandler.CallEventJump(_speedIdx);
+            moveDir.y = speedVec[2];
+            movementEventsHandler.CallEventJump(speedIdx);
             StartCoroutine(OverseeJumpState());
         }
         private void CalcMovVecXZ(Vector2 moveVector)
         {
             bool areControlsPressed = !(moveVector.x == 0f && moveVector.y == 0f);
-            if (areControlsPressed && _myCharacterController.isGrounded)
+            if (areControlsPressed && myCharacterController.isGrounded)
             {
-                Vector3 moveDir = _myTransform.forward * moveVector.y + _myTransform.right * moveVector.x;
-                Physics.SphereCast(_myTransform.position, _characterRadius, -_upDir, out RaycastHit hitInfo,
-                                   _myCharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-                moveDir = Vector3.ProjectOnPlane(moveDir, hitInfo.normal).normalized;
-                _moveDir.x = moveDir.x * _speedVec[_speedIdx];
-                _moveDir.z = moveDir.z * _speedVec[_speedIdx];
+                Vector3 mDir = myTransform.forward * moveVector.y + myTransform.right * moveVector.x;
+                Physics.SphereCast(myTransform.position, characterRadius, -upDir, out RaycastHit hitInfo,
+                                   myCharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+                mDir = Vector3.ProjectOnPlane(mDir, hitInfo.normal).normalized;
+                moveDir.x = mDir.x * speedVec[speedIdx];
+                moveDir.z = mDir.z * speedVec[speedIdx];
 
-                _movementEventsHandler.CallEventStep(_speedIdx);
-                _isMoving = true;
+                movementEventsHandler.CallEventStep(speedIdx);
+                isMoving = true;
             }
             else if (areControlsPressed)
             {
-                _moveDir.x *= _inertiaCoeff;
-                _moveDir.z *= _inertiaCoeff;
+                moveDir.x *= inertiaCoeff;
+                moveDir.z *= inertiaCoeff;
             }
             else
             {
-                _moveDir.x = 0f;
-                _moveDir.z = 0f;
-                if (_isMoving)
+                moveDir.x = 0f;
+                moveDir.z = 0f;
+                if (isMoving)
                 {
-                    _movementEventsHandler.CallEventStoppedMoving(_speedIdx);
-                    _isMoving = false;
+                    movementEventsHandler.CallEventStoppedMoving(speedIdx);
+                    isMoving = false;
                 }
             }
         }
         private void StickPlayerToTheGround()
         {
-            if (!_myCharacterController.isGrounded)
-                _moveDir += _gravityMultiplayer * Time.fixedDeltaTime * _gravity;
+            if (!myCharacterController.isGrounded)
+                moveDir += gravityMultiplayer * Time.fixedDeltaTime * gravity;
         }
         private void MovePlayer(Vector2 moveVector)
         {
             CalcMovVecXZ(moveVector);
-            _myCharacterController.Move(_moveDir * Time.fixedDeltaTime);
+            myCharacterController.Move(moveDir * Time.fixedDeltaTime);
             StickPlayerToTheGround();
         }
         private void FixedUpdate()
         {
-            MovePlayer(_move.ReadValue<Vector2>());
+            MovePlayer(move.ReadValue<Vector2>());
         }
     }
 }

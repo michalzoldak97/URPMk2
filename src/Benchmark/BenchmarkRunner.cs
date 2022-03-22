@@ -9,10 +9,10 @@ namespace URPMk2
     {
         [SerializeField] public int numOfCases = 10000;
         [SerializeField] public float waitUntilStart = 1f;
-        private float _numTests = 40;
+        private float numTests = 40;
         private Vector2 primaryRes = Vector2.zero;
         private Vector2 alternativeRes = Vector2.zero;
-        private ITestable _testCase = new TestCase();
+        private ITestable testCase = new TestCase();
 
         private IEnumerator RunPrimary()
         {
@@ -21,7 +21,7 @@ namespace URPMk2
             watch.Start();
             for (int a = 0; a < numOfCases; a++)
             {
-                _testCase.RunPrimaryTestCase();
+                testCase.RunPrimaryTestCase();
             }
             watch.Stop();
             primaryRes.x += watch.ElapsedMilliseconds;
@@ -34,7 +34,7 @@ namespace URPMk2
             watch.Start();
             for (int a = 0; a < numOfCases; a++)
             {
-                _testCase.RunAlternativeTestCase();
+                testCase.RunAlternativeTestCase();
             }
             watch.Stop();
             alternativeRes.x += watch.ElapsedMilliseconds;
@@ -42,14 +42,14 @@ namespace URPMk2
         }
         private IEnumerator RunBenchmark()
         {
-            for (int i = 0; i < _numTests; i++)
+            for (int i = 0; i < numTests; i++)
             {
                 StartCoroutine(RunPrimary());
                 StartCoroutine(RunAlternative());
             }
             yield return new WaitForSeconds(10f);
-            UnityEngine.Debug.Log("\nPrimary milisec = " + (primaryRes.x / _numTests).ToString() + "    Primary tics = " + (primaryRes.y / _numTests).ToString()
-                + "\nAlternative milisec = " + (alternativeRes.x / _numTests).ToString() + "    Alternative tics = " + (alternativeRes.y / _numTests).ToString());
+            UnityEngine.Debug.Log("\nPrimary milisec = " + (primaryRes.x / numTests).ToString() + "    Primary tics = " + (primaryRes.y / numTests).ToString()
+                + "\nAlternative milisec = " + (alternativeRes.x / numTests).ToString() + "    Alternative tics = " + (alternativeRes.y / numTests).ToString());
         }
         private void Start()
         {

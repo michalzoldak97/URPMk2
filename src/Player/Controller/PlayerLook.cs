@@ -7,48 +7,48 @@ namespace URPMk2
 {
     public class PlayerLook : MonoBehaviour
     {
-        [SerializeField] private Transform _fpsCamera;
-        private float _clampDeg, _xRot;
-        private float[] _sensitivityXY;
-        private Vector3 _up = Vector3.up;
-        private Vector3 _left = Vector3.left;
-        private Transform _myTransform;
-        private InputAction _lookX;
-        private InputAction _lookY;
+        [SerializeField] private Transform fpsCamera;
+        private float clampDeg, xRot;
+        private float[] sensitivityXY;
+        private Vector3 up = Vector3.up;
+        private Vector3 left = Vector3.left;
+        private Transform myTransform;
+        private InputAction lookX;
+        private InputAction lookY;
         private void SetInit()
         {
             PlayerMoveSettings playerSettings = GetComponent<PlayerMaster>().GetPlayerSettings().playerMoveSettings;
-            _clampDeg = playerSettings.lookClamp;
-            _sensitivityXY = playerSettings.lookSensitivity;
-            _myTransform = gameObject.transform;
-            _lookX = InputManager.playerInputActions.Humanoid.MouseX;
-            _lookY = InputManager.playerInputActions.Humanoid.MouseY;
+            clampDeg = playerSettings.lookClamp;
+            sensitivityXY = playerSettings.lookSensitivity;
+            myTransform = gameObject.transform;
+            lookX = InputManager.playerInputActions.Humanoid.MouseX;
+            lookY = InputManager.playerInputActions.Humanoid.MouseY;
         }
         private void OnEnable()
         {
             SetInit();
-            _lookX.Enable();
-            _lookY.Enable();
+            lookX.Enable();
+            lookY.Enable();
         }
         private void OnDisable()
         {
-            _lookX.Disable();
-            _lookY.Disable();
+            lookX.Disable();
+            lookY.Disable();
         }
         private void LookHorizontal(float mouseX)
         {
-            _myTransform.Rotate(_up, mouseX * _sensitivityXY[0]);
+            myTransform.Rotate(up, mouseX * sensitivityXY[0]);
         }
         private void LookVertical(float mouseY)
         {
-            _xRot += mouseY * _sensitivityXY[1];
-            _xRot = Mathf.Clamp(_xRot, -_clampDeg, _clampDeg);
-            _fpsCamera.localEulerAngles = _left * _xRot;
+            xRot += mouseY * sensitivityXY[1];
+            xRot = Mathf.Clamp(xRot, -clampDeg, clampDeg);
+            fpsCamera.localEulerAngles = left * xRot;
         }
         private void Look()
         {
-            float mouseX = _lookX.ReadValue<float>();
-            float mouseY = _lookY.ReadValue<float>();
+            float mouseX = lookX.ReadValue<float>();
+            float mouseY = lookY.ReadValue<float>();
             if (mouseX != 0.0f)
                 LookHorizontal(mouseX);
             if (mouseY != 0.0f)

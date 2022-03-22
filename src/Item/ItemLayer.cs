@@ -4,25 +4,25 @@ namespace URPMk2
 {
 	public class ItemLayer : MonoBehaviour
 	{
-		private int _originalLayer;
-		private ItemMaster _itemMaster;
+		private int originalLayer;
+		private ItemMaster itemMaster;
 		private void SetInit()
 		{
-			_itemMaster = GetComponent<ItemMaster>();
-			_originalLayer = gameObject.layer;
+			itemMaster = GetComponent<ItemMaster>();
+			originalLayer = gameObject.layer;
 		}
 		
 		private void OnEnable()
 		{
 			SetInit();
-			_itemMaster.EventItemPickedUp += ChangeOnPickUp;
-			_itemMaster.EventItemThrow += ChangeOnThrow;
+			itemMaster.EventItemPickedUp += ChangeOnPickUp;
+			itemMaster.EventItemThrow += ChangeOnThrow;
 		}
 		
 		private void OnDisable()
 		{
-			_itemMaster.EventItemPickedUp -= ChangeOnPickUp;
-			_itemMaster.EventItemThrow -= ChangeOnThrow;
+			itemMaster.EventItemPickedUp -= ChangeOnPickUp;
+			itemMaster.EventItemThrow -= ChangeOnThrow;
 		}
 		private void SetLayer(int toSet)
         {
@@ -34,12 +34,12 @@ namespace URPMk2
 		}
 		private void ChangeOnPickUp(Transform origin)
         {
-			int layerToSet = LayerMask.NameToLayer(_itemMaster.GetItemSettings().toLayerName);
+			int layerToSet = LayerMask.NameToLayer(itemMaster.GetItemSettings().toLayerName);
 			SetLayer(layerToSet);
 		}
 		private void ChangeOnThrow(Transform origin)
         {
-			SetLayer(_originalLayer);
+			SetLayer(originalLayer);
 		}
 	}
 }

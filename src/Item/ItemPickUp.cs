@@ -4,21 +4,21 @@ namespace URPMk2
 {
 	public class ItemPickUp : MonoBehaviour
 	{
-		private ItemMaster _itemMaster;
+		private ItemMaster itemMaster;
 		private void SetInit()
 		{
-			_itemMaster = GetComponent<ItemMaster>();
+			itemMaster = GetComponent<ItemMaster>();
 		}
 		
 		private void OnEnable()
 		{
 			SetInit();
-			_itemMaster.EventInteractionRequested += HandlePickUp;
+			itemMaster.EventInteractionRequested += HandlePickUp;
 		}
 		
 		private void OnDisable()
 		{
-			_itemMaster.EventInteractionRequested -= HandlePickUp;
+			itemMaster.EventInteractionRequested -= HandlePickUp;
 		}
 		private void HandlePickUp(Transform origin)
         {
@@ -26,10 +26,10 @@ namespace URPMk2
 				return;
 
 			gameObject.transform.SetParent(origin);
-			_itemMaster.CallEventItemPickedUp(origin);
+			itemMaster.CallEventItemPickedUp(origin);
 			origin.root.GetComponent<IInventoryMaster>().CallEventItemPickUp(gameObject.transform);
 			// set obj state
-			if (!_itemMaster.GetItemSettings().deactivateObjOnPickUp)
+			if (!itemMaster.GetItemSettings().deactivateObjOnPickUp)
 				return;
 			gameObject.SetActive(false);
 		}

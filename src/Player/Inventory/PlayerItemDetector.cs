@@ -5,29 +5,29 @@ namespace URPMk2
 {
 	public class PlayerItemDetector : MonoBehaviour
 	{
-		[SerializeField] private Transform _fpsCamera;
-		private bool _isItemInRange;
-		private int _ignorePlayerlayerMask;
-		private float _nextCheck, _checkRate;
-		private float[] _itemLabelWidthHeight;
-		private LayerMask _itemLayer;
-		private Transform _itemInRange;
-		private Rect _labelRect;
-		private GUIStyle _labelStyle = new GUIStyle();
+		[SerializeField] private Transform fpsCamera;
+		private bool isItemInRange;
+		private int ignorePlayerlayerMask;
+		private float nextCheck, checkRate;
+		private float[] itemLabelWidthHeight;
+		private LayerMask itemLayer;
+		private Transform itemInRange;
+		private Rect labelRect;
+		private GUIStyle labelStyle = new GUIStyle();
 		private void SetInit()
 		{
 			PlayerInventorySettings playerSettings = GetComponent<PlayerMaster>().GetPlayerSettings().playerInventorySettings;
-			_checkRate = playerSettings.itemCheckRate;
-			_itemLabelWidthHeight = playerSettings.itemLabelWidthHeight;
-			_labelRect = new Rect(Screen.width / 2 - _itemLabelWidthHeight[0], 
-				Screen.height / 2, _itemLabelWidthHeight[0], _itemLabelWidthHeight[1]);
-			_labelStyle.fontSize = playerSettings.labelFontSize;
-			_labelStyle.normal.textColor = Color.white;
+			checkRate = playerSettings.itemCheckRate;
+			itemLabelWidthHeight = playerSettings.itemLabelWidthHeight;
+			labelRect = new Rect(Screen.width / 2 - itemLabelWidthHeight[0], 
+				Screen.height / 2, itemLabelWidthHeight[0], itemLabelWidthHeight[1]);
+			labelStyle.fontSize = playerSettings.labelFontSize;
+			labelStyle.normal.textColor = Color.white;
 
-			_itemLayer = 1 << LayerMask.NameToLayer("Item");
+			itemLayer = 1 << LayerMask.NameToLayer("Item");
 			// mask to ignore player layer when checking if the item is visible
-			_ignorePlayerlayerMask = 1 << LayerMask.NameToLayer("Player");
-			_ignorePlayerlayerMask = ~_ignorePlayerlayerMask;
+			ignorePlayerlayerMask = 1 << LayerMask.NameToLayer("Player");
+			ignorePlayerlayerMask = ~ignorePlayerlayerMask;
 		}
 		
 		private void OnEnable()
@@ -43,19 +43,19 @@ namespace URPMk2
 		}
 		private void InteractWithItem(InputAction.CallbackContext obj)
         {
-			if (_isItemInRange && _itemInRange.GetComponent<ItemMaster>() != null)
+			if (isItemInRange && itemInRange.GetComponent<ItemMaster>() != null)
             {
-				_itemInRange.GetComponent<ItemMaster>().CallEventInteractionRequested(_fpsCamera);
+				itemInRange.GetComponent<ItemMaster>().CallEventInteractionRequested(fpsCamera);
 			}
         }
         private void ManageItemSearch()
         {
-			if(!_isItemInRange && Time.time > _nextCheck)
+			if(!isItemInRange && Time.time > nextCheck)
             {
 				DetectItem();
-				_nextCheck = Time.time + _checkRate;
+				nextCheck = Time.time + checkRate;
 			}
-			else if (_isItemInRange)
+			else if (isItemInRange)
             {
 				DetectItem();
 			}
@@ -63,7 +63,7 @@ namespace URPMk2
 
 		private bool CheckItemVisible(Transform itemTransform)
         {
-			if (Physics.Linecast(_fpsCamera.position, itemTransform.position, out RaycastHit hit, _ignorePlayerlayerMask))
+			if (Physics.Linecast(fpsCamera.position, itemTransform.position, out RaycastHit hit, ignorePlayerlayerMask))
 			{
 				if (hit.transform != itemTransform)
 					return false;
@@ -76,19 +76,19 @@ namespace URPMk2
 
 		private void DetectItem()
         {
-			if (Physics.SphereCast(_fpsCamera.position, 0.5f, _fpsCamera.forward, out RaycastHit hit, 3, _itemLayer))
+			if (Physics.SphereCast(fpsCamera.position, 0.5f, fpsCamera.forward, out RaycastHit hit, 3, itemLayer))
 			{
 				Transform foundItem = hit.transform;
-				if (foundItem != _itemInRange && CheckItemVisible(foundItem))
+				if (foundItem != itemInRange && CheckItemVisible(foundItem))
                 {
-					_isItemInRange = true;
-					_itemInRange = foundItem;
+					isItemInRange = true;
+					itemInRange = foundItem;
 				}
 			}
 			else
 			{
-				_isItemInRange = false;
-				_itemInRange = null;
+				isItemInRange = false;
+				itemInRange = null;
 			}
 		}
 
@@ -98,9 +98,9 @@ namespace URPMk2
 		}
         private void OnGUI()
         {
-            if (_isItemInRange)
+            if (isItemInRange)
             {
-				GUI.Label(_labelRect, _itemInRange.name, _labelStyle);
+				GUI.Label(labelRect, itemInRange.name, labelStyle);
             }
         }
     }
