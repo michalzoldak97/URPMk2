@@ -7,12 +7,17 @@ namespace URPMk2
     public class ItemMaster : MonoBehaviour, IItemMaster
     {
         [SerializeField] private ItemSettings itemSettings;
+        public bool isSelectedOnParent { get; set; }
         public ItemSettings GetItemSettings() { return itemSettings; }
 
         public delegate void ItemInteractionsEventhandler(Transform origin);
         public event ItemInteractionsEventhandler EventInteractionRequested;
         public event ItemInteractionsEventhandler EventItemPickedUp;
         public event ItemInteractionsEventhandler EventItemThrow;
+
+        public delegate void ItemInventoryEventhandler();
+        public event ItemInventoryEventhandler EventActivateOnParent;
+        public event ItemInventoryEventhandler EventDisableOnParent;
 
         public void CallEventInteractionRequested(Transform origin)
         {
@@ -25,6 +30,14 @@ namespace URPMk2
         public void CallEventEventItemThrow(Transform origin)
         {
             EventItemThrow?.Invoke(origin);
+        }
+        public void CallEventActivateOnParent()
+        {
+            EventActivateOnParent?.Invoke();
+        }
+        public void CallEventDisableOnParent()
+        {
+            EventDisableOnParent?.Invoke();
         }
     }
 }

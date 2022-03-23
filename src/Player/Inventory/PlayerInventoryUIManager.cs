@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,12 +18,14 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
-			inventoryMaster.ItemPlaced += RebuildInventoryUI;
+			inventoryMaster.EventItemPlaced += RebuildInventoryUI;
+			inventoryMaster.EventItemActivate += StartMarkButtonActive;
 		}
 		
 		private void OnDisable()
 		{
-			inventoryMaster.ItemPlaced -= RebuildInventoryUI;
+			inventoryMaster.EventItemPlaced -= RebuildInventoryUI;
+			inventoryMaster.EventItemActivate -= StartMarkButtonActive;
 		}
 		private void CallEventItemActivate(Transform item)
         {
@@ -61,6 +64,34 @@ namespace URPMk2
             {
 				AddItemButton(items[i]);
 			}
+
+			for (int i = 0; i < items.Count; i++)
+			{
+				if (items[i].GetComponent<ItemMaster>().isSelectedOnParent)
+					StartMarkButtonActive(items[i]);
+			}
 		}
+		private void StartMarkButtonActive(Transform item)
+        {
+			StartCoroutine(MarkButtonActive(item));
+        }
+		private IEnumerator MarkButtonActive(Transform item)
+        {
+			yield return new WaitForEndOfFrame();
+			List<Transform> items = inventoryMaster.GetItemList();
+			int activeItemIdx = items.FindIndex(i => i == item);
+			if (activeItemIdx == -1)
+				yield break;
+
+			int buttonCount = 0;
+            foreach (Transform UIElement in itemUIParent)
+            {
+                if (buttonCount != activeItemIdx)
+                    UIElement.GetComponent<Image>().color = UIElement.GetComponent<Button>().colors.normalColor;
+                else
+                    UIElement.GetComponent<Image>().color = UIElement.GetComponent<Button>().colors.pressedColor;
+                buttonCount++;
+            }
+        }
 	}
 }
