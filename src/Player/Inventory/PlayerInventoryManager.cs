@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace URPMk2
 {
@@ -17,14 +18,20 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
+			InputManager.playerInputActions.Humanoid.ItemThrow.performed += CallEventItemThrow;
+			InputManager.playerInputActions.Humanoid.ItemThrow.Enable();
 			inventoryMaster.EventItemPickUp += AddItem;
 			inventoryMaster.EventItemActivate += ActivateItem;
+			inventoryMaster.EventItemThrow += ThrowItem;
 		}
 		
 		private void OnDisable()
 		{
+			InputManager.playerInputActions.Humanoid.ItemThrow.performed -= CallEventItemThrow;
+			InputManager.playerInputActions.Humanoid.ItemThrow.Disable();
 			inventoryMaster.EventItemPickUp -= AddItem;
 			inventoryMaster.EventItemActivate -= ActivateItem;
+			inventoryMaster.EventItemThrow -= ThrowItem;
 		}
 		private void AddItem(Transform item)
         {
@@ -42,6 +49,7 @@ namespace URPMk2
 			if (!inventoryItems.Contains(item))
 				return;
 
+			// deactivate current item
 			if (selectedItem != null)
 			{
 				ItemMaster currentItemMaster = selectedItem.GetComponent<ItemMaster>();
@@ -53,6 +61,24 @@ namespace URPMk2
 			item.gameObject.SetActive(true);
 			item.GetComponent<ItemMaster>().CallEventActivateOnParent();
 			selectedItem = item;
+		}
+		private void CallEventItemThrow(InputAction.CallbackContext obj)
+        {
+			if (selectedItem != null)
+				inventoryMaster.CallEventItemThrow(selectedItem);
+        }
+		private void ThrowItem(Transform item)
+        {
+			if (!inventoryItems.Contains(item))
+				return;
+
+			ItemMaster currentItemMaster = item.GetComponent<ItemMaster>();
+			Transform origin = item.parent;
+
+			item.SetParent(null);
+			currentItemMaster.CallEventDisableOnParent();
+			currentItemMaster.CallEventItemThrow(origin);
+			inventoryMaster.CallEventItemThrow(item);
 		}
 	}
 }

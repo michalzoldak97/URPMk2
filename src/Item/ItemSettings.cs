@@ -9,6 +9,7 @@ namespace URPMk2
 		public bool deactivateObjOnPickUp;
 		public bool deactivateCollOnPickUp;
 		public int itemTypeID;
+		public int throwForce;
 		public string toItemName;
 		public string toLayerName;
 		public float[] onPlayerPosition;

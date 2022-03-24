@@ -60,12 +60,13 @@ namespace URPMk2
         {
 			ClearUI();
 			List<Transform> items = inventoryMaster.GetItemList();
-			for (int i = 0; i < items.Count; i++)
+			int itemCount = items.Count;
+			for (int i = 0; i < itemCount; i++)
             {
 				AddItemButton(items[i]);
 			}
-
-			for (int i = 0; i < items.Count; i++)
+			// mark selected item button
+			for (int i = 0; i < itemCount; i++)
 			{
 				if (items[i].GetComponent<ItemMaster>().isSelectedOnParent)
 					StartMarkButtonActive(items[i]);

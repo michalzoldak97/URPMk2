@@ -243,6 +243,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ItemThrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""346ba0e3-4296-4023-92b3-e5e2cb491a70"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -419,6 +428,17 @@ namespace URPMk2
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ItemInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b82e8348-7028-4af8-86eb-f98e9b74f7d0"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ItemThrow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -915,6 +935,7 @@ namespace URPMk2
             m_Humanoid_MouseX = m_Humanoid.FindAction("MouseX", throwIfNotFound: true);
             m_Humanoid_MouseY = m_Humanoid.FindAction("MouseY", throwIfNotFound: true);
             m_Humanoid_ItemInteract = m_Humanoid.FindAction("ItemInteract", throwIfNotFound: true);
+            m_Humanoid_ItemThrow = m_Humanoid.FindAction("ItemThrow", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1058,6 +1079,7 @@ namespace URPMk2
         private readonly InputAction m_Humanoid_MouseX;
         private readonly InputAction m_Humanoid_MouseY;
         private readonly InputAction m_Humanoid_ItemInteract;
+        private readonly InputAction m_Humanoid_ItemThrow;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1069,6 +1091,7 @@ namespace URPMk2
             public InputAction @MouseX => m_Wrapper.m_Humanoid_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Humanoid_MouseY;
             public InputAction @ItemInteract => m_Wrapper.m_Humanoid_ItemInteract;
+            public InputAction @ItemThrow => m_Wrapper.m_Humanoid_ItemThrow;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1099,6 +1122,9 @@ namespace URPMk2
                     @ItemInteract.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemInteract;
                     @ItemInteract.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemInteract;
                     @ItemInteract.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemInteract;
+                    @ItemThrow.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemThrow;
+                    @ItemThrow.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemThrow;
+                    @ItemThrow.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemThrow;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1124,6 +1150,9 @@ namespace URPMk2
                     @ItemInteract.started += instance.OnItemInteract;
                     @ItemInteract.performed += instance.OnItemInteract;
                     @ItemInteract.canceled += instance.OnItemInteract;
+                    @ItemThrow.started += instance.OnItemThrow;
+                    @ItemThrow.performed += instance.OnItemThrow;
+                    @ItemThrow.canceled += instance.OnItemThrow;
                 }
             }
         }
@@ -1250,6 +1279,7 @@ namespace URPMk2
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnItemInteract(InputAction.CallbackContext context);
+            void OnItemThrow(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
