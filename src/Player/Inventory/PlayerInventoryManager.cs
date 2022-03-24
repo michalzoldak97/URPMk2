@@ -18,20 +18,20 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
-			InputManager.playerInputActions.Humanoid.ItemThrow.performed += CallEventItemThrow;
+			InputManager.playerInputActions.Humanoid.ItemThrow.performed += CallEventItemThrowRequested;
 			InputManager.playerInputActions.Humanoid.ItemThrow.Enable();
 			inventoryMaster.EventItemPickUp += AddItem;
 			inventoryMaster.EventItemActivate += ActivateItem;
-			inventoryMaster.EventItemThrow += ThrowItem;
+			inventoryMaster.EventItemThrowRequested += ThrowItem;
 		}
 		
 		private void OnDisable()
 		{
-			InputManager.playerInputActions.Humanoid.ItemThrow.performed -= CallEventItemThrow;
+			InputManager.playerInputActions.Humanoid.ItemThrow.performed -= CallEventItemThrowRequested;
 			InputManager.playerInputActions.Humanoid.ItemThrow.Disable();
 			inventoryMaster.EventItemPickUp -= AddItem;
 			inventoryMaster.EventItemActivate -= ActivateItem;
-			inventoryMaster.EventItemThrow -= ThrowItem;
+			inventoryMaster.EventItemThrowRequested -= ThrowItem;
 		}
 		private void AddItem(Transform item)
         {
@@ -62,19 +62,21 @@ namespace URPMk2
 			item.GetComponent<ItemMaster>().CallEventActivateOnParent();
 			selectedItem = item;
 		}
-		private void CallEventItemThrow(InputAction.CallbackContext obj)
+		private void CallEventItemThrowRequested(InputAction.CallbackContext obj)
         {
 			if (selectedItem != null)
-				inventoryMaster.CallEventItemThrow(selectedItem);
+				inventoryMaster.CallEventItemThrowRequested(selectedItem);
         }
 		private void ThrowItem(Transform item)
         {
-			if (!inventoryItems.Contains(item))
+			if (item != selectedItem || !inventoryItems.Contains(item))
 				return;
 
 			ItemMaster currentItemMaster = item.GetComponent<ItemMaster>();
 			Transform origin = item.parent;
 
+			inventoryItems.Remove(item);
+			selectedItem = null;
 			item.SetParent(null);
 			currentItemMaster.CallEventDisableOnParent();
 			currentItemMaster.CallEventItemThrow(origin);

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace URPMk2
 {
@@ -13,16 +14,20 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
-			itemMaster.EventItemThrow += ThrowItem;
+			itemMaster.EventItemThrow += StartThrowItem;
 		}
 		
 		private void OnDisable()
 		{
-			itemMaster.EventItemThrow -= ThrowItem;
+			itemMaster.EventItemThrow -= StartThrowItem;
 		}
-		private void ThrowItem(Transform origin)
+		private void StartThrowItem(Transform origin)
         {
-			Debug.Log("The transform is: " + origin);
+			StartCoroutine(ThrowItem(origin));
+        }
+		private IEnumerator ThrowItem(Transform origin)
+        {
+			yield return new WaitForEndOfFrame();
 			if (GetComponent<Rigidbody>() != null)
 				GetComponent<Rigidbody>().AddForce(origin.forward * 
 					itemMaster.GetItemSettings().throwForce, ForceMode.Impulse);

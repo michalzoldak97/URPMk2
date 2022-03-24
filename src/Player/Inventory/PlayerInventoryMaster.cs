@@ -9,6 +9,7 @@ namespace URPMk2
 		public event ItemEventHandler EventItemPickUp;
 		public event ItemEventHandler EventItemPlaced;
 		public event ItemEventHandler EventItemActivate;
+		public event ItemEventHandler EventItemThrowRequested;
 		public event ItemEventHandler EventItemThrow;
 
 		public void CallEventItemPickUp(Transform item)
@@ -22,6 +23,10 @@ namespace URPMk2
 		public void CallEventItemActivate(Transform item)
         {
 			EventItemActivate?.Invoke(item);
+		}
+		public void CallEventItemThrowRequested(Transform item)
+		{
+			EventItemThrowRequested?.Invoke(item);
 		}
 		public void CallEventItemThrow(Transform item)
 		{

@@ -9,7 +9,6 @@ namespace URPMk2
 		private void SetInit()
 		{
 			itemMaster = GetComponent<ItemMaster>();
-			originalLayer = gameObject.layer;
 		}
 		
 		private void OnEnable()
@@ -24,7 +23,11 @@ namespace URPMk2
 			itemMaster.EventItemPickedUp -= ChangeOnPickUp;
 			itemMaster.EventItemThrow -= ChangeOnThrow;
 		}
-		private void SetLayer(int toSet)
+        private void Start()
+        {
+			originalLayer = gameObject.layer;
+		}
+        private void SetLayer(int toSet)
         {
 			gameObject.layer = toSet;
 			foreach (Transform child in transform)

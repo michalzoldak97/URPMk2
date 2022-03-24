@@ -29,7 +29,7 @@ namespace URPMk2
 			itemMaster.CallEventItemPickedUp(origin);
 			origin.root.GetComponent<IInventoryMaster>().CallEventItemPickUp(gameObject.transform);
 			// set obj state
-			if (!itemMaster.GetItemSettings().deactivateObjOnPickUp)
+			if (!itemMaster.GetItemSettings().deactivateObjOnPickUp || itemMaster.isSelectedOnParent)
 				return;
 			gameObject.SetActive(false);
 		}

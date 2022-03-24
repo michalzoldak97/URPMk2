@@ -19,12 +19,14 @@ namespace URPMk2
 		{
 			SetInit();
 			inventoryMaster.EventItemPlaced += RebuildInventoryUI;
+			inventoryMaster.EventItemThrow += RebuildInventoryUI;
 			inventoryMaster.EventItemActivate += StartMarkButtonActive;
 		}
 		
 		private void OnDisable()
 		{
 			inventoryMaster.EventItemPlaced -= RebuildInventoryUI;
+			inventoryMaster.EventItemThrow -= RebuildInventoryUI;
 			inventoryMaster.EventItemActivate -= StartMarkButtonActive;
 		}
 		private void CallEventItemActivate(Transform item)
@@ -61,6 +63,7 @@ namespace URPMk2
 			ClearUI();
 			List<Transform> items = inventoryMaster.GetItemList();
 			int itemCount = items.Count;
+			Debug.Log("Clear UI called, num of items: " + itemCount);
 			for (int i = 0; i < itemCount; i++)
             {
 				AddItemButton(items[i]);
