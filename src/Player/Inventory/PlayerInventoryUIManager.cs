@@ -63,7 +63,6 @@ namespace URPMk2
 			ClearUI();
 			List<Transform> items = inventoryMaster.GetItemList();
 			int itemCount = items.Count;
-			Debug.Log("Clear UI called, num of items: " + itemCount);
 			for (int i = 0; i < itemCount; i++)
             {
 				AddItemButton(items[i]);

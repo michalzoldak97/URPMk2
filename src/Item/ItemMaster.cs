@@ -29,7 +29,6 @@ namespace URPMk2
         }
         public void CallEventItemThrow(Transform origin)
         {
-            Debug.Log("Event called"); 
             EventItemThrow?.Invoke(origin);
         }
         public void CallEventActivateOnParent()

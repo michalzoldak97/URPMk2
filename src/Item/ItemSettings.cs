@@ -16,5 +16,8 @@ namespace URPMk2
 		public float[] onPlayerRotation;
 		public Sprite itemIcon;
 		public Sprite itemImage;
+		public AudioClip pickUpSound;
+		public AudioClip throwSound;
+		public AudioClip[] collisionSounds;
 	}
 }
