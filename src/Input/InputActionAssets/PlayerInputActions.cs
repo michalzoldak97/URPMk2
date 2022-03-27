@@ -252,6 +252,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""35431b0d-5fdf-4b6d-a65c-8b9369598cba"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -441,6 +450,17 @@ namespace URPMk2
                     ""action"": ""ItemThrow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0306d550-ac3a-4430-acdf-d218889e8a20"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -534,6 +554,15 @@ namespace URPMk2
                     ""type"": ""PassThrough"",
                     ""id"": ""99d6e9d3-0895-4b2e-84c2-8d1be3664ce9"",
                     ""expectedControlType"": ""Quaternion"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""2466e617-2215-40ec-99ad-f7e7cfc04d02"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -913,6 +942,17 @@ namespace URPMk2
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""445a6bab-d614-4e03-8da7-c2d2d2f4b0b2"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -936,6 +976,7 @@ namespace URPMk2
             m_Humanoid_MouseY = m_Humanoid.FindAction("MouseY", throwIfNotFound: true);
             m_Humanoid_ItemInteract = m_Humanoid.FindAction("ItemInteract", throwIfNotFound: true);
             m_Humanoid_ItemThrow = m_Humanoid.FindAction("ItemThrow", throwIfNotFound: true);
+            m_Humanoid_ToggleInventory = m_Humanoid.FindAction("ToggleInventory", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -948,6 +989,7 @@ namespace URPMk2
             m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+            m_UI_ToggleInventory = m_UI.FindAction("ToggleInventory", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1080,6 +1122,7 @@ namespace URPMk2
         private readonly InputAction m_Humanoid_MouseY;
         private readonly InputAction m_Humanoid_ItemInteract;
         private readonly InputAction m_Humanoid_ItemThrow;
+        private readonly InputAction m_Humanoid_ToggleInventory;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1092,6 +1135,7 @@ namespace URPMk2
             public InputAction @MouseY => m_Wrapper.m_Humanoid_MouseY;
             public InputAction @ItemInteract => m_Wrapper.m_Humanoid_ItemInteract;
             public InputAction @ItemThrow => m_Wrapper.m_Humanoid_ItemThrow;
+            public InputAction @ToggleInventory => m_Wrapper.m_Humanoid_ToggleInventory;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1125,6 +1169,9 @@ namespace URPMk2
                     @ItemThrow.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemThrow;
                     @ItemThrow.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemThrow;
                     @ItemThrow.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnItemThrow;
+                    @ToggleInventory.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleInventory;
+                    @ToggleInventory.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleInventory;
+                    @ToggleInventory.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleInventory;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1153,6 +1200,9 @@ namespace URPMk2
                     @ItemThrow.started += instance.OnItemThrow;
                     @ItemThrow.performed += instance.OnItemThrow;
                     @ItemThrow.canceled += instance.OnItemThrow;
+                    @ToggleInventory.started += instance.OnToggleInventory;
+                    @ToggleInventory.performed += instance.OnToggleInventory;
+                    @ToggleInventory.canceled += instance.OnToggleInventory;
                 }
             }
         }
@@ -1171,6 +1221,7 @@ namespace URPMk2
         private readonly InputAction m_UI_RightClick;
         private readonly InputAction m_UI_TrackedDevicePosition;
         private readonly InputAction m_UI_TrackedDeviceOrientation;
+        private readonly InputAction m_UI_ToggleInventory;
         public struct UIActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1185,6 +1236,7 @@ namespace URPMk2
             public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
             public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
             public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+            public InputAction @ToggleInventory => m_Wrapper.m_UI_ToggleInventory;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1224,6 +1276,9 @@ namespace URPMk2
                     @TrackedDeviceOrientation.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
+                    @ToggleInventory.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleInventory;
+                    @ToggleInventory.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleInventory;
+                    @ToggleInventory.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleInventory;
                 }
                 m_Wrapper.m_UIActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1258,6 +1313,9 @@ namespace URPMk2
                     @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+                    @ToggleInventory.started += instance.OnToggleInventory;
+                    @ToggleInventory.performed += instance.OnToggleInventory;
+                    @ToggleInventory.canceled += instance.OnToggleInventory;
                 }
             }
         }
@@ -1280,6 +1338,7 @@ namespace URPMk2
             void OnMouseY(InputAction.CallbackContext context);
             void OnItemInteract(InputAction.CallbackContext context);
             void OnItemThrow(InputAction.CallbackContext context);
+            void OnToggleInventory(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
@@ -1293,6 +1352,7 @@ namespace URPMk2
             void OnRightClick(InputAction.CallbackContext context);
             void OnTrackedDevicePosition(InputAction.CallbackContext context);
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+            void OnToggleInventory(InputAction.CallbackContext context);
         }
     }
 }

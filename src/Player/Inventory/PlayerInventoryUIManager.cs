@@ -2,25 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 namespace URPMk2
 {
 	public class PlayerInventoryUIManager : MonoBehaviour
 	{
-		[SerializeField] Transform itemUIParent;
 		[SerializeField] ItemButtonsSO itemButtons;
+		[SerializeField] Transform itemUIParent;
+		[SerializeField] GameObject inventoryUIParent;
+		private bool isInventoryUIActive;
 		private PlayerInventoryMaster inventoryMaster;
 		private void SetInit()
 		{
 			inventoryMaster = GetComponent<PlayerInventoryMaster>();
 		}
-		
-		private void OnEnable()
+
+        private void Start()
+        {
+			ToggleInventoryUI(false);
+		}
+
+        private void OnEnable()
 		{
 			SetInit();
 			inventoryMaster.EventItemPlaced += RebuildInventoryUI;
 			inventoryMaster.EventItemThrow += RebuildInventoryUI;
 			inventoryMaster.EventItemActivate += StartMarkButtonActive;
+			InputManager.playerInputActions.Humanoid.ToggleInventory.performed += EnableInventoryUI;
+			InputManager.playerInputActions.Humanoid.ToggleInventory.Enable();
+			InputManager.playerInputActions.UI.ToggleInventory.performed += DisableInventoryUI;
+			InputManager.playerInputActions.UI.ToggleInventory.Enable();
 		}
 		
 		private void OnDisable()
@@ -28,6 +40,10 @@ namespace URPMk2
 			inventoryMaster.EventItemPlaced -= RebuildInventoryUI;
 			inventoryMaster.EventItemThrow -= RebuildInventoryUI;
 			inventoryMaster.EventItemActivate -= StartMarkButtonActive;
+			InputManager.playerInputActions.Humanoid.ToggleInventory.performed -= EnableInventoryUI;
+			InputManager.playerInputActions.Humanoid.ToggleInventory.Disable();
+			InputManager.playerInputActions.UI.ToggleInventory.performed -= DisableInventoryUI;
+			InputManager.playerInputActions.UI.ToggleInventory.Disable();
 		}
 		private void CallEventItemActivate(Transform item)
         {
@@ -96,5 +112,34 @@ namespace URPMk2
                 buttonCount++;
             }
         }
+		private void ToggleInventoryUI(bool toState)
+        {
+			CursorManager.ToggleCursorState(toState);
+			if (toState)
+				InputManager.ToggleActionMap(InputManager.playerInputActions.UI);
+			else
+				InputManager.ToggleActionMap(InputManager.playerInputActions.Humanoid);
+			if (isInventoryUIActive)
+			{
+				InputManager.playerInputActions.UI.Enable();
+				InputManager.playerInputActions.Humanoid.Disable();
+			}
+			else
+			{
+				InputManager.playerInputActions.UI.Disable();
+				InputManager.playerInputActions.Humanoid.Enable();
+			}
+			inventoryUIParent.SetActive(toState);
+		}
+		private void EnableInventoryUI(InputAction.CallbackContext obj)
+        {
+			isInventoryUIActive = !isInventoryUIActive;
+			ToggleInventoryUI(isInventoryUIActive);
+		}
+		private void DisableInventoryUI(InputAction.CallbackContext obj)
+		{
+			isInventoryUIActive = !isInventoryUIActive;
+			ToggleInventoryUI(isInventoryUIActive);
+		}
 	}
 }
