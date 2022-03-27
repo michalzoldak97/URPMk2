@@ -5,6 +5,7 @@ namespace URPMk2
 	public class ItemSounds : MonoBehaviour
 	{
 		private int playerLayer;
+		private AudioClip[] hitSounds;
 		private ItemMaster itemMaster;
 		private void SetInit()
 		{
@@ -12,7 +13,8 @@ namespace URPMk2
 		}
         private void Start()
         {
-            playerLayer = 1 << LayerMask.NameToLayer("Player");
+            playerLayer = LayerMask.NameToLayer("Player");
+			hitSounds = itemMaster.GetItemSettings().collisionSounds;
 		}
         private void OnEnable()
 		{
@@ -34,5 +36,12 @@ namespace URPMk2
         {
 			AudioSource.PlayClipAtPoint(itemMaster.GetItemSettings().throwSound, transform.position);
 		}
-	}
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.layer != playerLayer)
+            {
+				AudioSource.PlayClipAtPoint(hitSounds[Random.Range(0, hitSounds.Length - 1)], transform.position);
+			}
+        }
+    }
 }
