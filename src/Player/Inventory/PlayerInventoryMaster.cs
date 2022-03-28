@@ -5,6 +5,7 @@ namespace URPMk2
 {
 	public class PlayerInventoryMaster : MonoBehaviour, IInventoryMaster
 	{
+		public Transform itemCamera;
 		public delegate void ItemEventHandler(Transform item);
 		public event ItemEventHandler EventItemPickUp;
 		public event ItemEventHandler EventItemPlaced;
