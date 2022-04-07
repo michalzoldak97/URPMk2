@@ -9,5 +9,11 @@ namespace URPMk2
         {
 			return (int)(Mathf.Log(layer.value, 2));
 		}
+		public static Vector3 GetVector3FromFloat(float[] toSet)
+        {
+			if (toSet.Length != 3)
+				return Vector3.zero;
+			return new Vector3(toSet[0], toSet[1], toSet[2]);
+        }
 	}
 }

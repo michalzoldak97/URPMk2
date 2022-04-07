@@ -19,6 +19,9 @@ namespace URPMk2
         public event ItemInventoryEventhandler EventActivateOnParent;
         public event ItemInventoryEventhandler EventDisableOnParent;
 
+        public delegate void ItemCameraEventHandler(bool toCameraState);
+        public event ItemCameraEventHandler EventToggleItemCamera;
+
         public void CallEventInteractionRequested(Transform origin)
         {
             EventInteractionRequested?.Invoke(origin);
@@ -38,6 +41,10 @@ namespace URPMk2
         public void CallEventDisableOnParent()
         {
             EventDisableOnParent?.Invoke();
+        }
+        public void CallEventToggleItemCamera(bool toCameraState)
+        {
+            EventToggleItemCamera?.Invoke(toCameraState);
         }
     }
 }

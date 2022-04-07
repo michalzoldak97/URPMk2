@@ -17,12 +17,14 @@ namespace URPMk2
 			SetInit();
 			itemMaster.EventActivateOnParent += OnActivate;
 			itemMaster.EventDisableOnParent += OnDeactivate;
+			itemMaster.EventToggleItemCamera += ChangeItemCameraState;
 		}
 		
 		private void OnDisable()
 		{
 			itemMaster.EventActivateOnParent -= OnActivate;
 			itemMaster.EventDisableOnParent -= OnDeactivate;
+			itemMaster.EventToggleItemCamera -= ChangeItemCameraState;
 		}
 		private void OnActivate()
         {
@@ -33,22 +35,22 @@ namespace URPMk2
 		private void OnDeactivate()
 		{
 			shouldInformCamera = false;
+			inventoryMaster = null;
+		}
+		private void ChangeItemCameraState(bool toState)
+        {
+			inventoryMaster.itemCamera.gameObject.SetActive(toState);
+			shouldInformCamera = !toState;
 		}
         private void OnTriggerStay(Collider other)
         {
 			if (inventoryMaster != null && shouldInformCamera)
-			{
-				inventoryMaster.itemCamera.gameObject.SetActive(true);
-				shouldInformCamera = false;
-			}
-        }
+				ChangeItemCameraState(true);
+		}
 		private void OnTriggerExit(Collider other)
 		{
 			if (inventoryMaster != null)
-			{
-				inventoryMaster.itemCamera.gameObject.SetActive(false);
-				shouldInformCamera = true;
-			}
+				ChangeItemCameraState(false);
 		}
 	}
 }

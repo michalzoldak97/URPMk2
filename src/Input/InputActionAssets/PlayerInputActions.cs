@@ -261,6 +261,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""89acea72-66c4-46b9-8431-ed4ecc3f3cb8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -459,6 +468,17 @@ namespace URPMk2
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""164d35c3-1225-4aeb-86eb-58e98d0ba520"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -977,6 +997,7 @@ namespace URPMk2
             m_Humanoid_ItemInteract = m_Humanoid.FindAction("ItemInteract", throwIfNotFound: true);
             m_Humanoid_ItemThrow = m_Humanoid.FindAction("ItemThrow", throwIfNotFound: true);
             m_Humanoid_ToggleInventory = m_Humanoid.FindAction("ToggleInventory", throwIfNotFound: true);
+            m_Humanoid_Aim = m_Humanoid.FindAction("Aim", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1123,6 +1144,7 @@ namespace URPMk2
         private readonly InputAction m_Humanoid_ItemInteract;
         private readonly InputAction m_Humanoid_ItemThrow;
         private readonly InputAction m_Humanoid_ToggleInventory;
+        private readonly InputAction m_Humanoid_Aim;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1136,6 +1158,7 @@ namespace URPMk2
             public InputAction @ItemInteract => m_Wrapper.m_Humanoid_ItemInteract;
             public InputAction @ItemThrow => m_Wrapper.m_Humanoid_ItemThrow;
             public InputAction @ToggleInventory => m_Wrapper.m_Humanoid_ToggleInventory;
+            public InputAction @Aim => m_Wrapper.m_Humanoid_Aim;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1172,6 +1195,9 @@ namespace URPMk2
                     @ToggleInventory.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleInventory;
                     @ToggleInventory.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleInventory;
                     @ToggleInventory.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleInventory;
+                    @Aim.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnAim;
+                    @Aim.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnAim;
+                    @Aim.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnAim;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1203,6 +1229,9 @@ namespace URPMk2
                     @ToggleInventory.started += instance.OnToggleInventory;
                     @ToggleInventory.performed += instance.OnToggleInventory;
                     @ToggleInventory.canceled += instance.OnToggleInventory;
+                    @Aim.started += instance.OnAim;
+                    @Aim.performed += instance.OnAim;
+                    @Aim.canceled += instance.OnAim;
                 }
             }
         }
@@ -1339,6 +1368,7 @@ namespace URPMk2
             void OnItemInteract(InputAction.CallbackContext context);
             void OnItemThrow(InputAction.CallbackContext context);
             void OnToggleInventory(InputAction.CallbackContext context);
+            void OnAim(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

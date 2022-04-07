@@ -25,12 +25,12 @@ namespace URPMk2
 		private void SetPosition(Transform origin)
         {
 			float[] c = itemMaster.GetItemSettings().onPlayerPosition;
-			gameObject.transform.localPosition = new Vector3(c[0], c[1], c[2]);
+			gameObject.transform.localPosition = Utils.GetVector3FromFloat(c);
         }
 		private void SetRotation(Transform origin)
         {
 			float[] c = itemMaster.GetItemSettings().onPlayerRotation;
-			gameObject.transform.localRotation = Quaternion.Euler(new Vector3(c[0], c[1], c[2]));
+			gameObject.transform.localRotation = Quaternion.Euler(Utils.GetVector3FromFloat(c));
 		}
 	}
 }
