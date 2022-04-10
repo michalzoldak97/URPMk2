@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace URPMk2
@@ -55,16 +56,25 @@ namespace URPMk2
 				weaponMaster.isWeaponLoaded = false;
             }
         }
+		private IEnumerator ReloadAmmo(int amountToRequest)
+        {
+			weaponMaster.isReloading = true;
+			yield return new WaitForSeconds(weaponMaster.GetWeaponSettings().reloadTime);
+			
+			ammoMaster.CallEventAmmoChange(currentAmmoCode, -amountToRequest, this);
+			if (currentAmmo > 0)
+				weaponMaster.isWeaponLoaded = true;
+
+			weaponMaster.CallEventReload();
+			weaponMaster.isReloading = false;
+		}
 		private void OnReload()
         {
 			int amountToRequest = weaponMaster.GetWeaponSettings().ammoCapacity - currentAmmo;
 			if (amountToRequest < 1 || ammoMaster == null)
 				return;
 
-			Debug.Log("Event ammo change called from gun");
-			ammoMaster.CallEventAmmoChange(currentAmmoCode, -amountToRequest, this);
-			if (currentAmmo > 0)
-				weaponMaster.isWeaponLoaded = true;
+			StartCoroutine(ReloadAmmo(amountToRequest));
 		}
 		private void SetAmmoMaster(Transform origin)
         {

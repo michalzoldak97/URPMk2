@@ -45,7 +45,7 @@ namespace URPMk2
 				playerAmmoStore[ammoCode];
 
 			playerAmmoStore[ammoCode] -= availableAmount;
-			Debug.Log("Player calls change ammo on weapon");
+
 			origin.ChangeAmmo(availableAmount);
 		}
 	}

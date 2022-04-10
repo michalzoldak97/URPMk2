@@ -32,7 +32,6 @@ namespace URPMk2
 				weaponMaster.isAim)
 				return;
 
-			Debug.Log("Reload requested");
 			weaponMaster.CallEventReloadRequest();
         }
 	}

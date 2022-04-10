@@ -6,6 +6,7 @@ namespace URPMk2
 	public class WeaponSettingsSO : ScriptableObject
 	{
 		public int ammoCapacity;
+		public float reloadTime;
 		public float[] aimPosition;
 		public string defaultAmmoCode;
 		public string[] availableAmmoCodes;
