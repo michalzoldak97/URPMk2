@@ -8,15 +8,15 @@ namespace URPMk2
     {
         [SerializeField] private PlayerSettings playerSettings;
         public PlayerSettings GetPlayerSettings() { return playerSettings; }
-        public delegate void PlayerAmmoEventsHandler(string ammoCode, int amount);
+        public delegate void PlayerAmmoEventsHandler(string ammoCode, int amount, WeaponAmmo origin);
         public event PlayerAmmoEventsHandler EventPlayerAmmoChange;
         private void Start()
         {
             InputManager.Start();
         }
-        public void CallEventAmmoChange(string ammoCode, int amount)
+        public void CallEventAmmoChange(string ammoCode, int amount, WeaponAmmo origin)
         {
-            EventPlayerAmmoChange?.Invoke(ammoCode, amount);
+            EventPlayerAmmoChange?.Invoke(ammoCode, amount, origin);
         }
     }
 }

@@ -29,13 +29,24 @@ namespace URPMk2
 		{
 			playerMaster.EventPlayerAmmoChange -= ChangePlayerAmmo;
 		}
-		private void ChangePlayerAmmo(string ammoCode, int amount)
+		private void ChangePlayerAmmo(string ammoCode, int amount, WeaponAmmo origin)
         {
-			if (!playerAmmoStore.ContainsKey(ammoCode) ||
-				playerAmmoStore[ammoCode] + amount < 0)
+			if (!playerAmmoStore.ContainsKey(ammoCode))
 				return;
 
-			playerAmmoStore[ammoCode] += amount;
+			if (amount > 0)
+			{
+				playerAmmoStore[ammoCode] += amount;
+				return;
+			}
+
+			int availableAmount = playerAmmoStore[ammoCode] + amount >= 0 ? 
+				-amount : 
+				playerAmmoStore[ammoCode];
+
+			playerAmmoStore[ammoCode] -= availableAmount;
+			Debug.Log("Player calls change ammo on weapon");
+			origin.ChangeAmmo(availableAmount);
 		}
 	}
 }
