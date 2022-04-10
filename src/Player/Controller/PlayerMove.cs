@@ -76,8 +76,7 @@ namespace URPMk2
         private IEnumerator OverseeJumpState()
         {
             yield return new WaitForFixedUpdate();
-            WaitUntil waitUntillLand = new WaitUntil(() => myCharacterController.isGrounded);
-            yield return waitUntillLand;
+            while (myCharacterController.isGrounded) yield return null;
             movementEventsHandler.CallEventLand(speedIdx);
         }
         private void HandleJump(InputAction.CallbackContext obj)

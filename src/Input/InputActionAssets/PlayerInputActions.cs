@@ -270,6 +270,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""aef70b32-5250-4e8d-9ff9-b3d0bd925f5a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -479,6 +488,17 @@ namespace URPMk2
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""434a3194-cb72-486f-8c54-6cf879a4014b"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -998,6 +1018,7 @@ namespace URPMk2
             m_Humanoid_ItemThrow = m_Humanoid.FindAction("ItemThrow", throwIfNotFound: true);
             m_Humanoid_ToggleInventory = m_Humanoid.FindAction("ToggleInventory", throwIfNotFound: true);
             m_Humanoid_Aim = m_Humanoid.FindAction("Aim", throwIfNotFound: true);
+            m_Humanoid_Shoot = m_Humanoid.FindAction("Shoot", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1145,6 +1166,7 @@ namespace URPMk2
         private readonly InputAction m_Humanoid_ItemThrow;
         private readonly InputAction m_Humanoid_ToggleInventory;
         private readonly InputAction m_Humanoid_Aim;
+        private readonly InputAction m_Humanoid_Shoot;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1159,6 +1181,7 @@ namespace URPMk2
             public InputAction @ItemThrow => m_Wrapper.m_Humanoid_ItemThrow;
             public InputAction @ToggleInventory => m_Wrapper.m_Humanoid_ToggleInventory;
             public InputAction @Aim => m_Wrapper.m_Humanoid_Aim;
+            public InputAction @Shoot => m_Wrapper.m_Humanoid_Shoot;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1198,6 +1221,9 @@ namespace URPMk2
                     @Aim.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnAim;
                     @Aim.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnAim;
                     @Aim.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnAim;
+                    @Shoot.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnShoot;
+                    @Shoot.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnShoot;
+                    @Shoot.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnShoot;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1232,6 +1258,9 @@ namespace URPMk2
                     @Aim.started += instance.OnAim;
                     @Aim.performed += instance.OnAim;
                     @Aim.canceled += instance.OnAim;
+                    @Shoot.started += instance.OnShoot;
+                    @Shoot.performed += instance.OnShoot;
+                    @Shoot.canceled += instance.OnShoot;
                 }
             }
         }
@@ -1369,6 +1398,7 @@ namespace URPMk2
             void OnItemThrow(InputAction.CallbackContext context);
             void OnToggleInventory(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);
+            void OnShoot(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

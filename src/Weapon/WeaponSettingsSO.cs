@@ -13,5 +13,6 @@ namespace URPMk2
     {
 		public bool autoModeAvailable;
 		public bool burstModeAvaliable;
+		public float shootRate; // shoots / min
     }
 }

@@ -8,9 +8,11 @@ namespace URPMk2
 		private bool aimRequested;
 		private Vector3 startPosition, aimPosition;
 		private WeaponMaster weaponMaster;
+		private ItemMaster itemMaster;
 		private void SetInit()
 		{
 			weaponMaster = GetComponent<WeaponMaster>();
+			itemMaster = GetComponent<ItemMaster>();
 		}
         private void Start()
         {
@@ -33,12 +35,11 @@ namespace URPMk2
 		private void Aim(bool isRequested, Vector3 posToSet)
 		{
 			aimRequested = isRequested;
+			weaponMaster.isAim = isRequested;
 			if (weaponMaster.isReloading)
 				return;
 			transform.localPosition = posToSet;
-			ItemMaster itemMaster = GetComponent<ItemMaster>();
-			if (itemMaster != null)
-				itemMaster.CallEventToggleItemCamera(isRequested);
+			itemMaster.CallEventToggleItemCamera(isRequested);
 		}
 		private void HandleAim(InputAction.CallbackContext obj)
         {
