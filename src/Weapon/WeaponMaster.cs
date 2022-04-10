@@ -9,6 +9,9 @@ namespace URPMk2
 
 		public bool isAim;
 		public bool isReloading;
+		public bool isShootState, isShootingBurst;
+		public bool isWeaponLoaded = true;
+		public WeaponFireMode fireMode;
 		public delegate void WeaponInputEvenHandler();
 		public event WeaponInputEvenHandler EventAimRequest;
 		public event WeaponInputEvenHandler EventUnAim;

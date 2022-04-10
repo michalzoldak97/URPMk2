@@ -16,6 +16,8 @@ namespace URPMk2
 		}
         private void Start()
         {
+			float[] startPositionToSet = itemMaster.GetItemSettings().onPlayerPosition;
+			startPosition = Utils.GetVector3FromFloat(startPositionToSet);
 			float[] aimPositionToSet = weaponMaster.GetWeaponSettings().aimPosition;
 			aimPosition = Utils.GetVector3FromFloat(aimPositionToSet);
 		}
@@ -36,8 +38,6 @@ namespace URPMk2
 		}
 		private void Aim(bool isRequested, Vector3 posToSet)
 		{
-			if (!itemMaster.isSelectedOnParent)
-				return;
 			aimRequested = isRequested;
 			weaponMaster.isAim = isRequested;
 			if (weaponMaster.isReloading)
@@ -47,9 +47,10 @@ namespace URPMk2
 		}
 		private void HandleAim(InputAction.CallbackContext obj)
         {
+			if (!itemMaster.isSelectedOnParent || weaponMaster.isReloading)
+				return;
 			if (!aimRequested)
 			{
-				startPosition = transform.localPosition;
 				Aim(true, aimPosition);
 			}
 			else

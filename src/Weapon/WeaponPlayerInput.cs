@@ -6,9 +6,8 @@ namespace URPMk2
 {
 	public class WeaponPlayerInput : MonoBehaviour, IActionMapChangeSensitive
 	{
-		private bool isShootState;
 		private float shootRate;
-		private WaitForSeconds waitNextShoot;
+		private WaitForSeconds waitNextShootAuto;
 		private WeaponMaster weaponMaster;
 		private ItemMaster itemMaster;
 		private void SetInit()
@@ -20,7 +19,7 @@ namespace URPMk2
         {
 			WeaponSettingsSO weaponSettings = weaponMaster.GetWeaponSettings();
 			shootRate = 60f / weaponSettings.gunSettings.shootRate;
-			waitNextShoot = new WaitForSeconds(shootRate);
+			waitNextShootAuto = new WaitForSeconds(shootRate);
 		}
 
         private void OnEnable()
@@ -41,33 +40,70 @@ namespace URPMk2
 		}
 		private void AttempShoot()
         {
-			Debug.Log("Shoot    " + isShootState);
+			Debug.Log("Shoot    " + weaponMaster.isShootState);
         }
-
+		private void SingleShoot()
+        {
+			AttempShoot();
+		}
 		private IEnumerator AutoShoot()
         {
-            while (isShootState)
+            while (weaponMaster.isShootState)
             {
 				AttempShoot();
-				yield return waitNextShoot;
+				yield return waitNextShootAuto;
             }
         }
+		private IEnumerator BurstShoot()
+        {
+			weaponMaster.isShootingBurst = true;
+			BurstFireSettings burstFireSettings = weaponMaster.GetWeaponSettings().burstFireSettings;
+			WaitForSeconds waitNextShootBurst = new WaitForSeconds(60f / burstFireSettings.burstShootRate);
+			for (int i = 0; i < burstFireSettings.shootsInBurst; i++)
+            {
+				AttempShoot();
+				yield return waitNextShootBurst;
+			}
+			weaponMaster.isShootingBurst = false;
+		}
 		private void ReleaseTrigger(InputAction.CallbackContext obj)
         {
 			if (itemMaster.isSelectedOnParent)
-				isShootState = false;
+				weaponMaster.isShootState = false;
 		}
 		private void PullTrigger(InputAction.CallbackContext obj)
         {
-			if (itemMaster.isSelectedOnParent)
-			{
-				isShootState = true;
-				StartCoroutine(AutoShoot());
-			}
+			if (!itemMaster.isSelectedOnParent || 
+				weaponMaster.isReloading ||
+				!weaponMaster.isWeaponLoaded ||
+				weaponMaster.isShootingBurst)
+				return;
+
+			weaponMaster.isShootState = true;
+
+            switch (weaponMaster.fireMode)
+            {
+				case WeaponFireMode.Single:
+				{
+					SingleShoot();
+					break;
+				}
+				case WeaponFireMode.Auto:
+                {
+					StartCoroutine(AutoShoot());
+					break;
+				}
+				case WeaponFireMode.Burst:
+                {
+					StartCoroutine(BurstShoot());
+					break;
+				}
+				default:	break;
+            }
 		}
 		public void InputMapChange(InputActionMap actionMapToSet)
         {
-			isShootState = false;
+			weaponMaster.isShootState = false;
 		}
 	}
 }

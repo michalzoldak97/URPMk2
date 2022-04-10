@@ -7,6 +7,7 @@ namespace URPMk2
 	{
 		public float[] aimPosition;
 		public GunSettings gunSettings;
+		public BurstFireSettings burstFireSettings;
 	}
 	[System.Serializable]
 	public class GunSettings
@@ -14,5 +15,11 @@ namespace URPMk2
 		public bool autoModeAvailable;
 		public bool burstModeAvaliable;
 		public float shootRate; // shoots / min
+    }
+	[System.Serializable]
+	public class BurstFireSettings
+    {
+		public int shootsInBurst;
+		public float burstShootRate;
     }
 }
