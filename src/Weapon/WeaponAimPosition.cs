@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace URPMk2
 {
-	public class WeaponAimPosition : MonoBehaviour
+	public class WeaponAimPosition : MonoBehaviour, IActionMapChangeSensitive
 	{
 		private bool aimRequested;
 		private Vector3 startPosition, aimPosition;
@@ -25,15 +25,19 @@ namespace URPMk2
 			SetInit();
 			InputManager.playerInputActions.Humanoid.Aim.performed += HandleAim;
 			InputManager.playerInputActions.Humanoid.Aim.Enable();
+			InputManager.actionMapChange += InputMapChange;
 		}
 		
 		private void OnDisable()
 		{
 			InputManager.playerInputActions.Humanoid.Aim.performed -= HandleAim;
 			InputManager.playerInputActions.Humanoid.Aim.Disable();
+			InputManager.actionMapChange -= InputMapChange;
 		}
 		private void Aim(bool isRequested, Vector3 posToSet)
 		{
+			if (!itemMaster.isSelectedOnParent)
+				return;
 			aimRequested = isRequested;
 			weaponMaster.isAim = isRequested;
 			if (weaponMaster.isReloading)
@@ -51,5 +55,9 @@ namespace URPMk2
 			else
 				Aim(false, startPosition);
         }
+		public void InputMapChange(InputActionMap actionMapToSet)
+		{
+			Aim(false, startPosition);
+		}
 	}
 }

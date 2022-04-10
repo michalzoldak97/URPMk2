@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace URPMk2
 {
-	public class WeaponPlayerInput : MonoBehaviour
+	public class WeaponPlayerInput : MonoBehaviour, IActionMapChangeSensitive
 	{
 		private bool isShootState;
 		private float shootRate;
@@ -54,14 +54,18 @@ namespace URPMk2
         }
 		private void ReleaseTrigger(InputAction.CallbackContext obj)
         {
-			isShootState = false;
+			if (itemMaster.isSelectedOnParent)
+				isShootState = false;
 		}
 		private void PullTrigger(InputAction.CallbackContext obj)
         {
-			isShootState = true;
-			StartCoroutine(AutoShoot());
+			if (itemMaster.isSelectedOnParent)
+			{
+				isShootState = true;
+				StartCoroutine(AutoShoot());
+			}
 		}
-		private void InputMapChange(InputActionMap actionMapToSet)
+		public void InputMapChange(InputActionMap actionMapToSet)
         {
 			isShootState = false;
 		}
