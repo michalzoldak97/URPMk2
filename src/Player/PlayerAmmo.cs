@@ -22,12 +22,20 @@ namespace URPMk2
         private void OnEnable()
 		{
 			SetInit();
-			
+			playerMaster.EventPlayerAmmoChange += ChangePlayerAmmo;
 		}
 		
 		private void OnDisable()
 		{
-			
+			playerMaster.EventPlayerAmmoChange -= ChangePlayerAmmo;
+		}
+		private void ChangePlayerAmmo(string ammoCode, int amount)
+        {
+			if (!playerAmmoStore.ContainsKey(ammoCode) ||
+				playerAmmoStore[ammoCode] + amount < 0)
+				return;
+
+			playerAmmoStore[ammoCode] += amount;
 		}
 	}
 }
