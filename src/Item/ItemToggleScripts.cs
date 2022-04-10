@@ -29,7 +29,6 @@ namespace URPMk2
 		}
 		private void ActivateMonoScripts(Transform dummy)
 		{
-			Debug.Log("Activate for: " + transform.name);
 			foreach (MonoBehaviour script in scripts)
 			{
 				script.enabled = true;
@@ -37,7 +36,6 @@ namespace URPMk2
 		}
 		private void DeactivateMonoScripts(Transform dummy)
         {
-			Debug.Log("Deactivate for: " + transform.name);
 			foreach (MonoBehaviour script in scripts)
             {
 				script.enabled = false;

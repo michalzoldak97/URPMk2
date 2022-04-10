@@ -279,6 +279,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=1)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd7f693c-3bef-46fe-a815-c10119b2dcab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -499,6 +508,17 @@ namespace URPMk2
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fcbb61ea-7476-4127-abf1-62f9763e96dc"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1019,6 +1039,7 @@ namespace URPMk2
             m_Humanoid_ToggleInventory = m_Humanoid.FindAction("ToggleInventory", throwIfNotFound: true);
             m_Humanoid_Aim = m_Humanoid.FindAction("Aim", throwIfNotFound: true);
             m_Humanoid_Shoot = m_Humanoid.FindAction("Shoot", throwIfNotFound: true);
+            m_Humanoid_Reload = m_Humanoid.FindAction("Reload", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1167,6 +1188,7 @@ namespace URPMk2
         private readonly InputAction m_Humanoid_ToggleInventory;
         private readonly InputAction m_Humanoid_Aim;
         private readonly InputAction m_Humanoid_Shoot;
+        private readonly InputAction m_Humanoid_Reload;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1182,6 +1204,7 @@ namespace URPMk2
             public InputAction @ToggleInventory => m_Wrapper.m_Humanoid_ToggleInventory;
             public InputAction @Aim => m_Wrapper.m_Humanoid_Aim;
             public InputAction @Shoot => m_Wrapper.m_Humanoid_Shoot;
+            public InputAction @Reload => m_Wrapper.m_Humanoid_Reload;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1224,6 +1247,9 @@ namespace URPMk2
                     @Shoot.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnShoot;
                     @Shoot.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnShoot;
                     @Shoot.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnShoot;
+                    @Reload.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnReload;
+                    @Reload.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnReload;
+                    @Reload.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnReload;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1261,6 +1287,9 @@ namespace URPMk2
                     @Shoot.started += instance.OnShoot;
                     @Shoot.performed += instance.OnShoot;
                     @Shoot.canceled += instance.OnShoot;
+                    @Reload.started += instance.OnReload;
+                    @Reload.performed += instance.OnReload;
+                    @Reload.canceled += instance.OnReload;
                 }
             }
         }
@@ -1399,6 +1428,7 @@ namespace URPMk2
             void OnToggleInventory(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);
             void OnShoot(InputAction.CallbackContext context);
+            void OnReload(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
