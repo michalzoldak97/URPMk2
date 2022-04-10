@@ -7,6 +7,8 @@ namespace URPMk2
 	{
 		public int ammoCapacity;
 		public float[] aimPosition;
+		public string defaultAmmoCode;
+		public string[] availableAmmoCodes;
 		public GunSettings gunSettings;
 		public BurstFireSettings burstFireSettings;
 	}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace URPMk2
 {
-    public class PlayerMaster : MonoBehaviour
+    public class PlayerMaster : MonoBehaviour, IAmmoMaster
     {
         [SerializeField] private PlayerSettings playerSettings;
         public PlayerSettings GetPlayerSettings() { return playerSettings; }
@@ -14,7 +14,7 @@ namespace URPMk2
         {
             InputManager.Start();
         }
-        public void CallEventPlayerAmmoChange(string ammoCode, int amount)
+        public void CallEventAmmoChange(string ammoCode, int amount)
         {
             EventPlayerAmmoChange?.Invoke(ammoCode, amount);
         }
