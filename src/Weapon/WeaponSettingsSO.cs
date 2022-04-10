@@ -5,6 +5,7 @@ namespace URPMk2
 	[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/WeaponSettings", order = 3)]
 	public class WeaponSettingsSO : ScriptableObject
 	{
+		public int ammoCapacity;
 		public float[] aimPosition;
 		public GunSettings gunSettings;
 		public BurstFireSettings burstFireSettings;
@@ -14,6 +15,7 @@ namespace URPMk2
     {
 		public bool autoModeAvailable;
 		public bool burstModeAvaliable;
+		public int defaultFireMode;
 		public float shootRate; // shoots / min
     }
 	[System.Serializable]

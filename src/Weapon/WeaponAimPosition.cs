@@ -58,6 +58,8 @@ namespace URPMk2
         }
 		public void InputMapChange(InputActionMap actionMapToSet)
 		{
+			if (!itemMaster.isSelectedOnParent || weaponMaster.isReloading)
+				return;
 			Aim(false, startPosition);
 		}
 	}

@@ -15,6 +15,12 @@ namespace URPMk2
 		public delegate void WeaponInputEvenHandler();
 		public event WeaponInputEvenHandler EventAimRequest;
 		public event WeaponInputEvenHandler EventUnAim;
+		public event WeaponInputEvenHandler EventShootRequest;
+		public event WeaponInputEvenHandler EventReloadRequest;
+
+		public delegate void WeaponEventhandler();
+		public event WeaponEventhandler EventShoot;
+		public event WeaponEventhandler EventReload;
 
 		public void CallEventAimRequest()
         {
@@ -24,5 +30,25 @@ namespace URPMk2
         {
 			EventUnAim?.Invoke();
 		}
-	}
+		public void CallEventShootRequest()
+        {
+			EventShootRequest?.Invoke();
+		}
+		public void CallEventReloadRequest()
+		{
+			EventReloadRequest?.Invoke();
+		}
+		public void CallEventShoot()
+		{
+			EventShoot?.Invoke();
+		}
+		public void CallEventReload()
+		{
+			EventReload?.Invoke();
+		}
+		private void Start()
+        {
+			fireMode = (WeaponFireMode)weaponSettings.gunSettings.defaultFireMode;
+        }
+    }
 }
