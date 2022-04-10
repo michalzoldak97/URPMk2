@@ -29,6 +29,7 @@ namespace URPMk2
 			weaponMaster.EventShoot += OnShoot;
 			weaponMaster.EventReloadRequest += OnReload;
 			itemMaster.EventItemPickedUp += SetAmmoMaster;
+			itemMaster.EventItemThrow += BreakReloadProcess;
 		}
 		
 		private void OnDisable()
@@ -36,6 +37,8 @@ namespace URPMk2
 			weaponMaster.EventShoot -= OnShoot;
 			weaponMaster.EventReloadRequest -= OnReload;
 			itemMaster.EventItemPickedUp -= SetAmmoMaster;
+			itemMaster.EventItemThrow -= BreakReloadProcess;
+			BreakReloadProcess(transform);
 		}
 		public void ChangeAmmo(int amount)
         {
@@ -79,6 +82,15 @@ namespace URPMk2
 		private void SetAmmoMaster(Transform origin)
         {
 			ammoMaster = origin.parent.GetComponent<IAmmoMaster>();
+        }
+		private void BreakReloadProcess(Transform dummy)
+        {
+			if (!weaponMaster.isReloading)
+				return;
+
+			StopAllCoroutines();
+			weaponMaster.isWeaponLoaded = currentAmmo > 0;
+			weaponMaster.isReloading = false;
         }
 	}
 }
