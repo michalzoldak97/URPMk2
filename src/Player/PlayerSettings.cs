@@ -9,6 +9,7 @@ namespace URPMk2
     {
         public PlayerMoveSettings playerMoveSettings;
         public PlayerInventorySettings playerInventorySettings;
+        public PlayerAmmoSlot[] playerAmmoStore;
     }
     [System.Serializable]
     public class PlayerInventorySettings
@@ -35,5 +36,11 @@ namespace URPMk2
         public string[] stoneSurfaceTags;
         public string[] metalSurfaceTags;
         public string[] grassSurfaceTags;
+    }
+    [System.Serializable]
+    public class PlayerAmmoSlot
+    {
+        public string ammoCode;
+        public int ammoQuantity;
     }
 }
