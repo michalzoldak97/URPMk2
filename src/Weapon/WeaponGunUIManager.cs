@@ -31,6 +31,7 @@ namespace URPMk2
 			weaponMaster.EventReload += UpdateGunUI;
 			weaponMaster.EventFireModeChanged += UpdateGunUI;
 			itemMaster.EventItemPickedUp += SetAmmoOnPickup;
+			itemMaster.EventActivateOnParent += UpdateGunUI;
 			itemMaster.EventActivateOnParent += ToggleUICanvas;
 			itemMaster.EventDisableOnParent += ToggleUICanvas;
 		}
@@ -41,6 +42,7 @@ namespace URPMk2
 			weaponMaster.EventReload -= UpdateGunUI;
 			weaponMaster.EventFireModeChanged -= UpdateGunUI;
 			itemMaster.EventItemPickedUp -= SetAmmoOnPickup;
+			itemMaster.EventActivateOnParent -= UpdateGunUI;
 			itemMaster.EventActivateOnParent -= ToggleUICanvas;
 			itemMaster.EventDisableOnParent -= ToggleUICanvas;
 		}

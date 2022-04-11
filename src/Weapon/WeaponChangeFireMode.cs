@@ -12,19 +12,15 @@ namespace URPMk2
 			weaponMaster = GetComponent<WeaponMaster>();
 			itemMaster = GetComponent<ItemMaster>();
 		}
-        private void Start()
-        {
-			InputManager.playerInputActions.Humanoid.ChangeFireMode.Enable();
-		}
         private void OnEnable()
 		{
 			SetInit();
-			InputManager.playerInputActions.Humanoid.ChangeFireMode.performed += CallChangeFireMode;
+			weaponMaster.EventFireModeChangeRequest += CallChangeFireMode;
 		}
 		
 		private void OnDisable()
 		{
-			InputManager.playerInputActions.Humanoid.ChangeFireMode.performed -= CallChangeFireMode;
+			weaponMaster.EventFireModeChangeRequest -= CallChangeFireMode;
 		}
 		private void ChangeFireMode()
         {
@@ -53,7 +49,7 @@ namespace URPMk2
 
 			weaponMaster.CallEventFireModeChanged();
 		}
-		private void CallChangeFireMode(InputAction.CallbackContext obj)
+		private void CallChangeFireMode()
         {
 			if (!itemMaster.isSelectedOnParent || 
 				weaponMaster.isReloading ||

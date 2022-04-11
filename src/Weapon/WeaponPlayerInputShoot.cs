@@ -17,7 +17,6 @@ namespace URPMk2
 		}
 		private void Start()
 		{
-			InputManager.playerInputActions.Humanoid.Shoot.Enable();
 			WeaponSettingsSO weaponSettings = weaponMaster.GetWeaponSettings();
 			shootRate = 60f / weaponSettings.gunSettings.shootRate;
 			waitNextShootAuto = new WaitForSeconds(shootRate);
@@ -26,16 +25,16 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
-			InputManager.playerInputActions.Humanoid.Shoot.started += PullTrigger;
-			InputManager.playerInputActions.Humanoid.Shoot.performed += ReleaseTrigger;
+			weaponMaster.EventPullTrigger += PullTrigger;
+			weaponMaster.EventReleaseTrigger += ReleaseTrigger;
 			InputManager.actionMapChange += InputMapChange;
 			itemMaster.EventItemThrow += CancelShooting;
 		}
 
 		private void OnDisable()
 		{
-			InputManager.playerInputActions.Humanoid.Shoot.started -= PullTrigger;
-			InputManager.playerInputActions.Humanoid.Shoot.performed -= ReleaseTrigger;
+			weaponMaster.EventPullTrigger -= PullTrigger;
+			weaponMaster.EventReleaseTrigger -= ReleaseTrigger;
 			InputManager.actionMapChange -= InputMapChange;
 			itemMaster.EventItemThrow -= CancelShooting;
 			CancelShooting(transform);
@@ -43,7 +42,6 @@ namespace URPMk2
 		private void AttempShoot()
 		{
 			weaponMaster.CallEventShootRequest();
-			Debug.Log("Shoot    " + weaponMaster.isShootState);
 		}
 		private void SingleShoot()
 		{
@@ -51,7 +49,8 @@ namespace URPMk2
 		}
 		private IEnumerator AutoShoot()
 		{
-			while (weaponMaster.isShootState)
+			while (weaponMaster.isShootState &&
+				weaponMaster.isWeaponLoaded)
 			{
 				AttempShoot();
 				yield return waitNextShootAuto;
@@ -64,17 +63,20 @@ namespace URPMk2
 			WaitForSeconds waitNextShootBurst = new WaitForSeconds(60f / burstFireSettings.burstShootRate);
 			for (int i = 0; i < burstFireSettings.shootsInBurst; i++)
 			{
-				AttempShoot();
+				if (weaponMaster.isWeaponLoaded)
+					AttempShoot();
+				else
+					break;
 				yield return waitNextShootBurst;
 			}
 			weaponMaster.isShootingBurst = false;
 		}
-		private void ReleaseTrigger(InputAction.CallbackContext obj)
+		private void ReleaseTrigger()
 		{
 			if (itemMaster.isSelectedOnParent)
 				weaponMaster.isShootState = false;
 		}
-		private void PullTrigger(InputAction.CallbackContext obj)
+		private void PullTrigger()
 		{
 			if (!itemMaster.isSelectedOnParent ||
 				weaponMaster.isReloading ||

@@ -76,6 +76,13 @@ namespace URPMk2
 		}
 		private void OnReload()
         {
+			if (!itemMaster.isSelectedOnParent ||
+				weaponMaster.isReloading ||
+				weaponMaster.isAim ||
+				weaponMaster.isShootState ||
+				weaponMaster.isShootingBurst)
+				return;
+
 			int amountToRequest = weaponMaster.GetWeaponSettings().ammoCapacity - currentAmmo;
 			if (amountToRequest < 1 || ammoMaster == null)
 				return;

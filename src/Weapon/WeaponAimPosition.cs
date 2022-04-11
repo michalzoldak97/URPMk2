@@ -16,7 +16,6 @@ namespace URPMk2
 		}
         private void Start()
         {
-			InputManager.playerInputActions.Humanoid.Aim.Enable();
 			float[] startPositionToSet = itemMaster.GetItemSettings().onPlayerPosition;
 			startPosition = Utils.GetVector3FromFloat(startPositionToSet);
 			float[] aimPositionToSet = weaponMaster.GetWeaponSettings().aimPosition;
@@ -26,13 +25,13 @@ namespace URPMk2
         private void OnEnable()
 		{
 			SetInit();
-			InputManager.playerInputActions.Humanoid.Aim.performed += HandleAim;
+			weaponMaster.EventAimRequest += HandleAim;
 			InputManager.actionMapChange += InputMapChange;
 		}
 		
 		private void OnDisable()
 		{
-			InputManager.playerInputActions.Humanoid.Aim.performed -= HandleAim;
+			weaponMaster.EventAimRequest -= HandleAim;
 			InputManager.actionMapChange -= InputMapChange;
 		}
 		private void Aim(bool isRequested, Vector3 posToSet)
@@ -44,7 +43,7 @@ namespace URPMk2
 			transform.localPosition = posToSet;
 			itemMaster.CallEventToggleItemCamera(isRequested);
 		}
-		private void HandleAim(InputAction.CallbackContext obj)
+		private void HandleAim()
         {
 			if (!itemMaster.isSelectedOnParent || weaponMaster.isReloading)
 				return;

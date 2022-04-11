@@ -6,7 +6,7 @@ namespace URPMk2
 {
 	public class PlayerInventoryManager : MonoBehaviour
 	{
-		private Transform selectedItem;
+		public Transform selectedItem { get; private set; }
 		private List<Transform> inventoryItems = new List<Transform>();
 		public List<Transform> GetInventoryItems() { return inventoryItems; }
 		private PlayerInventoryMaster inventoryMaster;

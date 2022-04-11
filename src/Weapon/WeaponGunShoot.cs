@@ -5,9 +5,11 @@ namespace URPMk2
 	public class WeaponGunShoot : MonoBehaviour
 	{
 		private WeaponMaster weaponMaster;
+		private WeaponAmmo weaponAmmo;
 		private void SetInit()
 		{
 			weaponMaster = GetComponent<WeaponMaster>();
+			weaponAmmo = GetComponent<WeaponAmmo>();
 		}
 		
 		private void OnEnable()
@@ -22,7 +24,11 @@ namespace URPMk2
 		}
 		private void OnShoot()
         {
-			weaponMaster.CallEventShoot();
+			if (weaponAmmo.currentAmmo > 0)
+			{
+				weaponMaster.CallEventShoot();
+				Debug.Log("Shoot    " + weaponMaster.isShootState);
+			}
         }
 	}
 }
