@@ -6,10 +6,10 @@ namespace URPMk2
 	public class WeaponAmmo : MonoBehaviour
 	{
 		public int currentAmmo { get; private set; }
-		private string currentAmmoCode;
+		public string currentAmmoCode { get; private set; }
+		public IAmmoMaster ammoMaster { get; private set; }
 		private WeaponMaster weaponMaster;
 		private ItemMaster itemMaster;
-		private IAmmoMaster ammoMaster;
 		private void SetInit()
 		{
 			weaponMaster = GetComponent<WeaponMaster>();

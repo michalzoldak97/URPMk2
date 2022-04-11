@@ -18,5 +18,9 @@ namespace URPMk2
         {
             EventPlayerAmmoChange?.Invoke(ammoCode, amount, origin);
         }
+        public Dictionary<string, int> GetAmmoStore()
+        {
+            return GetComponent<PlayerAmmo>().playerAmmoStore;
+        }
     }
 }

@@ -5,7 +5,7 @@ namespace URPMk2
 {
 	public class PlayerAmmo : MonoBehaviour
 	{
-		private Dictionary<string, int> playerAmmoStore = new Dictionary<string, int>();
+		public Dictionary<string, int> playerAmmoStore { get; private set; }
 		private PlayerMaster playerMaster;
 		private void SetInit()
 		{
@@ -13,7 +13,9 @@ namespace URPMk2
 		}
         private void Start()
         {
-            foreach (PlayerAmmoSlot ammoSlot in playerMaster.GetPlayerSettings().playerAmmoStore)
+			playerAmmoStore = new Dictionary<string, int>();
+
+			foreach (PlayerAmmoSlot ammoSlot in playerMaster.GetPlayerSettings().playerAmmoStore)
             {
 				playerAmmoStore.Add(ammoSlot.ammoCode, ammoSlot.ammoQuantity);
             }

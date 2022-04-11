@@ -30,7 +30,7 @@ namespace URPMk2
         private void SetLayer(int toSet)
         {
 			gameObject.layer = toSet;
-			foreach (Transform child in transform)
+			foreach (Transform child in transform.GetComponentsInChildren<Transform>())
 			{
 				child.gameObject.layer = toSet;
 			}
