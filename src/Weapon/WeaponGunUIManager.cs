@@ -27,8 +27,9 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
-			weaponMaster.EventShoot += UpdateGunUI;
+			weaponMaster.EventUpdateAmmoUI += UpdateGunUI;
 			weaponMaster.EventReload += UpdateGunUI;
+			weaponMaster.EventFireModeChanged += UpdateGunUI;
 			itemMaster.EventItemPickedUp += SetAmmoOnPickup;
 			itemMaster.EventActivateOnParent += ToggleUICanvas;
 			itemMaster.EventDisableOnParent += ToggleUICanvas;
@@ -36,8 +37,9 @@ namespace URPMk2
 		
 		private void OnDisable()
 		{
-			weaponMaster.EventShoot -= UpdateGunUI;
+			weaponMaster.EventUpdateAmmoUI -= UpdateGunUI;
 			weaponMaster.EventReload -= UpdateGunUI;
+			weaponMaster.EventFireModeChanged -= UpdateGunUI;
 			itemMaster.EventItemPickedUp -= SetAmmoOnPickup;
 			itemMaster.EventActivateOnParent -= ToggleUICanvas;
 			itemMaster.EventDisableOnParent -= ToggleUICanvas;

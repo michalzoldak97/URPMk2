@@ -288,6 +288,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeFireMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""04e52dc5-8fd7-4597-b1ed-25a4abcbe5f2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -519,6 +528,17 @@ namespace URPMk2
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a355069-900f-44a0-a9fe-3eb68064f6a4"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeFireMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1040,6 +1060,7 @@ namespace URPMk2
             m_Humanoid_Aim = m_Humanoid.FindAction("Aim", throwIfNotFound: true);
             m_Humanoid_Shoot = m_Humanoid.FindAction("Shoot", throwIfNotFound: true);
             m_Humanoid_Reload = m_Humanoid.FindAction("Reload", throwIfNotFound: true);
+            m_Humanoid_ChangeFireMode = m_Humanoid.FindAction("ChangeFireMode", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1189,6 +1210,7 @@ namespace URPMk2
         private readonly InputAction m_Humanoid_Aim;
         private readonly InputAction m_Humanoid_Shoot;
         private readonly InputAction m_Humanoid_Reload;
+        private readonly InputAction m_Humanoid_ChangeFireMode;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1205,6 +1227,7 @@ namespace URPMk2
             public InputAction @Aim => m_Wrapper.m_Humanoid_Aim;
             public InputAction @Shoot => m_Wrapper.m_Humanoid_Shoot;
             public InputAction @Reload => m_Wrapper.m_Humanoid_Reload;
+            public InputAction @ChangeFireMode => m_Wrapper.m_Humanoid_ChangeFireMode;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1250,6 +1273,9 @@ namespace URPMk2
                     @Reload.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnReload;
                     @Reload.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnReload;
                     @Reload.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnReload;
+                    @ChangeFireMode.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnChangeFireMode;
+                    @ChangeFireMode.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnChangeFireMode;
+                    @ChangeFireMode.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnChangeFireMode;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1290,6 +1316,9 @@ namespace URPMk2
                     @Reload.started += instance.OnReload;
                     @Reload.performed += instance.OnReload;
                     @Reload.canceled += instance.OnReload;
+                    @ChangeFireMode.started += instance.OnChangeFireMode;
+                    @ChangeFireMode.performed += instance.OnChangeFireMode;
+                    @ChangeFireMode.canceled += instance.OnChangeFireMode;
                 }
             }
         }
@@ -1429,6 +1458,7 @@ namespace URPMk2
             void OnAim(InputAction.CallbackContext context);
             void OnShoot(InputAction.CallbackContext context);
             void OnReload(InputAction.CallbackContext context);
+            void OnChangeFireMode(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

@@ -17,6 +17,7 @@ namespace URPMk2
 		}
 		private void Start()
 		{
+			InputManager.playerInputActions.Humanoid.Shoot.Enable();
 			WeaponSettingsSO weaponSettings = weaponMaster.GetWeaponSettings();
 			shootRate = 60f / weaponSettings.gunSettings.shootRate;
 			waitNextShootAuto = new WaitForSeconds(shootRate);
@@ -27,16 +28,17 @@ namespace URPMk2
 			SetInit();
 			InputManager.playerInputActions.Humanoid.Shoot.started += PullTrigger;
 			InputManager.playerInputActions.Humanoid.Shoot.performed += ReleaseTrigger;
-			InputManager.playerInputActions.Humanoid.Shoot.Enable();
 			InputManager.actionMapChange += InputMapChange;
+			itemMaster.EventItemThrow += CancelShooting;
 		}
 
 		private void OnDisable()
 		{
 			InputManager.playerInputActions.Humanoid.Shoot.started -= PullTrigger;
 			InputManager.playerInputActions.Humanoid.Shoot.performed -= ReleaseTrigger;
-			InputManager.playerInputActions.Humanoid.Shoot.Disable();
 			InputManager.actionMapChange -= InputMapChange;
+			itemMaster.EventItemThrow -= CancelShooting;
+			CancelShooting(transform);
 		}
 		private void AttempShoot()
 		{
@@ -106,5 +108,11 @@ namespace URPMk2
 		{
 			weaponMaster.isShootState = false;
 		}
+		private void CancelShooting(Transform dummy)
+        {
+			StopAllCoroutines();
+			weaponMaster.isShootState = false;
+			weaponMaster.isShootingBurst = false;
+        }
 	}
 }

@@ -46,6 +46,8 @@ namespace URPMk2
 				currentAmmo += amount;
 			else
 				currentAmmo = currentAmmo + amount >= 0 ? currentAmmo + amount : 0;
+
+			weaponMaster.CallEventEventUpdateAmmoUI();
         }
 		private void OnShoot()
         {
@@ -58,7 +60,8 @@ namespace URPMk2
 				currentAmmo = 0;
 				weaponMaster.isWeaponLoaded = false;
             }
-        }
+			weaponMaster.CallEventEventUpdateAmmoUI();
+		}
 		private IEnumerator ReloadAmmo(int amountToRequest)
         {
 			weaponMaster.isReloading = true;

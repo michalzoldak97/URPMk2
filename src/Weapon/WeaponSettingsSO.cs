@@ -16,9 +16,8 @@ namespace URPMk2
 	[System.Serializable]
 	public class GunSettings
     {
-		public bool autoModeAvailable;
-		public bool burstModeAvaliable;
 		public int defaultFireMode;
+		public int[] avaliableFireModes;
 		public float shootRate; // shoots / min
     }
 	[System.Serializable]

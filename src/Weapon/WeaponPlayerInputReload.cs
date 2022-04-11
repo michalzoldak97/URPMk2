@@ -12,18 +12,19 @@ namespace URPMk2
 			weaponMaster = GetComponent<WeaponMaster>();
 			itemMaster = GetComponent<ItemMaster>();
 		}
-		
-		private void OnEnable()
+        private void Start()
+        {
+			InputManager.playerInputActions.Humanoid.Reload.Enable();
+		}
+        private void OnEnable()
 		{
 			SetInit();
 			InputManager.playerInputActions.Humanoid.Reload.performed += HandleReloadRequest;
-			InputManager.playerInputActions.Humanoid.Reload.Enable();
 		}
 		
 		private void OnDisable()
 		{
 			InputManager.playerInputActions.Humanoid.Reload.performed -= HandleReloadRequest;
-			InputManager.playerInputActions.Humanoid.Reload.Disable();
 		}
 		private void HandleReloadRequest(InputAction.CallbackContext obj)
         {
