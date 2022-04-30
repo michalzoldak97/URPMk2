@@ -65,6 +65,7 @@ namespace URPMk2
 		private IEnumerator ReloadAmmo(int amountToRequest)
         {
 			weaponMaster.isReloading = true;
+			weaponMaster.CallEventStartReload();
 			yield return new WaitForSeconds(weaponMaster.GetWeaponSettings().reloadTime);
 			
 			ammoMaster.CallEventAmmoChange(currentAmmoCode, -amountToRequest, this);

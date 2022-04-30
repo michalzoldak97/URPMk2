@@ -10,6 +10,8 @@ namespace URPMk2
 		public float[] aimPosition;
 		public string defaultAmmoCode;
 		public string[] availableAmmoCodes;
+		public AudioClip shootSound;
+		public AudioClip reloadSound;
 		public GunSettings gunSettings;
 		public BurstFireSettings burstFireSettings;
 	}

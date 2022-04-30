@@ -23,6 +23,7 @@ namespace URPMk2
 
 		public delegate void WeaponEventHandler();
 		public event WeaponEventHandler EventShoot;
+		public event WeaponEventHandler EventStartReload;
 		public event WeaponEventHandler EventReload;
 		public event WeaponEventHandler EventUpdateAmmoUI;
 
@@ -49,6 +50,10 @@ namespace URPMk2
 		public void CallEventShoot()
 		{
 			EventShoot?.Invoke();
+		}
+		public void CallEventStartReload()
+		{
+			EventStartReload?.Invoke();
 		}
 		public void CallEventReload()
 		{
