@@ -46,7 +46,10 @@ namespace URPMk2
 		private void HandleAim()
         {
 			if (!itemMaster.isSelectedOnParent || weaponMaster.isReloading)
+            {
+				aimRequested = !aimRequested;
 				return;
+			}
 			if (!aimRequested)
 			{
 				Aim(true, aimPosition);
