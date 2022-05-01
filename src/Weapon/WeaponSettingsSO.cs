@@ -23,7 +23,6 @@ namespace URPMk2
 		public float funcInter;
 		public float penCoeff;
 		public float penVar;
-		public LayerMask layersToHit;
 		public LayerMask layersToDamage;
     }
 	[System.Serializable]
@@ -32,7 +31,11 @@ namespace URPMk2
 		public int defaultFireMode;
 		public int[] avaliableFireModes;
 		public float shootRate; // shoots / min
-    }
+		public float shootRange;
+		public float recoil;
+		public LayerMask layersToHit;
+		public float[] shootStartPos;
+	}
 	[System.Serializable]
 	public class BurstFireSettings
     {
