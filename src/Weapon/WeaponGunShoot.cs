@@ -11,16 +11,18 @@ namespace URPMk2
 		private WeaponMaster weaponMaster;
 		private void SetInit()
 		{
-			myTransform = transform;
 			weaponMaster = GetComponent<WeaponMaster>();
+		}
+        private void Start()
+        {
+			myTransform = transform;
 			GunSettings gunSettings = weaponMaster.GetWeaponSettings().gunSettings;
 			recoil = gunSettings.recoil;
 			shootRange = gunSettings.shootRange;
 			layersToHit = gunSettings.layersToHit;
 			shootStartPos = Utils.GetVector3FromFloat(gunSettings.shootStartPos);
 		}
-		
-		private void OnEnable()
+        private void OnEnable()
 		{
 			SetInit();
 			weaponMaster.EventShoot += OnShoot;

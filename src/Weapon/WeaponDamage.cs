@@ -12,6 +12,10 @@ namespace URPMk2
         {
             myTransform = transform;
             weaponMaster = GetComponent<WeaponMaster>();
+        }
+        private void Start()
+        {
+            myTransform = transform;
             GunDamageSettings damageSettings = weaponMaster.GetWeaponSettings().damageSettings;
             funcCoeff = damageSettings.funcCoeff;
             funcInter = damageSettings.funcInter;
@@ -35,7 +39,6 @@ namespace URPMk2
         }
         private void HandleGunHit(RaycastHit hit)
         {
-            Debug.Log(hit.transform.name);
             if ((layersToDamage & (1 << hit.transform.gameObject.layer)) == 0)
                 return;
 
@@ -45,6 +48,7 @@ namespace URPMk2
             // global damage handler should know about obj armour
             float dmg = dist * funcCoeff + funcInter;
             float pen = penCoeff == 0 ? 1 : GetPenetration(dmg);
+            Debug.Log("Was hit: " + hit.transform.name + "dist: " + dist + " damage: " + dmg + " penetration: " + pen);
         }
     }
 }

@@ -11,10 +11,12 @@ namespace URPMk2
 		{
 			myAudioSource = GetComponent<AudioSource>();
 			weaponMaster = GetComponent<WeaponMaster>();
+		}
+        private void Start()
+        {
 			shootSound = weaponMaster.GetWeaponSettings().shootSound;
 		}
-
-		private void OnEnable()
+        private void OnEnable()
 		{
 			SetInit();
 			weaponMaster.EventShoot += PlayShootSound;
