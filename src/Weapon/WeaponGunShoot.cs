@@ -24,11 +24,7 @@ namespace URPMk2
 		}
 		private void OnShoot()
         {
-			if (weaponAmmo.currentAmmo > 0)
-			{
-				weaponMaster.CallEventShoot();
-				Debug.Log("Shoot    " + weaponMaster.isShootState);
-			}
+			Debug.Log("Shoot    " + weaponMaster.isShootState);
         }
 	}
 }
