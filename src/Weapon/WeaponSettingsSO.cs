@@ -24,6 +24,7 @@ namespace URPMk2
 		public float penCoeff;
 		public float penVar;
 		public LayerMask layersToHit;
+		public LayerMask layersToDamage;
     }
 	[System.Serializable]
 	public class GunSettings
