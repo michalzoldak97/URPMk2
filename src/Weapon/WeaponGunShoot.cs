@@ -15,12 +15,12 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
-			weaponMaster.EventShootRequest += OnShoot;
+			weaponMaster.EventShoot += OnShoot;
 		}
 		
 		private void OnDisable()
 		{
-			weaponMaster.EventShootRequest -= OnShoot;
+			weaponMaster.EventShoot -= OnShoot;
 		}
 		private void OnShoot()
         {

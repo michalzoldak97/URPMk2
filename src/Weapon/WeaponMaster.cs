@@ -16,7 +16,6 @@ namespace URPMk2
 		public event WeaponInputEvenHandler EventAimRequest;
 		public event WeaponInputEvenHandler EventPullTrigger;
 		public event WeaponInputEvenHandler EventReleaseTrigger;
-		public event WeaponInputEvenHandler EventShootRequest;
 		public event WeaponInputEvenHandler EventReloadRequest;
 		public event WeaponInputEvenHandler EventFireModeChangeRequest;
 		public event WeaponInputEvenHandler EventFireModeChanged;
@@ -26,6 +25,9 @@ namespace URPMk2
 		public event WeaponEventHandler EventStartReload;
 		public event WeaponEventHandler EventReload;
 		public event WeaponEventHandler EventUpdateAmmoUI;
+
+		public delegate void WeaponDamageEventHandler(Transform hit);
+		public event WeaponDamageEventHandler EventHitByGun;
 
 		public void CallEventAimRequest()
         {
@@ -38,10 +40,6 @@ namespace URPMk2
 		public void CallEventReleaseTrigger()
 		{
 			EventReleaseTrigger?.Invoke();
-		}
-		public void CallEventShootRequest()
-        {
-			EventShootRequest?.Invoke();
 		}
 		public void CallEventReloadRequest()
 		{
@@ -71,6 +69,10 @@ namespace URPMk2
 		{
 			EventUpdateAmmoUI?.Invoke();
 		}
+		public void CallEventHitByGun(Transform hit)
+        {
+			EventHitByGun?.Invoke(hit);
+        }
 		private void Start()
         {
 			fireMode = (WeaponFireMode)weaponSettings.gunSettings.defaultFireMode;

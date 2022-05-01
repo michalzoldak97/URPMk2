@@ -13,8 +13,18 @@ namespace URPMk2
 		public AudioClip shootSound;
 		public AudioClip reloadSound;
 		public GunSettings gunSettings;
+		public GunDamageSettings damageSettings;
 		public BurstFireSettings burstFireSettings;
 	}
+	[System.Serializable]
+	public class GunDamageSettings
+    {
+		public float funcCoeff;
+		public float funcInter;
+		public float penCoeff;
+		public float penVar;
+		public LayerMask layersToHit;
+    }
 	[System.Serializable]
 	public class GunSettings
     {

@@ -41,7 +41,7 @@ namespace URPMk2
 		}
 		private void AttempShoot()
 		{
-			weaponMaster.CallEventShootRequest();
+			weaponMaster.CallEventShoot();
 		}
 		private void SingleShoot()
 		{
