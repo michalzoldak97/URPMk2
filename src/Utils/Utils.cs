@@ -4,8 +4,6 @@ namespace URPMk2
 {
 	public static class Utils
 	{
-		public static string shootKey = "shoot";
-		public static string reloadKey = "reload";
 		// will not work for 31!!!
 		public static int GetLayerIndexFromSingleLayer(LayerMask layer)
         {

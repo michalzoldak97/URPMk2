@@ -36,11 +36,11 @@ namespace URPMk2
 		}
 		private void PlayShootAnimation()
         {
-			animator.SetTrigger(Utils.shootKey);
+			animator.SetTrigger(GameConfig.shootKey);
         }
 		private void PlayReloadAnimation()
 		{
-			animator.SetTrigger(Utils.reloadKey);
+			animator.SetTrigger(GameConfig.reloadKey);
 		}
 		private void EnableAnimator(Transform dummy)
         {
