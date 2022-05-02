@@ -48,7 +48,7 @@ namespace URPMk2
             // global damage handler should know about obj armour
             float dmg = dist * funcCoeff + funcInter;
             float pen = penCoeff == 0 ? 1 : GetPenetration(dmg);
-            Debug.Log("Was hit: " + hit.transform.name + "dist: " + dist + " damage: " + dmg + " penetration: " + pen);
+            Debug.Log("Was hit: " + hit.transform.name + " dist: " + dist + " damage: " + dmg + " penetration: " + pen);
         }
     }
 }
