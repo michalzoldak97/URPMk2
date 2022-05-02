@@ -8,26 +8,31 @@ namespace URPMk2
         private static Dictionary<Transform, IDamagableMaster> damagableObjects = 
             new Dictionary<Transform, IDamagableMaster>();
 
-        public static void RegisterDamagable(Transform toRegister)
+        public static void RegisterDamagable(Transform k, IDamagableMaster v)
         {
-            if (!damagableObjects.ContainsKey(toRegister)
-                && toRegister.GetComponent<IDamagableMaster>() != null)
-                damagableObjects.Add(toRegister, toRegister.GetComponent<IDamagableMaster>());
+            if (!damagableObjects.ContainsKey(k))
+                damagableObjects.Add(k, v);
         }
         public static void UnregisterDamagable(Transform toRemove)
         {
             if (damagableObjects.ContainsKey(toRemove))
                 damagableObjects.Remove(toRemove);
         }
-        public static void DamageObjByGun(Transform toDmg, DamageType dmgType, float dmg, float pen)
+        public static void DamageObj(Transform toDmg, DamageType dmgType, float dmg, float pen)
         {
-            if (damagableObjects.ContainsKey(toDmg))
-                damagableObjects[toDmg].CallEventHitByGun(dmg, pen);
-        }
-        public static void DamageObjByExplosion(Transform toDmg, DamageType dmgType, float dmg, float pen)
-        {
-            if (damagableObjects.ContainsKey(toDmg))
-                damagableObjects[toDmg].CallEventHitByExplosion(dmg, pen);
+            if (!damagableObjects.ContainsKey(toDmg))
+                return;
+
+            switch (dmgType)
+            {
+                case DamageType.Gun:
+                    if (pen > damagableObjects[toDmg].GetArmor())
+                        damagableObjects[toDmg].CallEventHitByGun(dmg, pen);
+                    break;
+                case DamageType.Explosion:
+                    damagableObjects[toDmg].CallEventHitByExplosion(dmg, pen);
+                    break;
+            }
         }
     }
 }
