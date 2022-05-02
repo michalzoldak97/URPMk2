@@ -33,8 +33,9 @@ namespace URPMk2
 		public float shootRate; // shoots / min
 		public float shootRange;
 		public float recoil;
-		public LayerMask layersToHit;
 		public float[] shootStartPos;
+		public LayerMask layersToHit;
+		public string[] hitEffectTags; // 0: stone, 1: metal
 	}
 	[System.Serializable]
 	public class BurstFireSettings

@@ -13,36 +13,34 @@ namespace URPMk2
         public GameObject prefab;
         public int size, maxAdditional;
     }
-    public class PoolInstance : MonoBehaviour
+    public class PoolInstance
     {
-        public bool isLocked { get; private set; }
-        public int objIdx { get; set; }
+        public bool IsLocked { get; private set; }
+        public int ObjIdx { get; set; }
         public string poolTag;
         public GameObject[] objects;
 
         public bool HasFreeObjects()
         {
-            return objIdx < objects.Length - 1;
+            return ObjIdx < objects.Length;
         }
         public GameObject GetObject()
         {
-            objIdx++;
-            return objects[objIdx - 1];
-        }
-        private IEnumerator UnlockPool()
-        {
-            yield return new WaitForEndOfFrame();
-            objIdx = 0;
-            isLocked = false;
+            ObjIdx++;
+            return objects[ObjIdx - 1];
         }
         public void Lock()
         {
-            isLocked = true;
-            StartCoroutine(UnlockPool());
+            IsLocked = true;
+        }
+        public void Unlock()
+        {
+            ObjIdx = 0;
+            IsLocked = false;
         }
         public void SupplementObj(GameObject obj)
         {
-            objects[objIdx] = obj;
+            objects[ObjIdx] = obj;
         }
     }
     // contains pools of objects 'pools'
@@ -88,6 +86,11 @@ namespace URPMk2
         {
             BuildPools();
         }
+        private IEnumerator UnlockPoolInstance(PoolInstance instance)
+        {
+            yield return new WaitForEndOfFrame();
+            instance.Unlock();
+        }
         public GameObject GetObjectFromPool(string tag)
         {
             if (!objectPools.ContainsKey(tag))
@@ -104,8 +107,11 @@ namespace URPMk2
                 return obj;
             }
 
-            if (!objectPools[tag].isLocked)
+            if (!objectPools[tag].IsLocked)
+            {
                 objectPools[tag].Lock();
+                StartCoroutine(UnlockPoolInstance(objectPools[tag]));
+            }
 
             return null;
         }
