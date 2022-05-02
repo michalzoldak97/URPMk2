@@ -34,10 +34,12 @@ namespace URPMk2
 		}
 		private void OnShoot()
         {
-			Debug.Log("Shoot    " + weaponMaster.isShootState);
 			if (Physics.Raycast(
 				myTransform.TransformPoint(shootStartPos), 
-				myTransform.TransformDirection(Random.Range(-recoil, recoil), Random.Range(-recoil, recoil), shootStartPos.z), 
+				myTransform.TransformDirection(
+					Random.Range(-recoil, recoil), 
+					Random.Range(-recoil, recoil), 
+					shootStartPos.z), 
 				out RaycastHit hit, 
 				shootRange,
 				layersToHit))

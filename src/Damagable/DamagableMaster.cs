@@ -18,7 +18,7 @@ namespace URPMk2
         }
         public void CallEventHitByGun(float dmg, float pen)
         {
-
+            Debug.Log("Hitten by gun");
         }
         public void CallEventHitByExplosion(float dmg, float pen)
         {

@@ -45,9 +45,10 @@ namespace URPMk2
             float dist = (myTransform.position - hit.transform.position).magnitude;
             if (dist < 1)
                 dist = 1;
-            // global damage handler should know about obj armour
+
             float dmg = dist * funcCoeff + funcInter;
             float pen = penCoeff == 0 ? 1 : GetPenetration(dmg);
+            GlobalDamageMaster.DamageObj(hit.transform, DamageType.Gun, dmg, pen);
             Debug.Log("Was hit: " + hit.transform.name + " dist: " + dist + " damage: " + dmg + " penetration: " + pen);
         }
     }
