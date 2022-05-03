@@ -25,6 +25,7 @@ namespace URPMk2
         private IEnumerator DeactivateEffect()
         {
             yield return GameConfig.waitEffectAlive;
+            transform.SetParent(null);
             gameObject.SetActive(false);
         }
     }

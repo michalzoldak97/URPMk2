@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 namespace URPMk2
 {
-    public class TestCase : ITestable
+    public class TestCase : MonoBehaviour, ITestable
     {
         private Vector3 _left = Vector3.left;
         private System.Random randIntGenerator = new System.Random();
@@ -23,17 +22,24 @@ namespace URPMk2
             doSomeJob.y = Mathf.Sqrt(324.6f * 7.1f);
             doSomeJob.z = Mathf.Sqrt(435.1f / 23.5f);
         }
+
+        private IEnumerator UseNewCoroutine()
+        {
+            yield return new WaitForSeconds(1);
+            DoSomeJob(InitializeTestVec3());
+        }
+        private IEnumerator UseCachedCoroutine()
+        {
+            yield return GameConfig.waitEffectAlive;
+            DoSomeJob(InitializeTestVec3());
+        }
         private void PrimaryTestCase()
         {
-            Vector3 someVal = InitializeTestVec3();
-            someVal = _left * randIntGenerator.Next(200);
-            DoSomeJob(someVal);
+            StartCoroutine(UseCachedCoroutine());
         }
         private void AlternativeTestCase()
         {
-            Vector3 someVal = InitializeTestVec3();
-            someVal = _left * UnityEngine.Random.Range(0, 200);
-            DoSomeJob(someVal);
+            StartCoroutine(UseNewCoroutine());
         }
         public void RunPrimaryTestCase()
         {

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Diagnostics;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace URPMk2
@@ -12,7 +11,7 @@ namespace URPMk2
         private float numTests = 40;
         private Vector2 primaryRes = Vector2.zero;
         private Vector2 alternativeRes = Vector2.zero;
-        private ITestable testCase = new TestCase();
+        private ITestable testCase;
 
         private IEnumerator RunPrimary()
         {
@@ -53,6 +52,7 @@ namespace URPMk2
         }
         private void Start()
         {
+            testCase = gameObject.AddComponent<TestCase>();
             StartCoroutine(RunBenchmark());
         }
     }

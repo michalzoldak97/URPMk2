@@ -18,19 +18,19 @@ namespace URPMk2
             if (damagableObjects.ContainsKey(toRemove))
                 damagableObjects.Remove(toRemove);
         }
-        public static void DamageObj(Transform toDmg, DamageType dmgType, float dmg, float pen)
+        public static void DamageObj(DamageInfo dmgInfo)
         {
-            if (!damagableObjects.ContainsKey(toDmg))
+            if (!damagableObjects.ContainsKey(dmgInfo.toDmg))
                 return;
 
-            switch (dmgType)
+            switch (dmgInfo.damageType)
             {
                 case DamageType.Gun:
-                    if (pen > damagableObjects[toDmg].GetArmor())
-                        damagableObjects[toDmg].CallEventHitByGun(dmg, pen);
+                    if (dmgInfo.pen > damagableObjects[dmgInfo.toDmg].GetArmor())
+                        damagableObjects[dmgInfo.toDmg].CallEventHitByGun(dmgInfo);
                     break;
                 case DamageType.Explosion:
-                    damagableObjects[toDmg].CallEventHitByExplosion(dmg, pen);
+                    damagableObjects[dmgInfo.toDmg].CallEventHitByExplosion(dmgInfo);
                     break;
             }
         }

@@ -7,6 +7,7 @@ namespace URPMk2
         private float funcCoeff, funcInter, penCoeff, penVar;
         private LayerMask layersToDamage;
         private Transform myTransform;
+        private DamageInfo dmgInfo;
         private WeaponMaster weaponMaster;
         private void SetInit()
         {
@@ -22,6 +23,7 @@ namespace URPMk2
             penCoeff = damageSettings.penCoeff;
             penVar = damageSettings.penVar;
             layersToDamage = damageSettings.layersToDamage;
+            dmgInfo = new DamageInfo(DamageType.Gun);
         }
         private void OnEnable()
         {
@@ -46,10 +48,12 @@ namespace URPMk2
             if (dist < 1)
                 dist = 1;
 
-            float dmg = dist * funcCoeff + funcInter;
-            float pen = penCoeff == 0 ? 1 : GetPenetration(dmg);
-            GlobalDamageMaster.DamageObj(hit.transform, DamageType.Gun, dmg, pen);
-            Debug.Log("Was hit: " + hit.transform.name + " dist: " + dist + " damage: " + dmg + " penetration: " + pen);
+            dmgInfo.dmg = dist * funcCoeff + funcInter;
+            dmgInfo.pen = penCoeff == 0 ? 1 : GetPenetration(dmgInfo.dmg);
+            dmgInfo.toDmg = hit.transform;
+            dmgInfo.hit = hit;
+            GlobalDamageMaster.DamageObj(dmgInfo);
+            Debug.Log("Was hit: " + hit.transform.name + " dist: " + dist + " damage: " + dmgInfo.dmg + " penetration: " + dmgInfo.pen);
         }
     }
 }

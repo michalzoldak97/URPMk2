@@ -11,18 +11,37 @@ namespace URPMk2
 
         public int GetArmor() { return damagableSettings.armor; }
 
+        public delegate void DamageEventsHandler(DamageInfo dmgInfo);
+        public event DamageEventsHandler EventHitByGun;
+        public event DamageEventsHandler EventHitByExplosion;
+
+        public delegate void DamagableEventsHandler();
+        public event DamagableEventsHandler EventDestroyObject;
+
+        public delegate void DamagableInformEventshandler(float dmg);
+        public event DamagableInformEventshandler EventReceivedDamage;
+
         private void Start()
         {
             // register obj in dictionary
             GlobalDamageMaster.RegisterDamagable(transform, this);
         }
-        public void CallEventHitByGun(float dmg, float pen)
+        public void CallEventHitByGun(DamageInfo dmgInfo)
         {
             Debug.Log("Hitten by gun");
+            EventHitByGun?.Invoke(dmgInfo);
         }
-        public void CallEventHitByExplosion(float dmg, float pen)
+        public void CallEventHitByExplosion(DamageInfo dmgInfo)
         {
-
+            EventHitByExplosion?.Invoke(dmgInfo);
+        }
+        public void CallEventDestroyObject()
+        {
+            EventDestroyObject?.Invoke();
+        }
+        public void CallEventReceivedDamage(float dmg)
+        {
+            EventReceivedDamage?.Invoke(dmg);
         }
     }
 }

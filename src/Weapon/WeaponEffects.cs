@@ -70,6 +70,7 @@ namespace URPMk2
 
 			eff.transform.position = hit.point;
 			eff.transform.rotation = Quaternion.LookRotation(-hit.normal);
+			eff.transform.SetParent(hit.transform);
 			eff.SetActive(true);
         }
 	}
