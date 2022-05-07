@@ -52,6 +52,7 @@ namespace URPMk2
     public class ObjectPool : MonoBehaviour
     {
         [SerializeField] private Pool[] pools;
+        private ObjectPoolMonitor objMonitor;
         private Pool GetPoolByTag(string tag)
         {
             for (int i = 0; i < pools.Length; i++)
@@ -85,6 +86,7 @@ namespace URPMk2
         private void Start()
         {
             BuildPools();
+            objMonitor = gameObject.AddComponent<ObjectPoolMonitor>();
         }
         private IEnumerator UnlockPoolInstance(PoolInstance instance)
         {
@@ -104,6 +106,7 @@ namespace URPMk2
                     obj = Instantiate(GetPoolByTag(tag).prefab);
                     objectPools[tag].SupplementObj(obj);
                 }
+                objMonitor.RegisterInMonitor(obj);
                 return obj;
             }
 
@@ -112,13 +115,7 @@ namespace URPMk2
                 objectPools[tag].Lock();
                 StartCoroutine(UnlockPoolInstance(objectPools[tag]));
             }
-
             return null;
-        }
-        public IEnumerator UnParentObject(GameObject obj)
-        {
-            yield return GameConfig.waitEffectAlive;
-            obj.transform.SetParent(null);
         }
     }
 }

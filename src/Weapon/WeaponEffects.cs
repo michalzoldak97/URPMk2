@@ -1,20 +1,7 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.VFX;
 namespace URPMk2
 {
-	[Serializable]
-	class MissingObjectException : Exception
-	{
-		public MissingObjectException() { }
-
-		public MissingObjectException(string name)
-			: base(String.Format("Fatal Error, {0} object is missing", name))
-		{
-
-		}
-	}
 	public class WeaponEffects : MonoBehaviour
 	{
 		[SerializeField] private VisualEffect shootEffect;
@@ -73,7 +60,6 @@ namespace URPMk2
 			eff.transform.rotation = Quaternion.LookRotation(-hit.normal);
 			eff.transform.SetParent(hit.transform);
 			eff.SetActive(true);
-			eff.GetComponent<IPooledObject>().ResetObjectState();
         }
 	}
 }
