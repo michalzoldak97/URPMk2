@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.VFX;
 namespace URPMk2
@@ -72,6 +73,7 @@ namespace URPMk2
 			eff.transform.rotation = Quaternion.LookRotation(-hit.normal);
 			eff.transform.SetParent(hit.transform);
 			eff.SetActive(true);
+			eff.GetComponent<IPooledObject>().ResetObjectState();
         }
 	}
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 namespace URPMk2
 {
-    public class GunHitEffect : MonoBehaviour
+    public class GunHitEffect : MonoBehaviour, IPooledObject
     {
         [SerializeField] AudioClip myHitSound;
         private AudioSource myAudioSource;
@@ -13,6 +13,14 @@ namespace URPMk2
         private void OnEnable()
         {
             PlayHitSound();
+        }
+        private void OnDisable()
+        {
+            transform.localScale.Set(1, 1, 1);
+        }
+        public void ResetObjectState()
+        {
+            StopAllCoroutines();
             StartCoroutine(DeactivateEffect());
         }
         private void PlayHitSound()

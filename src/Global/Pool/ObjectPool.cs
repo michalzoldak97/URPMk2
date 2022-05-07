@@ -115,5 +115,10 @@ namespace URPMk2
 
             return null;
         }
+        public IEnumerator UnParentObject(GameObject obj)
+        {
+            yield return GameConfig.waitEffectAlive;
+            obj.transform.SetParent(null);
+        }
     }
 }
