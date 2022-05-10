@@ -52,14 +52,16 @@ namespace URPMk2
 		}
 		private void PlaceHitEffect(RaycastHit hit, string hitTag)
         {
-			GameObject eff = objectPool.GetObjectFromPool(hitTag);
-			if (eff == null)
-				return;
+            PooledObjectInstance effInstance = objectPool.GetObjectFromPool(hitTag);
+            if (effInstance == null)
+                return;
 
-			eff.transform.position = hit.point;
-			eff.transform.rotation = Quaternion.LookRotation(-hit.normal);
-			eff.transform.SetParent(hit.transform);
-			eff.SetActive(true);
-        }
+			Transform effTransform = effInstance.obj.transform;
+			effTransform.position = hit.point;
+			effTransform.rotation = Quaternion.LookRotation(-hit.normal);
+			effTransform.SetParent(hit.transform);
+			effInstance.obj.SetActive(true);
+			effInstance.objBehavior.Activate();
+		}
 	}
 }
