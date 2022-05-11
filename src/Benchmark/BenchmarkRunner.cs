@@ -41,6 +41,7 @@ namespace URPMk2
         }
         private IEnumerator RunBenchmark()
         {
+            yield return new WaitForSeconds(waitUntilStart);
             for (int i = 0; i < numTests; i++)
             {
                 StartCoroutine(RunPrimary());
@@ -52,7 +53,7 @@ namespace URPMk2
         }
         private void Start()
         {
-            testCase = gameObject.AddComponent<TestCase>();
+            testCase = gameObject.AddComponent<TestCase_Loops>();
             StartCoroutine(RunBenchmark());
         }
     }

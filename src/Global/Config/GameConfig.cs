@@ -5,7 +5,7 @@ namespace URPMk2
     public static class GameConfig
     {
         public static float secToDestroy = 11;
-        public static float secToCheckForPoolObj = 0.1f;
+        public static float secToCheckForPoolObj = 0.5f;
         public static float secEffectAlive = 10;
         public static string shootKey = "shoot";
         public static string reloadKey = "reload";
