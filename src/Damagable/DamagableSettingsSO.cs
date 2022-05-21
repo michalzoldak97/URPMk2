@@ -8,6 +8,5 @@ namespace URPMk2
         public int armor;
         public float health = 100;
         public GameObject[] destructionEffects;
-        public int dummy;
     }
 }

@@ -16,7 +16,8 @@ namespace URPMk2
 			destructionEffect = Instantiate(
 				destructionEffects[Random.Range(0, destructionEffects.Length)], 
 				transform.position, 
-				transform.rotation);
+				transform.rotation,
+				transform);
 			destructionEffect.SetActive(false);
 		}
         private void Start()

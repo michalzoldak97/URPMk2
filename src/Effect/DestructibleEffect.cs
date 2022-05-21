@@ -5,16 +5,20 @@ namespace URPMk2
 {
 	public class DestructibleEffect : MonoBehaviour
 	{
-		[SerializeField] private bool isExplosion;
-		[SerializeField] private float explosionForce, explosionRadius;
-		[SerializeField] private AudioSource audioSource;
+		[SerializeField] private DestructibleSettingsSO settings;
+		[SerializeField] private AudioClip sound;
 		private Transform myTransform;
 		private Rigidbody[] shrads;
 		private void SetInit()
 		{
 			if (myTransform != null &&
 				shrads != null)
+            {
+				if (settings.isExplosion)
+					Explode();
+				StartCoroutine(Deactivate());
 				return;
+			}
 			myTransform = transform;
 			shrads = GetComponentsInChildren<Rigidbody>();
 		}
@@ -26,22 +30,22 @@ namespace URPMk2
         }
 		private void Explode()
 		{
+			myTransform.Rotate(Utils.GetVector3FromFloat(settings.rotVec));
 			foreach (Rigidbody rb in shrads)
             {
 				rb.AddExplosionForce(
-					explosionForce, 
-					myTransform.position, 
-					explosionRadius, 
+					settings.explosionForce, 
+					myTransform.position,
+					settings.explosionRadius, 
 					1, 
 					ForceMode.Impulse);
             }
+			AudioSource.PlayClipAtPoint(sound, myTransform.position);
 		}
 
 		private void OnEnable()
 		{
 			SetInit();
-			Explode();
-			StartCoroutine(Deactivate());
 		}
 	}
 }
