@@ -56,6 +56,8 @@ namespace URPMk2
 				List<GameObject> ks = new List<GameObject>(issuedObjects.Keys);
 				foreach (GameObject k in ks)
                 {
+					if (k == null)
+						continue;
 					issuedObjects[k].time -= decreaseRate;
 					if (issuedObjects[k].time < 0)
 					{
