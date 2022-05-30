@@ -28,7 +28,6 @@ namespace URPMk2
         }
         public void CallEventHitByGun(DamageInfo dmgInfo)
         {
-            Debug.Log("Hitten by gun");
             EventHitByGun?.Invoke(dmgInfo);
         }
         public void CallEventHitByExplosion(DamageInfo dmgInfo)
