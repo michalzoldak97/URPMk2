@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace URPMk2
 {
-	public class FSMInvestigateDangerState : MonoBehaviour
-	{
+	public class FSMInvestigateDangerState : IFSMState
+    {
         public void UpdateState()
         {
 

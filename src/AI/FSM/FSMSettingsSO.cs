@@ -12,6 +12,7 @@ namespace URPMk2
 		public Teams[] teamsToAttack;
 		public float checkRate;
 		public float attackRate;
+		public float recoverFromDmgTime;
 		public LayerMask sightLayers;
 		public LayerMask enemyLayers;
 		public LayerMask friendlyLayers;

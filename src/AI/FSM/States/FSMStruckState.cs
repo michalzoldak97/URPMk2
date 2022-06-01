@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace URPMk2
 {
-	public class FSMStruckState : MonoBehaviour
-	{
+	public class FSMStruckState : IFSMState
+    {
         public void UpdateState()
         {
 

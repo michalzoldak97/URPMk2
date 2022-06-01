@@ -30,16 +30,19 @@ namespace URPMk2
 		public FSMInvestigateDangerState investigateDangerState;
 		public FSMFollowState followState;
 
-		private float checkRate;
-		private WaitForSeconds waitForRecover; 
+		private float checkRate, nextCheck;
+		private WaitForSeconds waitForRecover;
+		private DamagableMaster dmgMaster;
 
 		private void SetInit()
 		{
 			FSMMaster = GetComponent<FSMMaster>();
+			dmgMaster = GetComponent<DamagableMaster>();
 			MyNavMeshAgent = GetComponent<NavMeshAgent>();
 			checkRate = Random.Range(
 				FSMSettings.checkRate - 0.15f, FSMSettings.checkRate + 0.15f);
 			waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
+			ActivatePatrolState();
 		}
 		private void SetStateReferences()
         {
@@ -48,21 +51,28 @@ namespace URPMk2
 
 		private void OnEnable()
 		{
+			SetStateReferences();
 			SetInit();
-
+			dmgMaster.EventReceivedDamage += ActivateStruckState;
 		}
 
 		private void OnDisable()
 		{
-
+			dmgMaster.EventReceivedDamage -= ActivateStruckState;
+			StopAllCoroutines();
 		}
-		private void UpdateStates()
+		private void RunUpdateActions()
         {
-
+			float t = Time.time;
+			if (t > nextCheck)
+            {
+				nextCheck = checkRate + t;
+				currentState.UpdateState();
+            }
         }
 		private void ActivatePatrolState()
         {
-
+			currentState = patrolState;
         }
 		private void ActivateAlertState()
         {
@@ -78,11 +88,35 @@ namespace URPMk2
         }
 		private void ActivateFleeState()
         {
-
+			if (currentState == struckState)
+            {
+				capturedState = fleeState;
+				return;
+            }
+			currentState = fleeState;
         }
-		private void ActivateStruckState(int dummy)
-        {
+		private IEnumerator RecoverFromStruckState()
+		{
+			yield return waitForRecover;
 
+			if (MyNavMeshAgent.enabled)
+				MyNavMeshAgent.isStopped = false;
+
+			currentState = capturedState;
+		}
+		private void ActivateStruckState(float dmg)
+        {
+			StopAllCoroutines();
+
+			if (currentState != struckState)
+				capturedState = currentState;
+
+			if (MyNavMeshAgent.enabled)
+				MyNavMeshAgent.isStopped = true;
+
+			currentState = struckState;
+
+			StartCoroutine(RecoverFromStruckState());
         }
 		private void ActivateInvestigateDangerState()
         {
@@ -92,25 +126,24 @@ namespace URPMk2
         {
 
         }
-		private IEnumerator RecoverFromStruckState()
-        {
-			yield return waitForRecover;
-        }
 		public void OnEnemyAttack()
         {
 
         }
 		public void SetMyAttacker(Transform attacker)
         {
-
+			MyAttacker = attacker;
         }
 		public void Distract(Vector3 distractionPos)
         {
+			LocationOfInterest = distractionPos;
 
+			if (currentState == patrolState)
+				currentState = alertState;
         }
         private void Update()
         {
-            
-        }
+			RunUpdateActions();
+		}
     }
 }

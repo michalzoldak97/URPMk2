@@ -6,7 +6,7 @@ namespace URPMk2
 {
     public class BenchmarkRunner : MonoBehaviour
     {
-        [SerializeField] public int numOfCases = 10000;
+        [SerializeField] public int numOfCases = 100;
         [SerializeField] public float waitUntilStart = 1f;
         private float numTests = 40;
         private Vector2 primaryRes = Vector2.zero;
@@ -53,7 +53,7 @@ namespace URPMk2
         }
         private void Start()
         {
-            testCase = gameObject.AddComponent<TestCase_Loops>();
+            testCase = gameObject.AddComponent<TestCase_UpdateTime>();
             StartCoroutine(RunBenchmark());
         }
     }
