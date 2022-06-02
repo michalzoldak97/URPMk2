@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Diagnostics;
 using UnityEngine;
+using TMPro;
 
 namespace URPMk2
 {
@@ -8,6 +9,7 @@ namespace URPMk2
     {
         [SerializeField] public int numOfCases = 100;
         [SerializeField] public float waitUntilStart = 1f;
+        [SerializeField] private TMP_Text resultText;
         private float numTests = 40;
         private Vector2 primaryRes = Vector2.zero;
         private Vector2 alternativeRes = Vector2.zero;
@@ -50,10 +52,14 @@ namespace URPMk2
             yield return new WaitForSeconds(10f);
             UnityEngine.Debug.Log("\nPrimary milisec = " + (primaryRes.x / numTests).ToString() + "    Primary tics = " + (primaryRes.y / numTests).ToString()
                 + "\nAlternative milisec = " + (alternativeRes.x / numTests).ToString() + "    Alternative tics = " + (alternativeRes.y / numTests).ToString());
+
+            if (resultText != null)
+                resultText.text = "\nPrimary milisec = " + (primaryRes.x / numTests).ToString() + "    Primary tics = " + (primaryRes.y / numTests).ToString()
+                + "\nAlternative milisec = " + (alternativeRes.x / numTests).ToString() + "    Alternative tics = " + (alternativeRes.y / numTests).ToString();
         }
         private void Start()
         {
-            testCase = gameObject.AddComponent<TestCase_UpdateTime>();
+            testCase = gameObject.AddComponent<TestCase_ChackInArray>();
             StartCoroutine(RunBenchmark());
         }
     }

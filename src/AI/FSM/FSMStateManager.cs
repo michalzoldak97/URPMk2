@@ -10,7 +10,7 @@ namespace URPMk2
 		[SerializeField] private Transform head;
 		[SerializeField] private FSMSettingsSO FSMSettings;
 		public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
-		public Vector3 LocationOfInterest { get; private set; }
+		public Vector3 LocationOfInterest { get; set; }
 		public Vector3 WanderTarget { get; private set; }
 		public Transform MyFollowTarget { get; private set; }
 		public Transform PursueTarget { get; private set; }
@@ -46,7 +46,7 @@ namespace URPMk2
 		}
 		private void SetStateReferences()
         {
-
+			patrolState = new FSMPatrolState(this);
         }
 
 		private void OnEnable()

@@ -13,6 +13,7 @@ namespace URPMk2
 		public float checkRate;
 		public float attackRate;
 		public float recoverFromDmgTime;
+		public float lookOffset;
 		public LayerMask sightLayers;
 		public LayerMask enemyLayers;
 		public LayerMask friendlyLayers;
