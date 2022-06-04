@@ -9,6 +9,7 @@ namespace URPMk2
         // get list of transforms in sight range and in team ordered by distance
         // patrol for items in list check if raycast
         // if not and close check if box, store box dimmensions in object passed
+        // split friendly and enemy lists
         private FSMStateManager fManager;
         Vector3 lookAtPoint;
         Vector3 heading;
