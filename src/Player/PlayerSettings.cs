@@ -5,8 +5,9 @@ using UnityEngine;
 namespace URPMk2
 {
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/PlayerSettings", order = 1)]
-    public class PlayerSettings : ScriptableObject
+    public class PlayerSettings : ScriptableObject, IAITeam
     {
+        public Teams TeamID { get { return Teams.Player; } set { } }
         public PlayerMoveSettings playerMoveSettings;
         public PlayerInventorySettings playerInventorySettings;
         public PlayerAmmoSlot[] playerAmmoStore;

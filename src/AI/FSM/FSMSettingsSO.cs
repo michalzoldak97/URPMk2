@@ -5,7 +5,8 @@ namespace URPMk2
 	[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FSMSettings", order = 5)]
 	public class FSMSettingsSO : ScriptableObject, IAITeam
 	{
-		public Teams TeamID { get; set; }
+		public Teams TeamID { get { return (Teams) teamID;  } set { } }
+		public int teamID;
 		public int requiredDetectionCount;
 		public int sightRange;
 		public int detectBehindRange;
