@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace URPMk2
@@ -37,7 +38,7 @@ namespace URPMk2
         }
         private void Look()
         {
-            colliders = Physics.OverlapSphere(fManager.transform.position, fManager.GetFSMSettings().sightRange / 3, fManager.GetFSMSettings().enemyLayers);
+            /*colliders = Physics.OverlapSphere(fManager.transform.position, fManager.GetFSMSettings().sightRange / 3, fManager.GetFSMSettings().enemyLayers);
 
             if (colliders.Length > 0)
             {
@@ -48,7 +49,12 @@ namespace URPMk2
                     SetUpAlertState(colliders[0].transform);
                     return;
                 }
-            }
+            }*/
+
+            List<ITeamMember> enemiesInRange = TeamMembersManager.GetTeamMembersInRange(
+                fManager.GetFSMSettings().teamsToAttack, 
+                fManager.transform.position, 
+                fManager.GetFSMSettings().sightRange * fManager.GetFSMSettings().sightRange);
         }
         private void Patrol()
         {

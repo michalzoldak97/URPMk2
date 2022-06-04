@@ -5,9 +5,16 @@ namespace URPMk2
 	public class TeamMember : MonoBehaviour, ITeamMember
 	{
 		[SerializeField] private IAITeam teamSettings;
+		[SerializeField] private Teams teamID;
 		public Teams TeamID { get; private set; }
 		public Vector3 BoundsExtens { get; private set; }
 		public GameObject Object { get; private set; }
+		private Transform myTransform;
+
+		public Vector3 GetPos()
+        {
+			return myTransform.position;
+		}
 
 		// iterates over all gameObject colliders
 		// returns max bounds - will be used to detect object with box cast
@@ -29,19 +36,21 @@ namespace URPMk2
 
 		private void SetInit()
 		{
-			TeamID = teamSettings.TeamID;
+			myTransform = transform;
+			TeamID = teamID;
+			BoundsExtens = GetBoundExtents();
 			Object = gameObject;
+			TeamMembersManager.RegisterInTeamMembers(this);
 		}
 		
 		private void OnEnable()
 		{
 			SetInit();
-			
 		}
 		
 		private void OnDisable()
 		{
-			
+			TeamMembersManager.RemoveFromTeamMembers(this);
 		}
 	}
 }
