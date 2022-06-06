@@ -1,25 +1,22 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace URPMk2
 {
-	public class FSMPatrolState : IFSMState
+    public class FSMPatrolState : IFSMState
 	{
-        // create class team identifier with team, position data
-        // register every in global teams manager
-        // get list of transforms in sight range and in team ordered by distance
-        // patrol for items in list check if raycast
-        // if not and close check if box, store box dimmensions in object passed
-        // split friendly and enemy lists
+        private float dotProd;
+        private Vector3 lookAtPoint;
+        private Vector3 heading;
+        private Transform fTransform;
+        private Collider[] enemyCols;
         private FSMStateManager fManager;
-        Vector3 lookAtPoint;
-        Vector3 heading;
-        float dotProd;
-        Collider[] colliders;
 
         public FSMPatrolState (FSMStateManager fManager)
         {
             this.fManager = fManager;
+            fTransform = fManager.transform;
         }
         public void ToAlertState()
         {
@@ -32,29 +29,33 @@ namespace URPMk2
         }
         private void CalculateVisibility(Transform target)
         {
-            lookAtPoint = new Vector3(target.position.x, target.position.y + fManager.GetFSMSettings().lookOffset, target.position.z);
-            heading = lookAtPoint - fManager.transform.position;
-            dotProd = Vector3.Dot(heading, fManager.transform.forward);
+            lookAtPoint.x = target.position.x; lookAtPoint.y = target.position.y; lookAtPoint.z = target.position.z;
+            heading = lookAtPoint - fTransform.position;
+            dotProd = Vector3.Dot(heading, fTransform.forward);
         }
         private void Look()
         {
-            /*colliders = Physics.OverlapSphere(fManager.transform.position, fManager.GetFSMSettings().sightRange / 3, fManager.GetFSMSettings().enemyLayers);
+            enemyCols = Physics.OverlapSphere(fTransform.position, fManager.GetFSMSettings().highResDetectionRange, fManager.GetFSMSettings().enemyLayers);
 
-            if (colliders.Length > 0)
+            Array.Sort(enemyCols, fManager.priorityComparer);
+
+            int closeLen = enemyCols.Length;
+            if (closeLen > 0)
             {
-                CalculateVisibility(colliders[0].transform);
-
-                if (dotProd > 0)
+                for (int i = 0; i < closeLen; i++)
                 {
-                    SetUpAlertState(colliders[0].transform);
-                    return;
-                }
-            }*/
+                    if (!Array.Exists(fManager.GetFSMSettings().tagsToAttack, el => enemyCols[i].CompareTag(el)))
+                        continue;
 
-            List<ITeamMember> enemiesInRange = TeamMembersManager.GetTeamMembersInRange(
-                fManager.GetFSMSettings().teamsToAttack, 
-                fManager.transform.position, 
-                fManager.GetFSMSettings().sightRange * fManager.GetFSMSettings().sightRange);
+                    CalculateVisibility(enemyCols[i].transform);
+
+                    if (dotProd > 0)
+                    {
+                        SetUpAlertState(enemyCols[i].transform);
+                        return;
+                    }
+                }
+            }
         }
         private void Patrol()
         {

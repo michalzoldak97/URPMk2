@@ -5,7 +5,8 @@ namespace URPMk2
 	public class TeamMember : MonoBehaviour, ITeamMember
 	{
 		[SerializeField] private IAITeam teamSettings;
-		public Teams TeamID { get { return teamSettings.TeamID; } private set { } }
+		public float DistTo { get; set; }
+		public Teams TeamID { get; set; }
 		public Vector3 BoundsExtens { get; private set; }
 		public GameObject Object { get; private set; }
 		private Transform myTransform;
@@ -36,7 +37,7 @@ namespace URPMk2
 		private void SetInit()
 		{
 			myTransform = transform;
-			TeamID = teamSettings.TeamID;
+			//TeamID = teamSettings.TeamID;
 			BoundsExtens = GetBoundExtents();
 			Object = gameObject;
 			TeamMembersManager.RegisterInTeamMembers(this);

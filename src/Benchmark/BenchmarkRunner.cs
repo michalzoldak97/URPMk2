@@ -59,7 +59,7 @@ namespace URPMk2
         }
         private void Start()
         {
-            testCase = gameObject.AddComponent<TestCase_ChackInArray>();
+            testCase = gameObject.AddComponent<TestCase_ToArray>();
             StartCoroutine(RunBenchmark());
         }
     }

@@ -7,6 +7,5 @@ namespace URPMk2
 		[SerializeField] private FSMSettingsSO fsmSettings;
 		public FSMSettingsSO GetFSMSettings() { return fsmSettings; }
 
-
-	}
+    }
 }

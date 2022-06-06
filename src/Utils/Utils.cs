@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace URPMk2
@@ -15,5 +16,9 @@ namespace URPMk2
 				return Vector3.zero;
 			return new Vector3(toSet[0], toSet[1], toSet[2]);
         }
+		public static int Compare(Dictionary<string, int> key, string x, string y)
+		{
+			return key[x].CompareTo(key[y]);
+		}
 	}
 }
