@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10e6523fd34bc74680866395a675ffc, type: 3}
+  m_Name: PlayerSettings
+  m_EditorClassIdentifier: 
+  playerMoveSettings:
+    walkSpeed: 5
+    runSpeed: 10
+    jumpSpeed: 7
+    stickToGroundForce: 1
+    gravityMultiplayer: 1
+    inertiaCoefficient: 0.99
+    lookSensitivity:
+    - 0.4
+    - 0.3
+    headBobSpeed:
+    - 15
+    - 22
+    headBobMagnitude:
+    - 0.05
+    - 0.08
+    verHorBobMultiplayer:
+    - 1
+    - 0.08
+    stepSpeed:
+    - 0.5
+    - 0.3
+    lookClamp: 85
+    stoneSurfaceTags: []
+    metalSurfaceTags: []
+    grassSurfaceTags: []
+  playerInventorySettings:
+    labelFontSize: 24
+    itemCheckRate: 0.1
+    itemLabelWidthHeight:
+    - 200
+    - 100
+  playerAmmoStore:
+  - ammoCode: 9X18_57-N-181S
+    ammoQuantity: 8
+  - ammoCode: 9X18_RG028
+    ammoQuantity: 0
+  - ammoCode: 9X19_FMJ
+    ammoQuantity: 0
+  - ammoCode: 9X19_XTRN
+    ammoQuantity: 0
+  - ammoCode: 0.45
+    ammoQuantity: 0
+  - ammoCode: 0.45_APC
+    ammoQuantity: 0
+  - ammoCode: 5.56X45_SD
+    ammoQuantity: 0
+  - ammoCode: 5.56X45_SDH
+    ammoQuantity: 0
+  - ammoCode: 7.62X51_SD
+    ammoQuantity: 0
+  - ammoCode: 7.62X51_SDI
+    ammoQuantity: 0
+  - ammoCode: 7.62X51_M9AP
+    ammoQuantity: 0
+  - ammoCode: 0.5_BBN
+    ammoQuantity: 0
+  - ammoCode: 0.5_AAN
+    ammoQuantity: 0
+  - ammoCode: HE_PXG_112
+    ammoQuantity: 0

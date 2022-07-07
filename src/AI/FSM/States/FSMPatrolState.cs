@@ -35,26 +35,15 @@ namespace URPMk2
         }
         private void Look()
         {
-            enemyCols = Physics.OverlapSphere(fTransform.position, fManager.GetFSMSettings().highResDetectionRange, fManager.GetFSMSettings().enemyLayers);
-
-            Array.Sort(enemyCols, fManager.priorityComparer);
-
-            int closeLen = enemyCols.Length;
-            if (closeLen > 0)
+            List<ITeamMember> enemiesInRange = TeamMembersManager.GetTeamMembersInRange(
+                    fManager.GetFSMSettings().teamsToAttack,
+                    fManager.transform.position,
+                    fManager.GetFSMSettings().sightRange * fManager.GetFSMSettings().sightRange
+                );
+            int numEnemies = enemiesInRange.Count;
+            for (int i = 0; i < numEnemies; i++)
             {
-                for (int i = 0; i < closeLen; i++)
-                {
-                    if (!Array.Exists(fManager.GetFSMSettings().tagsToAttack, el => enemyCols[i].CompareTag(el)))
-                        continue;
-
-                    CalculateVisibility(enemyCols[i].transform);
-
-                    if (dotProd > 0)
-                    {
-                        SetUpAlertState(enemyCols[i].transform);
-                        return;
-                    }
-                }
+                Debug.Log("ID: " + enemiesInRange[i].TeamID);
             }
         }
         private void Patrol()

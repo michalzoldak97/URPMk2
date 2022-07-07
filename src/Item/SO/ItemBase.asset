@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbc332d5427a904d9fbe4fa24d7318c, type: 3}
+  m_Name: ItemBase
+  m_EditorClassIdentifier: 
+  deactivateObjOnPickUp: 1
+  deactivateCollOnPickUp: 1
+  itemTypeID: 0
+  throwForce: 200
+  toItemName: An Item
+  toLayerName: Player
+  onPlayerPosition:
+  - 0.3
+  - 0
+  - 1.5
+  onPlayerRotation:
+  - 0
+  - 0
+  - 0
+  itemIcon: {fileID: 0}
+  itemImage: {fileID: 0}
+  pickUpSound: {fileID: 8300000, guid: 4ba5dd88b7a5fd74d9d5944a79ffeea4, type: 3}
+  throwSound: {fileID: 8300000, guid: 1f7b412f6b6d8794280fef57f6718d8c, type: 3}
+  collisionSounds:
+  - {fileID: 8300000, guid: d8fb7eb0b8526b9438c0f6ef13d7ce77, type: 3}
+  - {fileID: 8300000, guid: 4ac35fa319d549b47ba4103780581d65, type: 3}
+  - {fileID: 8300000, guid: d0ae6a4f3c9881f4eb4805559b7064e5, type: 3}
+  - {fileID: 8300000, guid: e2a7e915bf60ca44aaa48c3827df5540, type: 3}

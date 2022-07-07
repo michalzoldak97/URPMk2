@@ -77,7 +77,8 @@ namespace URPMk2
                 float d = (membersInTeam[i].GetPos() - pos).sqrMagnitude;
                 if (d < rangePow)
                 {
-                    membersInTeam[i].DistTo = d;
+                    // dist to has been created for test purposes only
+                    // membersInTeam[i].DistTo = d;
                     selectedMembers.Add(membersInTeam[i]);
                 }
             }
@@ -92,7 +93,7 @@ namespace URPMk2
                 GetTeamMembersInRangeByTeam(teams[i], pos, rangePow);
             }
 
-            selectedMembers.Sort((x, y) => x.DistTo.CompareTo(y.DistTo));
+            // selectedMembers.Sort((x, y) => x.DistTo.CompareTo(y.DistTo));
             return selectedMembers;
         }
 
@@ -108,7 +109,7 @@ namespace URPMk2
                 float d = (membersInTeam[i].GetPos() - pos).sqrMagnitude;
                 if (d < rangePow)
                 {
-                    membersInTeam[i].DistTo = d;
+                    // membersInTeam[i].DistTo = d;
                     selectedMembers.Add(membersInTeam[i]);
                 }
             }

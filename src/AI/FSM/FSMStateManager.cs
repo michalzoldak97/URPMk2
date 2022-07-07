@@ -19,7 +19,6 @@ namespace URPMk2
 		public FSMMaster FSMMaster { get; private set; }
 
 		public Transform[] waypoints;
-		public Dictionary<string, int> tagsPriority = new Dictionary<string, int>();
 		public IComparer priorityComparer;
 		public IFSMState currentState;
 		public IFSMState capturedState;
@@ -44,11 +43,6 @@ namespace URPMk2
 			checkRate = Random.Range(
 				FSMSettings.checkRate - 0.15f, FSMSettings.checkRate + 0.15f);
 			waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
-			for (int i = 0; i < FSMSettings.tagsToAttack.Length; i++)
-			{
-				tagsPriority.Add(FSMSettings.tagsToAttack[i], i);
-			}
-			priorityComparer = (System.Collections.IComparer)new PriorityComparer(tagsPriority);
 			ActivatePatrolState();
 		}
 		private void SetStateReferences()
