@@ -8,8 +8,6 @@ namespace URPMk2
 {
     public class FSMPatrolState : IFSMState
 	{
-        private float dotProd;
-        private Vector3 lookAtPoint;
         private Vector3 heading;
         private Transform fTransform;
         private Collider[] enemyCols;
@@ -29,11 +27,10 @@ namespace URPMk2
             fManager.LocationOfInterest = target.position;
             ToAlertState();
         }
-        private void CalculateVisibility(Transform target)
+        private float CalculateVisibility(Transform target)
         {
-            lookAtPoint.x = target.position.x; lookAtPoint.y = target.position.y; lookAtPoint.z = target.position.z;
-            heading = lookAtPoint - fTransform.position;
-            dotProd = Vector3.Dot(heading, fTransform.forward);
+            heading = Vector3.Normalize(target.position - fTransform.position);
+            return Vector3.Dot(heading, fTransform.forward);
         }
         private void Look()
         {
@@ -46,8 +43,7 @@ namespace URPMk2
             int numEnemies = enemiesInRange.Count;
             for (int i = 0; i < numEnemies; i++)
             {
-                Debug.Log("ID: " + enemiesInRange[i].TeamID);
-                dotProd = Vector3.Dot(fManager.transform.position, enemiesInRange[i].Object.transform.forward);
+                Debug.Log("ID: " + enemiesInRange[i].TeamID + " dot prod is: " + CalculateVisibility(enemiesInRange[i].ObjTransform));
             }
         }
         private void Patrol()

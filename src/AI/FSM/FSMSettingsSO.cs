@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace URPMk2
@@ -6,7 +5,6 @@ namespace URPMk2
 	[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FSMSettings", order = 5)]
 	public class FSMSettingsSO : ScriptableObject
 	{
-		public Teams TeamID { get { return (Teams) teamID;  } set { } }
 		public int teamID;
 		public int requiredDetectionCount;
 		public int sightRange;
