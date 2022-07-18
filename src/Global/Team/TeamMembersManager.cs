@@ -66,7 +66,7 @@ namespace URPMk2
 			int teamLen = membersInTeam.Length;
 			for (int i = 0; i < teamLen; i++)
             {
-				if ((membersInTeam[i].GetPos() - pos).sqrMagnitude < rangePow)
+				if ((membersInTeam[i].ObjTransform.position - pos).sqrMagnitude < rangePow)
 					selectedMembers.Add(membersInTeam[i]);
 			}
         }

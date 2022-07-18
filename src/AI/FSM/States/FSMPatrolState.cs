@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**/
+
 namespace URPMk2
 {
     public class FSMPatrolState : IFSMState
@@ -40,10 +42,12 @@ namespace URPMk2
                     fManager.transform.position,
                     fManager.GetFSMSettings().sightRange * fManager.GetFSMSettings().sightRange
                 );
+
             int numEnemies = enemiesInRange.Count;
             for (int i = 0; i < numEnemies; i++)
             {
                 Debug.Log("ID: " + enemiesInRange[i].TeamID);
+                dotProd = Vector3.Dot(fManager.transform.position, enemiesInRange[i].Object.transform.forward);
             }
         }
         private void Patrol()

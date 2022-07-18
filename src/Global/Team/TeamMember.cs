@@ -7,12 +7,13 @@ namespace URPMk2
 		[SerializeField] private int teamID;
 		public Teams TeamID { get; set; }
 		public Vector3 BoundsExtens { get; private set; }
+		public Transform ObjTransform { get { return myTransform; } }
 		public GameObject Object { get; private set; }
 		private Transform myTransform;
 
-		public Vector3 GetPos()
+		public Transform GetTran()
         {
-			return myTransform.position;
+			return myTransform;
 		}
 
 		// iterates over all gameObject colliders

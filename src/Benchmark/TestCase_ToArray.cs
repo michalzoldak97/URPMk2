@@ -74,7 +74,7 @@ namespace URPMk2
             int teamLen = membersInTeam.Length;
             for (int i = 0; i < teamLen; i++)
             {
-                float d = (membersInTeam[i].GetPos() - pos).sqrMagnitude;
+                float d = (membersInTeam[i].ObjTransform.position - pos).sqrMagnitude;
                 if (d < rangePow)
                 {
                     // dist to has been created for test purposes only
@@ -106,7 +106,7 @@ namespace URPMk2
             int teamLen = membersInTeam.Length;
             for (int i = 0; i < teamLen; i++)
             {
-                float d = (membersInTeam[i].GetPos() - pos).sqrMagnitude;
+                float d = (membersInTeam[i].ObjTransform.position - pos).sqrMagnitude;
                 if (d < rangePow)
                 {
                     // membersInTeam[i].DistTo = d;
