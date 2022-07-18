@@ -17,6 +17,7 @@ namespace URPMk2
 		public Transform MyAttacker { get; private set; }
 		public NavMeshAgent MyNavMeshAgent { get; private set; }
 		public FSMMaster FSMMaster { get; private set; }
+		public VisibilityParamContainer VisibilityParams { get; private set; }
 
 		public Transform[] waypoints;
 		public IComparer priorityComparer;
@@ -43,6 +44,11 @@ namespace URPMk2
 			checkRate = Random.Range(
 				FSMSettings.checkRate - 0.15f, FSMSettings.checkRate + 0.15f);
 			waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
+			VisibilityParams = new VisibilityParamContainer(
+				FSMSettings.sightRange, 
+				FSMSettings.highResDetectionRange * FSMSettings.highResDetectionRange, 
+				FSMSettings.sightLayers, 
+				head);
 			ActivatePatrolState();
 		}
 		private void SetStateReferences()

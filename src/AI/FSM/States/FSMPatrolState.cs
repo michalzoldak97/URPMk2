@@ -44,6 +44,10 @@ namespace URPMk2
             for (int i = 0; i < numEnemies; i++)
             {
                 Debug.Log("ID: " + enemiesInRange[i].TeamID + " dot prod is: " + CalculateVisibility(enemiesInRange[i].ObjTransform));
+                if (VisibilityCalculator.IsVisibleSingle(fManager.VisibilityParams, enemiesInRange[i]))
+                {
+                    Debug.Log("\n");
+                }
             }
         }
         private void Patrol()
