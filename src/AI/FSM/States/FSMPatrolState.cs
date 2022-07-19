@@ -27,9 +27,9 @@ namespace URPMk2
             fManager.LocationOfInterest = target.position;
             ToAlertState();
         }
-        private float CalculateVisibility(Transform target)
+        private float CalculateDotProd(Transform target)
         {
-            heading = Vector3.Normalize(target.position - fTransform.position);
+            heading = (target.position - fTransform.position).normalized;
             return Vector3.Dot(heading, fTransform.forward);
         }
         private void Look()
@@ -43,10 +43,11 @@ namespace URPMk2
             int numEnemies = enemiesInRange.Count;
             for (int i = 0; i < numEnemies; i++)
             {
-                Debug.Log("ID: " + enemiesInRange[i].TeamID + " dot prod is: " + CalculateVisibility(enemiesInRange[i].ObjTransform));
-                if (VisibilityCalculator.IsVisibleSingle(fManager.VisibilityParams, enemiesInRange[i]))
+                Debug.Log("ID: " + enemiesInRange[i].TeamID + " dot prod is: " + CalculateDotProd(enemiesInRange[i].ObjTransform));
+                if (CalculateDotProd(enemiesInRange[i].ObjTransform) > 0.0f &&
+                    VisibilityCalculator.IsVisibleSingle(fManager.VisibilityParams, enemiesInRange[i]))
                 {
-                    Debug.Log("\n");
+                    Debug.Log("Found  " + enemiesInRange[i].ObjTransform.name);
                 }
             }
         }

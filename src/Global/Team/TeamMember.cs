@@ -18,17 +18,18 @@ namespace URPMk2
 
 		// iterates over all gameObject colliders
 		// returns max bounds - will be used to detect object with box cast
+		// multiplayed by 0.9f so ray won't miss the bound
 		private Vector3 GetBoundExtents()
         {
 			float maxX = 0, maxY = 0, maxZ = 0;
 			foreach (Collider col in gameObject.GetComponents<Collider>())
             {
 				if (col.bounds.extents.x > maxX)
-					maxX = col.bounds.extents.x;
+					maxX = col.bounds.extents.x * 0.9f;
 				if (col.bounds.extents.y > maxY)
-					maxY = col.bounds.extents.y;
+					maxY = col.bounds.extents.y * 0.9f;
 				if (col.bounds.extents.z > maxZ)
-					maxZ = col.bounds.extents.z;
+					maxZ = col.bounds.extents.z * 0.9f;
 			}
 
 			return new Vector3(maxX, maxY, maxZ);

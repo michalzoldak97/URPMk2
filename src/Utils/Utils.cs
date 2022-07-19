@@ -20,5 +20,9 @@ namespace URPMk2
 		{
 			return key[x].CompareTo(key[y]);
 		}
+		public static void DrawRay(Vector3 start, Vector3 dir, float len, float t)
+        {
+			Debug.DrawRay(start, dir * len, Color.red, t);
+        }
 	}
 }

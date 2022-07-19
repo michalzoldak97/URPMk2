@@ -45,7 +45,8 @@ namespace URPMk2
 				FSMSettings.checkRate - 0.15f, FSMSettings.checkRate + 0.15f);
 			waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
 			VisibilityParams = new VisibilityParamContainer(
-				FSMSettings.sightRange, 
+				FSMSettings.sightRange,
+				FSMSettings.highResDetectionRange,
 				FSMSettings.highResDetectionRange * FSMSettings.highResDetectionRange, 
 				FSMSettings.sightLayers, 
 				head);

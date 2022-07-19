@@ -4,17 +4,19 @@ namespace URPMk2
 {
 	public class VisibilityParamContainer
 	{
-		public float searchRange, highResSearchSqrRange;
+		public float searchRange, highResSearchRange, highResSearchSqrRange;
 		public LayerMask layersToSearch;
 		public Transform origin;
 
 		public VisibilityParamContainer(
 			float searchRange, 
+			float highResSearchRange,
 			float highResSearchSqrRange, 
 			LayerMask layersToSearch, 
 			Transform origin)
 		{
 			this.searchRange = searchRange;
+			this.highResSearchRange = highResSearchRange;
 			this.highResSearchSqrRange = highResSearchSqrRange;
 			this.layersToSearch = layersToSearch;
 			this.origin = origin;
