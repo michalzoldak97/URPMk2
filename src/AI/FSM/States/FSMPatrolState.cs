@@ -44,9 +44,9 @@ namespace URPMk2
             for (int i = 0; i < numEnemies; i++)
             {
                 if (CalculateDotProd(enemiesInRange[i].ObjTransform) > 0.0f &&
-                    VisibilityCalculator.IsVisibleSingle(fManager.VisibilityParams, enemiesInRange[i]))
+                    VisibilityCalculator.IsVisibleSingle(fManager.VisibilityParams, enemiesInRange[i].ObjTransform, enemiesInRange[i].BoundsExtens))
                 {
-                    //Debug.Log("Found  " + enemiesInRange[i].ObjTransform.name);
+                    Debug.Log("Found  " + enemiesInRange[i].ObjTransform.name);
                 }
             }
         }
