@@ -40,38 +40,38 @@ namespace URPMk2
 					Vector3 targetCenter = target.ObjTransform.position;
 					Vector3 cornerPos = targetCenter;
 					Vector3 targetBounds = target.BoundsExtens;
+
 					// top center
 					cornerPos.y += targetBounds.y;
 					Debug.DrawRay(oPos, (cornerPos - oPos) * origin.highResSearchRange, Color.red, 1.8f);
 					if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
 						return true;
 
-					// center +x
+					// centre front
 					cornerPos.y = targetCenter.y;
-					cornerPos.x += targetBounds.x;
+					cornerPos += target.ObjTransform.forward * targetBounds.z;
 					Debug.DrawRay(oPos, (cornerPos - oPos) * origin.highResSearchRange, Color.red, 1.8f);
-					if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
-						return true;
+                    if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
+                        return true;
+
+                    // centre rear
+                    cornerPos = targetCenter - (target.ObjTransform.forward * targetBounds.z);
+					Debug.DrawRay(oPos, (cornerPos - oPos) * origin.highResSearchRange, Color.red, 1.8f);
+                    if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
+                        return true;
+
+					// center +x
+					cornerPos = targetCenter + (target.ObjTransform.right * targetBounds.x);
+					Debug.DrawRay(oPos, (cornerPos - oPos) * origin.highResSearchRange, Color.red, 1.8f);
+                    if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
+                        return true;
 
 					// center -x
-					cornerPos.x -= targetBounds.x * 2.0f;
+					cornerPos = targetCenter - (target.ObjTransform.right * targetBounds.x);
 					Debug.DrawRay(oPos, (cornerPos - oPos) * origin.highResSearchRange, Color.red, 1.8f);
-					if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
-						return true;
-
-					// center +z
-					cornerPos.x = targetCenter.x;
-					cornerPos.z += targetBounds.z;
-					Debug.DrawRay(oPos, (cornerPos - oPos) * origin.highResSearchRange, Color.red, 1.8f);
-					if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
-						return true;
-
-					// center -z
-					cornerPos.z -= targetBounds.z * 2.0f;
-					Debug.DrawRay(oPos, (cornerPos - oPos) * origin.highResSearchRange, Color.red, 1.8f);
-					if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
-						return true;
-				}
+                    if (CheckCorner(oPos, (cornerPos - oPos), origin.highResSearchRange, origin.layersToSearch, target.ObjTransform))
+                        return true;
+                }
 				return false;
             }
 			return false;

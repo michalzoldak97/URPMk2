@@ -43,11 +43,10 @@ namespace URPMk2
             int numEnemies = enemiesInRange.Count;
             for (int i = 0; i < numEnemies; i++)
             {
-                Debug.Log("ID: " + enemiesInRange[i].TeamID + " dot prod is: " + CalculateDotProd(enemiesInRange[i].ObjTransform));
                 if (CalculateDotProd(enemiesInRange[i].ObjTransform) > 0.0f &&
                     VisibilityCalculator.IsVisibleSingle(fManager.VisibilityParams, enemiesInRange[i]))
                 {
-                    Debug.Log("Found  " + enemiesInRange[i].ObjTransform.name);
+                    //Debug.Log("Found  " + enemiesInRange[i].ObjTransform.name);
                 }
             }
         }
