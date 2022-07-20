@@ -11,7 +11,7 @@ namespace URPMk2
 		[SerializeField] private FSMSettingsSO FSMSettings;
 		public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
 		public Vector3 LocationOfInterest { get; set; }
-		public Vector3 WanderTarget { get; private set; }
+		public Vector3 WanderTarget { get; set; }
 		public Transform MyFollowTarget { get; private set; }
 		public Transform PursueTarget { get; private set; }
 		public Transform MyAttacker { get; private set; }

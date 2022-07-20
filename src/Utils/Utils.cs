@@ -16,6 +16,16 @@ namespace URPMk2
 				return Vector3.zero;
 			return new Vector3(toSet[0], toSet[1], toSet[2]);
         }
+		public static Vector3 GetAbsVector3(Vector3 toAbs)
+        {
+			if (toAbs.x < 0f)
+				toAbs.x *= -1;
+
+			if (toAbs.z < 0f)
+				toAbs.z *= -1;
+
+			return toAbs;
+		}
 		public static int Compare(Dictionary<string, int> key, string x, string y)
 		{
 			return key[x].CompareTo(key[y]);
