@@ -55,19 +55,14 @@ namespace URPMk2
         }
         private bool RandomWanderTarget(Vector3 centre)
         {
-            Vector3 noAbsRnd = Random.insideUnitSphere * fManager.GetFSMSettings().sightRange;
-            Debug.Log("Random Point is: " + noAbsRnd);
-            Vector3 rndPoint = centre + Utils.GetAbsVector3(noAbsRnd);
+            Vector3 rndPoint = Random.insideUnitSphere * fManager.GetFSMSettings().sightRange;
+            rndPoint = Utils.GetAbsVector3(rndPoint);
 
             // find nearest plane
-            if (Physics.Raycast(rndPoint, -rndPoint.y * Vector3.up, out RaycastHit hit))
+            if (Physics.Raycast(rndPoint, -Vector3.up * rndPoint.y, out RaycastHit hit, fManager.GetFSMSettings().sightRange))
             {
-                rndPoint = hit.transform.position;
+                rndPoint = hit.point;
             }
-
-            // TO DO global function searching on terrarain
-
-            Debug.Log("Point is: " + rndPoint);
 
             if(NavMesh.SamplePosition(rndPoint, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
             {

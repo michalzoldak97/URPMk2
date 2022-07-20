@@ -18,12 +18,9 @@ namespace URPMk2
         }
 		public static Vector3 GetAbsVector3(Vector3 toAbs)
         {
-			if (toAbs.x < 0f)
-				toAbs.x *= -1;
-
-			if (toAbs.z < 0f)
-				toAbs.z *= -1;
-
+			toAbs.x = Mathf.Abs(toAbs.x);
+			toAbs.y = Mathf.Abs(toAbs.y);
+			toAbs.z = Mathf.Abs(toAbs.z);
 			return toAbs;
 		}
 		public static int Compare(Dictionary<string, int> key, string x, string y)
