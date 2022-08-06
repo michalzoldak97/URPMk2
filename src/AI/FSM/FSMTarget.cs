@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace URPMk2
 {
-	public struct FSMTarget
+	public class FSMTarget
 	{
 		public bool isVisible;
 		public Transform targetTransform;

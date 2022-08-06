@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace URPMk2
 {
-	public struct VisibilityParamContainer
+	public class VisibilityParamContainer
 	{
 		public float searchRange, highResSearchRange, highResSearchSqrRange;
 		public LayerMask layersToSearch;
