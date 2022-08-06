@@ -2,14 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-/**/
 
 namespace URPMk2
 {
     public class FSMPatrolState : IFSMState
 	{
-        private int sightRangePow, nextWayPoint;
-        private Teams[] teamsToAttack;
+        private int nextWayPoint;
         private Vector3 heading;
         private Transform fTransform;
         private FSMStateManager fManager;
@@ -18,9 +16,6 @@ namespace URPMk2
         {
             this.fManager = fManager;
             fTransform = fManager.transform;
-            sightRangePow = fManager.GetFSMSettings().sightRange * 
-                fManager.GetFSMSettings().sightRange;
-            teamsToAttack = fManager.GetFSMSettings().teamsToAttack;
         }
         public void ToAlertState()
         {
@@ -82,26 +77,9 @@ namespace URPMk2
         }
         private void Look()
         {
-            List<ITeamMember> enemiesInRange = TeamMembersManager.GetTeamMembersInRange(
-                    teamsToAttack,
-                    fTransform.position,
-                    sightRangePow
-                );
-
-            int numEnemies = enemiesInRange.Count;
-            for (int i = 0; i < numEnemies; i++)
-            {
-                if (CalculateDotProd(enemiesInRange[i].ObjTransform) < fManager.GetFSMSettings().minDotProd)
-                    continue;
-
-                if (VisibilityCalculator.IsVisibleSingle(fManager.VisibilityParams, heading, enemiesInRange[i].ObjTransform)
-                    || (heading.sqrMagnitude < fManager.VisibilityParams.highResSearchSqrRange &&
-                    VisibilityCalculator.IsVisibleCorners(fManager.VisibilityParams, enemiesInRange[i].ObjTransform, enemiesInRange[i].BoundsExtens)))
-                {
-                    Debug.Log("Found  " + enemiesInRange[i].ObjTransform.name);
-                    //SetUpAlertState(enemiesInRange[i].ObjTransform);
-                }
-            }
+            FSMTarget target = fManager.IsTargetVisible();
+            if (target.isVisible)
+                SetUpAlertState(target.targetTransform); 
         }
         private void Patrol()
         {
@@ -111,7 +89,7 @@ namespace URPMk2
             if (!fManager.MyNavMeshAgent.enabled)
                 return;
 
-            if(fManager.waypoints.Length > 0)
+            if (fManager.waypoints.Length > 0)
             {
                 MoveToTarget(fManager.waypoints[nextWayPoint].position);
 

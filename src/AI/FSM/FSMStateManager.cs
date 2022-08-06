@@ -32,9 +32,13 @@ namespace URPMk2
 		public FSMInvestigateDangerState investigateDangerState;
 		public FSMFollowState followState;
 
+		private int sightRangePow;
 		private float checkRate, nextCheck;
+		private Vector3 heading;
+		private Transform myTransform;
 		private WaitForSeconds waitForRecover;
 		private DamagableMaster dmgMaster;
+		private FSMTarget targetNotFound;
 
 		private void SetInit()
 		{
@@ -42,7 +46,7 @@ namespace URPMk2
 			dmgMaster = GetComponent<DamagableMaster>();
 			MyNavMeshAgent = GetComponent<NavMeshAgent>();
 			checkRate = Random.Range(
-				FSMSettings.checkRate - 0.15f, FSMSettings.checkRate + 0.15f);
+				FSMSettings.checkRate - FSMSettings.checkRateOffset, FSMSettings.checkRate + FSMSettings.checkRateOffset);
 			waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
 			VisibilityParams = new VisibilityParamContainer(
 				FSMSettings.sightRange,
@@ -50,11 +54,15 @@ namespace URPMk2
 				FSMSettings.highResDetectionRange * FSMSettings.highResDetectionRange, 
 				FSMSettings.sightLayers, 
 				head);
+			sightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
+			myTransform = transform;
+			targetNotFound = new FSMTarget(false, null);
 			ActivatePatrolState();
 		}
 		private void SetStateReferences()
         {
 			patrolState = new FSMPatrolState(this);
+			alertState = new FSMAlertState(this);
         }
 
 		private void OnEnable()
@@ -149,6 +157,35 @@ namespace URPMk2
 			if (currentState == patrolState)
 				currentState = alertState;
         }
+		private float CalculateDotProd(Transform target)
+		{
+			heading = (target.position - myTransform.position).normalized;
+			return Vector3.Dot(heading, myTransform.forward);
+		}
+		public FSMTarget IsTargetVisible()
+        {
+			List<ITeamMember> enemiesInRange = TeamMembersManager.GetTeamMembersInRange(
+					FSMSettings.teamsToAttack,
+					myTransform.position,
+					sightRangePow
+				);
+
+			int numEnemies = enemiesInRange.Count;
+			for (int i = 0; i < numEnemies; i++)
+			{
+				if (CalculateDotProd(enemiesInRange[i].ObjTransform) < FSMSettings.minDotProd)
+					continue;
+
+				if (VisibilityCalculator.IsVisibleSingle(VisibilityParams, heading, enemiesInRange[i].ObjTransform)
+					|| (heading.sqrMagnitude < VisibilityParams.highResSearchSqrRange &&
+					VisibilityCalculator.IsVisibleCorners(VisibilityParams, enemiesInRange[i].ObjTransform, enemiesInRange[i].BoundsExtens)))
+				{
+					Debug.Log("Found  " + enemiesInRange[i].ObjTransform.name);
+					return new FSMTarget(true, enemiesInRange[i].ObjTransform);
+				}
+			}
+			return targetNotFound;
+		}
         private void Update()
         {
 			RunUpdateActions();

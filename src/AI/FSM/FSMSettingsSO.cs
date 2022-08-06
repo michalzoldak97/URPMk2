@@ -12,6 +12,7 @@ namespace URPMk2
 		public int fleeRange;
 		public Teams[] teamsToAttack; // order is team importance
 		public float checkRate;
+		public float checkRateOffset;
 		public float attackRate;
 		public float recoverFromDmgTime;
 		public float minDotProd;
