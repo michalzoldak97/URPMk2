@@ -8,7 +8,6 @@ namespace URPMk2
     public class FSMPatrolState : IFSMState
 	{
         private int nextWayPoint;
-        private Vector3 heading;
         private Transform fTransform;
         private FSMStateManager fManager;
 
@@ -69,11 +68,6 @@ namespace URPMk2
                 fManager.WanderTarget = centre;
                 return false;
             }
-        }
-        private float CalculateDotProd(Transform target)
-        {
-            heading = (target.position - fTransform.position).normalized;
-            return Vector3.Dot(heading, fTransform.forward);
         }
         private void Look()
         {

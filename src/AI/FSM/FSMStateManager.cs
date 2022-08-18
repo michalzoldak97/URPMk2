@@ -13,14 +13,13 @@ namespace URPMk2
 		public Vector3 LocationOfInterest { get; set; }
 		public Vector3 WanderTarget { get; set; }
 		public Transform MyFollowTarget { get; private set; }
-		public Transform PursueTarget { get; private set; }
+		public Transform PursueTarget { get; set; }
 		public Transform MyAttacker { get; private set; }
 		public NavMeshAgent MyNavMeshAgent { get; private set; }
 		public FSMMaster FSMMaster { get; private set; }
 		public VisibilityParamContainer VisibilityParams { get; private set; }
 
 		public Transform[] waypoints;
-		public IComparer priorityComparer;
 		public IFSMState currentState;
 		public IFSMState capturedState;
 		public FSMPatrolState patrolState;
@@ -32,9 +31,11 @@ namespace URPMk2
 		public FSMInvestigateDangerState investigateDangerState;
 		public FSMFollowState followState;
 
+		private bool isInformingAllies;
 		private int sightRangePow;
 		private float checkRate, nextCheck;
 		private Vector3 heading;
+		private Collider[] nerbyAllies;
 		private Transform myTransform;
 		private WaitForSeconds waitForRecover;
 		private DamagableMaster dmgMaster;
@@ -57,6 +58,7 @@ namespace URPMk2
 			sightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
 			myTransform = transform;
 			targetNotFound = new FSMTarget(false, null);
+			nerbyAllies = new Collider[FSMSettings.informAlliesNum];
 			ActivatePatrolState();
 		}
 		private void SetStateReferences()
@@ -185,6 +187,42 @@ namespace URPMk2
 				}
 			}
 			return targetNotFound;
+		}
+		private async void ResetInformState()
+        {
+			await System.TimeSpan.FromSeconds(FSMSettings.informAlliesPeriod);
+			isInformingAllies = false;
+		}
+		public void AlertAllies()
+        {
+			if (!FSMSettings.shouldInformAllies ||
+				isInformingAllies)
+				return;
+
+			isInformingAllies = true;
+
+			int numAllies = Physics.OverlapSphereNonAlloc(myTransform.position, FSMSettings.informAlliesRange, nerbyAllies, FSMSettings.friendlyLayers);
+			if (numAllies <= 0)
+				return;
+
+			for (int i = 0; i < numAllies; i++)
+            {
+				if (nerbyAllies[i].transform.root.GetComponent<FSMStateManager>() != null)
+                {
+					FSMStateManager allyManager = nerbyAllies[i].transform.root.GetComponent<FSMStateManager>();
+
+					if (allyManager.currentState == allyManager.patrolState)
+                    {
+						allyManager.PursueTarget = PursueTarget;
+						allyManager.LocationOfInterest = PursueTarget.position;
+						allyManager.currentState = allyManager.alertState;
+                    }
+
+				}
+            }
+
+			System.Array.Clear(nerbyAllies, 0, numAllies);
+			ResetInformState();
 		}
         private void Update()
         {
