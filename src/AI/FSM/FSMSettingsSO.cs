@@ -14,6 +14,7 @@ namespace URPMk2
 		public int informAlliesRange; 
 		public int informAlliesNum; // max number of allies to infomr about the threat
 		public int enemiesBufferSize;
+		public int attackRange;
 		public Teams[] teamsToAttack; // order is team importance
 		public float checkRate;
 		public float checkRateOffset;

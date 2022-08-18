@@ -10,6 +10,7 @@ namespace URPMk2
 		[SerializeField] private Transform head;
 		[SerializeField] private FSMSettingsSO FSMSettings;
 		public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
+		public int SightRangePow { get; private set; }
 		public Vector3 LocationOfInterest { get; set; }
 		public Vector3 WanderTarget { get; set; }
 		public Transform MyFollowTarget { get; private set; }
@@ -18,6 +19,7 @@ namespace URPMk2
 		public NavMeshAgent MyNavMeshAgent { get; private set; }
 		public FSMMaster FSMMaster { get; private set; }
 		public VisibilityParamContainer VisibilityParams { get; private set; }
+
 
 		public Transform[] waypoints;
 		public IFSMState currentState;
@@ -32,7 +34,6 @@ namespace URPMk2
 		public FSMFollowState followState;
 
 		private bool isInformingAllies;
-		private int sightRangePow;
 		private float checkRate, nextCheck;
 		private Vector3 heading;
 		private Collider[] nerbyAllies;
@@ -56,7 +57,7 @@ namespace URPMk2
 				FSMSettings.highResDetectionRange * FSMSettings.highResDetectionRange, 
 				FSMSettings.sightLayers, 
 				head);
-			sightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
+			SightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
 			myTransform = transform;
 			targetNotFound = new FSMTarget(false, null);
 			nerbyAllies = new Collider[FSMSettings.informAlliesNum];
@@ -172,7 +173,7 @@ namespace URPMk2
 			List<ITeamMember> enemiesInRange = TeamMembersManager.GetTeamMembersInRange(
 					FSMSettings.teamsToAttack,
 					myTransform.position,
-					sightRangePow
+					SightRangePow
 				);
 
 			int numEnemies = enemiesInRange.Count;
@@ -199,7 +200,7 @@ namespace URPMk2
 			List<ITeamMember> enemiesInRange = TeamMembersManager.GetTeamMembersInRange(
 					FSMSettings.teamsToAttack,
 					myTransform.position,
-					sightRangePow
+					SightRangePow
 				);
 
 			Teams topTeam = FSMSettings.teamID;
@@ -248,12 +249,12 @@ namespace URPMk2
 			isInformingAllies = true;
 
 			int numAllies = Physics.OverlapSphereNonAlloc(myTransform.position, FSMSettings.informAlliesRange, nerbyAllies, FSMSettings.friendlyLayers);
-			if (numAllies <= 0)
+			if (numAllies <= 1) // 1st is this
 				return;
 
 			for (int i = 0; i < numAllies; i++)
             {
-				Debug.Log("Informing " + nerbyAllies[i].transform.root.name);
+				// Debug.Log("Informing " + nerbyAllies[i].transform.root.name);
 				if (nerbyAllies[i].transform.root.GetComponent<FSMStateManager>() != null)
                 {
 					FSMStateManager allyManager = nerbyAllies[i].transform.root.GetComponent<FSMStateManager>();

@@ -43,7 +43,7 @@ namespace URPMk2
                 fManager.LocationOfInterest = target.targetTransform.position;
                 fManager.PursueTarget = target.targetTransform;
                 fManager.AlertAllies();
-                // ToPursueState();
+                ToPursueState();
             }
 
             GoToLocationOfInterest();
