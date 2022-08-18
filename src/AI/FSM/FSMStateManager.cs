@@ -40,6 +40,7 @@ namespace URPMk2
 		private WaitForSeconds waitForRecover;
 		private DamagableMaster dmgMaster;
 		private FSMTarget targetNotFound;
+		private ITeamMember[] enemiesBuffer;
 
 		private void SetInit()
 		{
@@ -59,12 +60,14 @@ namespace URPMk2
 			myTransform = transform;
 			targetNotFound = new FSMTarget(false, null);
 			nerbyAllies = new Collider[FSMSettings.informAlliesNum];
+			enemiesBuffer = new ITeamMember[FSMSettings.enemiesBufferSize];
 			ActivatePatrolState();
 		}
 		private void SetStateReferences()
         {
 			patrolState = new FSMPatrolState(this);
 			alertState = new FSMAlertState(this);
+			pursueState = new FSMPursueState(this);
         }
 
 		private void OnEnable()
@@ -188,6 +191,49 @@ namespace URPMk2
 			}
 			return targetNotFound;
 		}
+
+		public ITeamMember[] GetEnemiesInRange()
+        {
+			System.Array.Clear(enemiesBuffer, 0, enemiesBuffer.Length);
+
+			List<ITeamMember> enemiesInRange = TeamMembersManager.GetTeamMembersInRange(
+					FSMSettings.teamsToAttack,
+					myTransform.position,
+					sightRangePow
+				);
+
+			Teams topTeam = FSMSettings.teamID;
+
+			int enemiesAdded = 0;
+			int numEnemies = enemiesInRange.Count;
+			for (int i = 0; i < numEnemies; i++)
+			{
+				if (enemiesAdded >= enemiesBuffer.Length)
+					break;
+
+				if (CalculateDotProd(enemiesInRange[i].ObjTransform) < FSMSettings.minDotProd)
+				{
+                    continue;
+				}
+
+				if (VisibilityCalculator.IsVisibleSingle(VisibilityParams, heading, enemiesInRange[i].ObjTransform)
+					|| (heading.sqrMagnitude < VisibilityParams.highResSearchSqrRange &&
+					VisibilityCalculator.IsVisibleCorners(VisibilityParams, enemiesInRange[i].ObjTransform, enemiesInRange[i].BoundsExtens)))
+				{
+					if (topTeam == FSMSettings.teamID)
+						topTeam = enemiesInRange[i].TeamID;
+					else if (enemiesInRange[i].TeamID != topTeam)
+                    {
+						break;
+                    }
+
+					enemiesBuffer[enemiesAdded] = enemiesInRange[i];
+					enemiesAdded++;
+				}
+			}
+			return enemiesBuffer;
+		}
+
 		private async void ResetInformState()
         {
 			await System.TimeSpan.FromSeconds(FSMSettings.informAlliesPeriod);
@@ -207,6 +253,7 @@ namespace URPMk2
 
 			for (int i = 0; i < numAllies; i++)
             {
+				Debug.Log("Informing " + nerbyAllies[i].transform.root.name);
 				if (nerbyAllies[i].transform.root.GetComponent<FSMStateManager>() != null)
                 {
 					FSMStateManager allyManager = nerbyAllies[i].transform.root.GetComponent<FSMStateManager>();

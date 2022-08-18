@@ -73,7 +73,10 @@ namespace URPMk2
         {
             FSMTarget target = fManager.IsTargetVisible();
             if (target.isVisible)
-                SetUpAlertState(target.targetTransform); 
+            {
+                Debug.Log("To alert state: " + target.targetTransform.name);
+                SetUpAlertState(target.targetTransform);
+            }
         }
         private void Patrol()
         {
@@ -94,12 +97,12 @@ namespace URPMk2
             }
             else
             {
-                Debug.Log("is destination reached: " + IsDestinationReached());
+                // Debug.Log("is destination reached: " + IsDestinationReached());
                 if (IsDestinationReached())
                 {
                     fManager.MyNavMeshAgent.isStopped = true;
 
-                    Debug.Log("is RandomWanderTarget: " + RandomWanderTarget(fTransform.position));
+                    // Debug.Log("is RandomWanderTarget: " + RandomWanderTarget(fTransform.position));
                     if (RandomWanderTarget(fTransform.position))
                         MoveToTarget(fManager.WanderTarget);
                 }

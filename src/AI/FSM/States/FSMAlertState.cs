@@ -11,10 +11,6 @@ namespace URPMk2
         {
             this.fManager = fManager;
         }
-        private void InformNearbyAllies()
-        {
-
-        }
         private void GoToLocationOfInterest()
         {
             if (!fManager.MyNavMeshAgent.enabled || 
@@ -46,8 +42,8 @@ namespace URPMk2
                 targetDetections = 0;
                 fManager.LocationOfInterest = target.targetTransform.position;
                 fManager.PursueTarget = target.targetTransform;
-                InformNearbyAllies();
-                ToPursueState();
+                fManager.AlertAllies();
+                // ToPursueState();
             }
 
             GoToLocationOfInterest();
