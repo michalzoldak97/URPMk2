@@ -62,13 +62,14 @@ namespace URPMk2
 			targetNotFound = new FSMTarget(false, null);
 			nerbyAllies = new Collider[FSMSettings.informAlliesNum];
 			enemiesBuffer = new ITeamMember[FSMSettings.enemiesBufferSize];
-			ActivatePatrolState();
+			currentState = patrolState;
 		}
 		private void SetStateReferences()
         {
 			patrolState = new FSMPatrolState(this);
 			alertState = new FSMAlertState(this);
 			pursueState = new FSMPursueState(this);
+			fleeState = new FSMFleeState(this);
         }
 
 		private void OnEnable()
@@ -91,22 +92,6 @@ namespace URPMk2
 				nextCheck = checkRate + t;
 				currentState.UpdateState();
             }
-        }
-		private void ActivatePatrolState()
-        {
-			currentState = patrolState;
-        }
-		private void ActivateAlertState()
-        {
-
-        }
-		private void ActivatePursueState()
-        {
-
-        }
-		private void ActivateAttackState()
-        {
-
         }
 		private void ActivateFleeState()
         {
@@ -140,13 +125,10 @@ namespace URPMk2
 
 			StartCoroutine(RecoverFromStruckState());
         }
-		private void ActivateInvestigateDangerState()
+		public void SwitchState(bool stopNavMeshAgent, IFSMState toState)
         {
-
-        }
-		private void ActivateFollowState()
-        {
-
+			MyNavMeshAgent.isStopped = stopNavMeshAgent;
+			currentState = toState;
         }
 		public void OnEnemyAttack()
         {

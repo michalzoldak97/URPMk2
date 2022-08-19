@@ -8,22 +8,18 @@ namespace URPMk2
     public class FSMPatrolState : IFSMState
 	{
         private int nextWayPoint;
-        private Transform fTransform;
-        private FSMStateManager fManager;
+        private readonly Transform fTransform;
+        private readonly FSMStateManager fManager;
 
         public FSMPatrolState (FSMStateManager fManager)
         {
             this.fManager = fManager;
             fTransform = fManager.transform;
         }
-        public void ToAlertState()
-        {
-            fManager.currentState = fManager.alertState;
-        }
         private void SetUpAlertState(Transform target)
         {
             fManager.LocationOfInterest = target.position;
-            ToAlertState();
+            fManager.SwitchState(false, fManager.alertState);
         }
         private bool IsDestinationReached()
         {
@@ -112,18 +108,6 @@ namespace URPMk2
         {
             Look();
             Patrol();
-        }
-		public void ToPatrolState()
-        {
-
-        }
-		public void ToPursueState()
-        {
-
-        }
-		public void ToAttackState()
-        {
-
         }
 	}
 }

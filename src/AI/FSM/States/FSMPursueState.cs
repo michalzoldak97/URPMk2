@@ -4,8 +4,8 @@ namespace URPMk2
 {
 	public class FSMPursueState : IFSMState
 	{
-        private Transform fTransform;
-        private FSMStateManager fManager;
+        private readonly Transform fTransform;
+        private readonly FSMStateManager fManager;
         public FSMPursueState(FSMStateManager fManager)
         {
             this.fManager = fManager;
@@ -15,7 +15,7 @@ namespace URPMk2
         {
             if (fManager.PursueTarget == null)
             {
-                ToPatrolState();
+                fManager.SwitchState(false, fManager.patrolState);
                 return;
             }
 
@@ -23,7 +23,7 @@ namespace URPMk2
             if (enemiesInRange.Length <= 0)
             {
                 fManager.PursueTarget = null;
-                ToPatrolState();
+                fManager.SwitchState(false, fManager.patrolState);
                 return;
             }
 
@@ -51,7 +51,7 @@ namespace URPMk2
             if (!fManager.MyNavMeshAgent.enabled ||
                 fManager.PursueTarget == null)
             {
-                ToAlertState();
+                fManager.SwitchState(false, fManager.alertState);
                 return;
             }
             fManager.MyNavMeshAgent.SetDestination(fManager.PursueTarget.position);
@@ -61,32 +61,16 @@ namespace URPMk2
             float distToEnemy = (fManager.PursueTarget.position - fTransform.position).sqrMagnitude;
 
             if (distToEnemy <= fManager.GetFSMSettings().attackRange)
-                ToAttackState();
+            {
+                Debug.Log("Attacking the target");
+                fManager.currentState = fManager.attackState;
+            }
 
         }
         public void UpdateState()
         {
             Look();
             Pursue();
-        }
-        public void ToPatrolState()
-        {
-            fManager.MyNavMeshAgent.isStopped = false;
-            fManager.currentState = fManager.patrolState;
-        }
-        public void ToAlertState()
-        {
-            fManager.MyNavMeshAgent.isStopped = false;
-            fManager.currentState = fManager.alertState;
-        }
-        public void ToPursueState()
-        {
-
-        }
-        public void ToAttackState()
-        {
-            Debug.Log("Pursuing the target ");
-            // fManager.currentState = fManager.attackState;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace URPMk2
 	public class FSMAlertState : IFSMState
 	{
         private int targetDetections, lastDetectionCnt;
-        private FSMStateManager fManager;
+        private readonly FSMStateManager fManager;
 
         public FSMAlertState(FSMStateManager fManager)
         {
@@ -25,7 +25,7 @@ namespace URPMk2
                 return;
 
             fManager.LocationOfInterest = Vector3.zero; // no target found at the destination
-            ToPatrolState();
+            fManager.currentState = fManager.patrolState;
         }
         private void Look()
         {
@@ -43,7 +43,7 @@ namespace URPMk2
                 fManager.LocationOfInterest = target.targetTransform.position;
                 fManager.PursueTarget = target.targetTransform;
                 fManager.AlertAllies();
-                ToPursueState();
+                fManager.currentState = fManager.pursueState;
             }
 
             GoToLocationOfInterest();
@@ -51,22 +51,6 @@ namespace URPMk2
         public void UpdateState()
         {
             Look();
-        }
-        public void ToPatrolState()
-        {
-            fManager.currentState = fManager.patrolState;
-        }
-        public void ToAlertState()
-        {
-
-        }
-        public void ToPursueState()
-        {
-            fManager.currentState = fManager.pursueState;
-        }
-        public void ToAttackState()
-        {
-
         }
     }
 }
