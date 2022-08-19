@@ -10,7 +10,7 @@ namespace URPMk2
 		public int requiredDetectionCount; // detections to confirm target as an enemy
 		public int sightRange;
 		public int highResDetectionRange;
-		public int fleeRange;
+		public int fleeAttackRangePow;
 		public int informAlliesRange; 
 		public int informAlliesNum; // max number of allies to infomr about the threat
 		public int enemiesBufferSize;

@@ -58,12 +58,12 @@ namespace URPMk2
             fManager.LocationOfInterest = fManager.PursueTarget.position;
             fManager.MyNavMeshAgent.isStopped = false;
 
-            float distToEnemy = (fManager.PursueTarget.position - fTransform.position).sqrMagnitude;
 
-            if (distToEnemy <= fManager.GetFSMSettings().attackRange)
+            if ((fManager.PursueTarget.position - fTransform.position).sqrMagnitude <= 
+                fManager.GetFSMSettings().attackRange)
             {
                 Debug.Log("Attacking the target");
-                fManager.currentState = fManager.attackState;
+                // fManager.currentState = fManager.attackState;
             }
 
         }

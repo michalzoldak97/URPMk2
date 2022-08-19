@@ -19,7 +19,7 @@ namespace URPMk2
         private void SetUpAlertState(Transform target)
         {
             fManager.LocationOfInterest = target.position;
-            fManager.SwitchState(false, fManager.alertState);
+            fManager.currentState = fManager.alertState;
         }
         private bool IsDestinationReached()
         {
