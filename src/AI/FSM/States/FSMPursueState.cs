@@ -4,17 +4,24 @@ namespace URPMk2
 {
 	public class FSMPursueState : IFSMState
 	{
+        private int notFoundCounterVal;
+        private readonly int notFoundCounter;
+        private readonly float attackRangePow;
         private readonly Transform fTransform;
         private readonly FSMStateManager fManager;
         public FSMPursueState(FSMStateManager fManager)
         {
             this.fManager = fManager;
             fTransform = fManager.transform;
+            notFoundCounter = fManager.GetFSMSettings().targetLostDetections; 
+            attackRangePow = fManager.GetFSMSettings().attackRange * 
+                fManager.GetFSMSettings().attackRange;
         }
         private void Look()
         {
             if (fManager.PursueTarget == null)
             {
+                notFoundCounterVal = notFoundCounter;
                 fManager.SwitchState(false, fManager.patrolState);
                 return;
             }
@@ -22,10 +29,18 @@ namespace URPMk2
             ITeamMember[] enemiesInRange = fManager.GetEnemiesInRange();
             if (enemiesInRange.Length <= 0)
             {
-                fManager.PursueTarget = null;
-                fManager.SwitchState(false, fManager.patrolState);
+                if (notFoundCounterVal <= 0)
+                {
+                    notFoundCounterVal = notFoundCounter;
+                    fManager.PursueTarget = null;
+                    fManager.SwitchState(false, fManager.patrolState);
+                    return;
+                }
+                notFoundCounterVal--;
                 return;
             }
+
+            notFoundCounterVal = notFoundCounter;
 
             float minDist = fManager.SightRangePow * 2;
             float distToEnemy;
@@ -59,11 +74,11 @@ namespace URPMk2
             fManager.MyNavMeshAgent.isStopped = false;
 
 
-            if ((fManager.PursueTarget.position - fTransform.position).sqrMagnitude <= 
-                fManager.GetFSMSettings().attackRange)
+            if ((fManager.PursueTarget.position - fTransform.position).sqrMagnitude <=
+                attackRangePow)
             {
                 Debug.Log("Attacking the target");
-                // fManager.currentState = fManager.attackState;
+                fManager.currentState = fManager.attackState;
             }
 
         }

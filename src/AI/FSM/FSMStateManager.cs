@@ -70,7 +70,9 @@ namespace URPMk2
 			alertState = new FSMAlertState(this);
 			pursueState = new FSMPursueState(this);
 			fleeState = new FSMFleeState(this);
-        }
+			followState = new FSMFollowState(this);
+			attackState = new FSMAttackState(this);
+		}
 
 		private void OnEnable()
 		{
@@ -253,6 +255,18 @@ namespace URPMk2
 
 			System.Array.Clear(nerbyAllies, 0, numAllies);
 			ResetInformState();
+		}
+		public bool CheckIfFollowDestinationReached()
+        {
+			if (MyNavMeshAgent.remainingDistance <= MyNavMeshAgent.stoppingDistance &&
+                !MyNavMeshAgent.pathPending)
+            {
+				MyNavMeshAgent.isStopped = true;
+				return true;
+            }
+
+			MyNavMeshAgent.isStopped = false;
+			return false;
 		}
         private void Update()
         {
