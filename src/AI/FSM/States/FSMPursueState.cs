@@ -27,7 +27,7 @@ namespace URPMk2
             }
 
             ITeamMember[] enemiesInRange = fManager.GetEnemiesInRange();
-            if (enemiesInRange.Length <= 0)
+            if (!(System.Array.Exists(enemiesInRange, el => el != null)))
             {
                 if (notFoundCounterVal <= 0)
                 {
@@ -36,6 +36,7 @@ namespace URPMk2
                     fManager.SwitchState(false, fManager.patrolState);
                     return;
                 }
+                Debug.Log("Decreasing not found counter");
                 notFoundCounterVal--;
                 return;
             }
@@ -49,7 +50,7 @@ namespace URPMk2
             for (int i = 0; i < eirLen; i++)
             {
                 if (enemiesInRange[i] == null)
-                    break;
+                    continue;
 
                 distToEnemy = (enemiesInRange[i].ObjTransform.position - fTransform.position).sqrMagnitude;
 
@@ -59,7 +60,7 @@ namespace URPMk2
                     fManager.PursueTarget = enemiesInRange[i].ObjTransform;
                 }
             }
-
+            fManager.RotateTowardsTarget();
         }
         private void Pursue()
         {

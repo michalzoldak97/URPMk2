@@ -26,10 +26,11 @@ namespace URPMk2
             }
 
             ITeamMember[] enemiesInRange = fManager.GetEnemiesInRange();
-            if (enemiesInRange.Length <= 0
+            if (!(System.Array.Exists(enemiesInRange, el => el != null))
                 || (fManager.PursueTarget.position - fTransform.position).sqrMagnitude >
                attackRangePow) // see no enemies but target alive or target too far
             {
+                Debug.Log("Getting back to the pursue state");
                 fManager.currentState = fManager.pursueState;
                 return;
             }
@@ -37,6 +38,7 @@ namespace URPMk2
             if (!System.Array.Exists(enemiesInRange,
                 el => el != null && el.ObjTransform == fManager.PursueTarget)) // see only other enemies
             {
+                Debug.Log("Getting back to the patrol state because only other enemies found");
                 fManager.PursueTarget = null;
                 fManager.SwitchState(false, fManager.patrolState);
                 return;
@@ -44,6 +46,7 @@ namespace URPMk2
 
             // weaponController.LaunchAtack();
             Debug.Log("Ratatatatatatatatatat");
+            fManager.RotateTowardsTarget();
 
         }
         public void UpdateState()

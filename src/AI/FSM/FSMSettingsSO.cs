@@ -23,6 +23,8 @@ namespace URPMk2
 		public float recoverFromDmgTime;
 		public float minDotProd;
 		public float informAlliesPeriod;
+		public float rotationAngularSpeed;
+		public float rotationsPerCycle;
 		public LayerMask sightLayers;
 		public LayerMask enemyLayers;
 		public LayerMask friendlyLayers;

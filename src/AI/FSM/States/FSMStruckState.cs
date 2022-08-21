@@ -4,6 +4,11 @@ namespace URPMk2
 {
 	public class FSMStruckState : IFSMState
     {
+        private readonly FSMStateManager fManager;
+        public FSMStruckState(FSMStateManager fManager)
+        {
+            this.fManager = fManager;
+        }
         public void UpdateState()
         {
 

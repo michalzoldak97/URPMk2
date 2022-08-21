@@ -11,6 +11,7 @@ namespace URPMk2
 		[SerializeField] private FSMSettingsSO FSMSettings;
 		public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
 		public int SightRangePow { get; private set; }
+		public float GetCheckRate() { return checkRate; }
 		public Vector3 LocationOfInterest { get; set; }
 		public Vector3 WanderTarget { get; set; }
 		public Transform MyFollowTarget { get; private set; }
@@ -32,6 +33,7 @@ namespace URPMk2
 		public FSMStruckState struckState;
 		public FSMInvestigateDangerState investigateDangerState;
 		public FSMFollowState followState;
+		public NPCRotationController rotationController;
 
 		private bool isInformingAllies;
 		private float checkRate, nextCheck;
@@ -62,6 +64,7 @@ namespace URPMk2
 			targetNotFound = new FSMTarget(false, null);
 			nerbyAllies = new Collider[FSMSettings.informAlliesNum];
 			enemiesBuffer = new ITeamMember[FSMSettings.enemiesBufferSize];
+			rotationController = GetComponent<FSMRotationController>();
 			currentState = patrolState;
 		}
 		private void SetStateReferences()
@@ -72,6 +75,7 @@ namespace URPMk2
 			fleeState = new FSMFleeState(this);
 			followState = new FSMFollowState(this);
 			attackState = new FSMAttackState(this);
+			struckState = new FSMStruckState(this);
 		}
 
 		private void OnEnable()
@@ -196,7 +200,8 @@ namespace URPMk2
 				if (enemiesAdded >= enemiesBuffer.Length)
 					break;
 
-				if (CalculateDotProd(enemiesInRange[i].ObjTransform) < FSMSettings.minDotProd)
+				if (CalculateDotProd(enemiesInRange[i].ObjTransform) < FSMSettings.minDotProd &&
+					heading.sqrMagnitude > VisibilityParams.highResSearchSqrRange)
 				{
                     continue;
 				}
@@ -267,6 +272,10 @@ namespace URPMk2
 
 			MyNavMeshAgent.isStopped = false;
 			return false;
+		}
+		public void RotateTowardsTarget()
+        {
+			rotationController.RotateTowardsTransform(PursueTarget);
 		}
         private void Update()
         {
