@@ -36,7 +36,6 @@ namespace URPMk2
                     fManager.SwitchState(false, fManager.patrolState);
                     return;
                 }
-                Debug.Log("Decreasing not found counter");
                 notFoundCounterVal--;
                 return;
             }

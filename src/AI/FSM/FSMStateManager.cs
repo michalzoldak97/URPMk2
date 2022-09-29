@@ -33,7 +33,6 @@ namespace URPMk2
 		public FSMStruckState struckState;
 		public FSMInvestigateDangerState investigateDangerState;
 		public FSMFollowState followState;
-		public NPCRotationController rotationController;
 
 		private bool isInformingAllies;
 		private float checkRate, nextCheck;
@@ -44,6 +43,7 @@ namespace URPMk2
 		private DamagableMaster dmgMaster;
 		private FSMTarget targetNotFound;
 		private ITeamMember[] enemiesBuffer;
+		private NPCRotationController rotationController;
 
 		private void SetInit()
 		{
@@ -167,16 +167,15 @@ namespace URPMk2
 			int numEnemies = enemiesInRange.Count;
 			for (int i = 0; i < numEnemies; i++)
 			{
-				if (CalculateDotProd(enemiesInRange[i].ObjTransform) < FSMSettings.minDotProd)
+				bool isInHighResRange = heading.sqrMagnitude < VisibilityParams.highResSearchSqrRange;
+				if (CalculateDotProd(enemiesInRange[i].ObjTransform) < FSMSettings.minDotProd &&
+					!isInHighResRange)
 					continue;
 
 				if (VisibilityCalculator.IsVisibleSingle(VisibilityParams, heading, enemiesInRange[i].ObjTransform)
-					|| (heading.sqrMagnitude < VisibilityParams.highResSearchSqrRange &&
+					|| (isInHighResRange &&
 					VisibilityCalculator.IsVisibleCorners(VisibilityParams, enemiesInRange[i].ObjTransform, enemiesInRange[i].BoundsExtens)))
-				{
-					Debug.Log("Found  " + enemiesInRange[i].ObjTransform.name);
 					return new FSMTarget(true, enemiesInRange[i].ObjTransform);
-				}
 			}
 			return targetNotFound;
 		}
@@ -200,22 +199,20 @@ namespace URPMk2
 				if (enemiesAdded >= enemiesBuffer.Length)
 					break;
 
+				bool isInHighResRange = heading.sqrMagnitude < VisibilityParams.highResSearchSqrRange;
+
 				if (CalculateDotProd(enemiesInRange[i].ObjTransform) < FSMSettings.minDotProd &&
-					heading.sqrMagnitude > VisibilityParams.highResSearchSqrRange)
-				{
+					!isInHighResRange)
                     continue;
-				}
 
 				if (VisibilityCalculator.IsVisibleSingle(VisibilityParams, heading, enemiesInRange[i].ObjTransform)
-					|| (heading.sqrMagnitude < VisibilityParams.highResSearchSqrRange &&
+					|| (isInHighResRange &&
 					VisibilityCalculator.IsVisibleCorners(VisibilityParams, enemiesInRange[i].ObjTransform, enemiesInRange[i].BoundsExtens)))
 				{
 					if (topTeam == FSMSettings.teamID)
 						topTeam = enemiesInRange[i].TeamID;
 					else if (enemiesInRange[i].TeamID != topTeam)
-                    {
 						break;
-                    }
 
 					enemiesBuffer[enemiesAdded] = enemiesInRange[i];
 					enemiesAdded++;
@@ -244,18 +241,17 @@ namespace URPMk2
 			for (int i = 0; i < numAllies; i++)
             {
 				// Debug.Log("Informing " + nerbyAllies[i].transform.root.name);
-				if (nerbyAllies[i].transform.root.GetComponent<FSMStateManager>() != null)
-                {
-					FSMStateManager allyManager = nerbyAllies[i].transform.root.GetComponent<FSMStateManager>();
+				if (nerbyAllies[i].transform.root.GetComponent<FSMStateManager>() == null)
+					continue;
 
-					if (allyManager.currentState == allyManager.patrolState)
-                    {
-						allyManager.PursueTarget = PursueTarget;
-						allyManager.LocationOfInterest = PursueTarget.position;
-						allyManager.currentState = allyManager.alertState;
-                    }
+				FSMStateManager allyManager = nerbyAllies[i].transform.root.GetComponent<FSMStateManager>();
 
-				}
+				if (allyManager.currentState != allyManager.patrolState)
+					continue;
+
+				allyManager.PursueTarget = PursueTarget;
+				allyManager.LocationOfInterest = PursueTarget.position;
+				allyManager.currentState = allyManager.alertState;
             }
 
 			System.Array.Clear(nerbyAllies, 0, numAllies);
