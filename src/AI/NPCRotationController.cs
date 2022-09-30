@@ -19,7 +19,7 @@ namespace URPMk2
 
         public async void RotateTowardsTransform(Transform target)
         {
-            Debug.Log("Is rotating = " + isRotatnig + " next Rot = " + nextRot);
+            // Debug.Log("Is rotating = " + isRotatnig + " next Rot = " + nextRot);
 
             if (isRotatnig)
                 return;

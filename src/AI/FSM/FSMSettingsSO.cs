@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace URPMk2
 {
-	[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FSMSettings", order = 5)]
+	[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FSMSettings", order = 6)]
 	public class FSMSettingsSO : ScriptableObject
 	{
 		public bool shouldInformAllies; // will inform about enemies found

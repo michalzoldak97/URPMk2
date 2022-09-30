@@ -70,7 +70,7 @@ namespace URPMk2
             FSMTarget target = fManager.IsTargetVisible();
             if (target.isVisible)
             {
-                Debug.Log("To alert state: " + target.targetTransform.name);
+                // Debug.Log("To alert state: " + target.targetTransform.name);
                 SetUpAlertState(target.targetTransform);
             }
         }

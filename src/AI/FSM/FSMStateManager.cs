@@ -18,7 +18,7 @@ namespace URPMk2
 		public Transform PursueTarget { get; set; }
 		public Transform MyAttacker { get; private set; }
 		public NavMeshAgent MyNavMeshAgent { get; private set; }
-		public FSMMaster FSMMaster { get; private set; }
+		public NPCMaster MyNPCMaster { get; private set; }
 		public VisibilityParamContainer VisibilityParams { get; private set; }
 
 
@@ -47,7 +47,7 @@ namespace URPMk2
 
 		private void SetInit()
 		{
-			FSMMaster = GetComponent<FSMMaster>();
+			MyNPCMaster = GetComponent<NPCMaster>();
 			dmgMaster = GetComponent<DamagableMaster>();
 			MyNavMeshAgent = GetComponent<NavMeshAgent>();
 			checkRate = Random.Range(
@@ -273,7 +273,12 @@ namespace URPMk2
         {
 			rotationController.RotateTowardsTransform(PursueTarget);
 		}
-        private void Update()
+		public void LaunchWeaponSystem()
+        {
+			MyNPCMaster.CallEventAttackTarget(PursueTarget);
+        }
+
+		private void Update()
         {
 			RunUpdateActions();
 		}

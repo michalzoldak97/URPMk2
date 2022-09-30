@@ -7,7 +7,6 @@ namespace URPMk2
         // TO DO: npc weapon controller should avoid friendly fire
         private readonly float attackRangePow;
         private readonly Transform fTransform;
-        private readonly INPCWeaponController weaponController;
         private readonly FSMStateManager fManager;
         public FSMAttackState(FSMStateManager fManager)
         {
@@ -15,7 +14,6 @@ namespace URPMk2
             fTransform = fManager.transform;
             attackRangePow = fManager.GetFSMSettings().attackRange *
                 fManager.GetFSMSettings().attackRange;
-            weaponController = fManager.GetComponent<INPCWeaponController>();
         }
         private void AttemptAttack()
         {
@@ -43,9 +41,9 @@ namespace URPMk2
             }
 
             // weaponController.LaunchAtack();
-            Debug.Log(fManager.gameObject.name + "  Ratatatatatatatatatat");
+            // Debug.Log(fManager.gameObject.name + "  Ratatatatatatatatatat");
             fManager.RotateTowardsTarget();
-
+            fManager.LaunchWeaponSystem();
         }
         public void UpdateState()
         {
