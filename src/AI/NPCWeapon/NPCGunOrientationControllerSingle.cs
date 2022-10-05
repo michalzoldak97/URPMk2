@@ -9,7 +9,7 @@ namespace URPMk2
 
         protected override void OnTargetAttack(Transform target)
         {
-            weapon.rotation = GetDesiredRotation(
+            weapon.localRotation = GetDesiredRotation(
                 weapon, 
                 target.position, 
                 weaponSettings.xMinMaxRotation, 
