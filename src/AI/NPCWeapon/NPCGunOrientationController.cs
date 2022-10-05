@@ -5,13 +5,9 @@ namespace URPMk2
 	public class NPCGunOrientationController : MonoBehaviour
 	{
         protected NPCMaster npcMaster;
-        protected virtual void SetInit()
-        {
-            npcMaster = GetComponent<NPCMaster>();
-        }
         private void OnEnable()
         {
-            SetInit();
+            npcMaster = GetComponent<NPCMaster>();
             npcMaster.EventAttackTarget += OnTargetAttack;
         }
         private void OnDisable()

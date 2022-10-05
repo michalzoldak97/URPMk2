@@ -10,6 +10,11 @@ namespace URPMk2
 		public void CallEventAttackTarget(Transform target)
         {
 			EventAttackTarget?.Invoke(target);
+			NPCWeaponShootFieldValidator val = GetComponent<NPCWeaponShootFieldValidator>();
+			if (val.IsShootFieldClean(transform))
+				Debug.Log("Ratatatatatatatatat");
+			else
+				Debug.Log("Need to change pos");
 		}
 	}
 }

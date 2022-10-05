@@ -25,6 +25,7 @@ namespace URPMk2
 		public float informAlliesPeriod;
 		public float rotationAngularSpeed;
 		public float rotationsPerCycle;
+		public float shiftRange;
 		public LayerMask sightLayers;
 		public LayerMask enemyLayers;
 		public LayerMask friendlyLayers;

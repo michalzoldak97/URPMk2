@@ -43,18 +43,20 @@ namespace URPMk2
                 fManager.MyNavMeshAgent.isStopped = false;
             }
         }
-        private bool RandomWanderTarget(Vector3 centre)
+        private bool ExistsRandomWanderTarget(Vector3 centre)
         {
-            Vector3 rndPoint = Random.insideUnitSphere * fManager.GetFSMSettings().sightRange;
-            rndPoint = Utils.GetAbsVector3(rndPoint);
-
+            float randRange = fManager.GetFSMSettings().sightRange;
+            Vector3 rndPoint = fTransform.position;
+            rndPoint.x += Random.Range(-rndPoint.x, randRange);
+            rndPoint.y += Random.Range(-rndPoint.y, randRange);
+            
             // find nearest plane
             if (Physics.Raycast(rndPoint, -Vector3.up * rndPoint.y, out RaycastHit hit, fManager.GetFSMSettings().sightRange))
-            {
                 rndPoint = hit.point;
-            }
 
-            if(NavMesh.SamplePosition(rndPoint, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
+            Debug.Log("Trying to set rand target " + rndPoint); // TODO: why ignoring enemy
+
+            if (NavMesh.SamplePosition(rndPoint, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
             {
                 fManager.WanderTarget = navHit.position;
                 return true;
@@ -87,9 +89,7 @@ namespace URPMk2
                 MoveToTarget(fManager.waypoints[nextWayPoint].position);
 
                 if (IsDestinationReached())
-                {
                     nextWayPoint = (nextWayPoint + 1) % fManager.waypoints.Length;
-                }
             }
             else
             {
@@ -99,7 +99,7 @@ namespace URPMk2
                     fManager.MyNavMeshAgent.isStopped = true;
 
                     // Debug.Log("is RandomWanderTarget: " + RandomWanderTarget(fTransform.position));
-                    if (RandomWanderTarget(fTransform.position))
+                    if (ExistsRandomWanderTarget(fTransform.position))
                         MoveToTarget(fManager.WanderTarget);
                 }
             }
