@@ -85,5 +85,16 @@ namespace URPMk2
 
 			return selectedMembers;
 		}
-    }
+		public static List<ITeamMember> GetTeamMembersInRange(Teams team, Vector3 pos, int rangePow)
+		{
+			if (!isTeamMembersRefreshed)
+				RefreshTeamMembers();
+
+			selectedMembers.Clear();
+
+			GetTeamMembersInRangeByTeam(team, pos, rangePow);
+
+			return selectedMembers;
+		}
+	}
 }

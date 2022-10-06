@@ -54,8 +54,6 @@ namespace URPMk2
             if (Physics.Raycast(rndPoint, -Vector3.up * rndPoint.y, out RaycastHit hit, fManager.GetFSMSettings().sightRange))
                 rndPoint = hit.point;
 
-            Debug.Log("Trying to set rand target " + rndPoint); // TODO: why ignoring enemy
-
             if (NavMesh.SamplePosition(rndPoint, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
             {
                 fManager.WanderTarget = navHit.position;
@@ -71,17 +69,15 @@ namespace URPMk2
         {
             FSMTarget target = fManager.IsTargetVisible();
             if (target.isVisible)
-            {
-                // Debug.Log("To alert state: " + target.targetTransform.name);
                 SetUpAlertState(target.targetTransform);
-            }
         }
         private void Patrol()
         {
             if (fManager.MyFollowTarget != null)
                 fManager.currentState = fManager.followState;
 
-            if (!fManager.MyNavMeshAgent.enabled)
+            if (!fManager.MyNavMeshAgent.enabled ||
+                fManager.currentState == fManager.alertState)
                 return;
 
             if (fManager.waypoints.Length > 0)

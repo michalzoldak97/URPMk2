@@ -9,12 +9,8 @@ namespace URPMk2
 		public Vector3 BoundsExtens { get; private set; }
 		public Transform ObjTransform { get { return myTransform; } }
 		public GameObject Object { get; private set; }
+		public NPCMaster NMaster { get; private set; }
 		private Transform myTransform;
-
-		public Transform GetTran()
-        {
-			return myTransform;
-		}
 
 		// iterates over all gameObject colliders
 		// returns max bounds - will be used to detect object with box cast
@@ -42,6 +38,7 @@ namespace URPMk2
 			Object = gameObject;
 			// To DO figure it out how to get this from settings...
 			TeamID = (Teams) teamID;
+			NMaster = GetComponent<NPCMaster>();
 			TeamMembersManager.RegisterInTeamMembers(this);
 		}
 		

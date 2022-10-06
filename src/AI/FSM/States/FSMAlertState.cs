@@ -20,8 +20,9 @@ namespace URPMk2
             fManager.MyNavMeshAgent.SetDestination(fManager.LocationOfInterest);
             fManager.MyNavMeshAgent.isStopped = false;
 
-            if (fManager.MyNavMeshAgent.remainingDistance >= fManager.MyNavMeshAgent.stoppingDistance ||
-                fManager.MyNavMeshAgent.pathPending)
+            if (targetDetections != 0 ||
+                fManager.MyNavMeshAgent.pathPending ||
+                fManager.MyNavMeshAgent.remainingDistance >= fManager.MyNavMeshAgent.stoppingDistance)
                 return;
 
             fManager.LocationOfInterest = Vector3.zero; // no target found at the destination
@@ -44,6 +45,7 @@ namespace URPMk2
                 fManager.PursueTarget = target.targetTransform;
                 fManager.AlertAllies();
                 fManager.currentState = fManager.pursueState;
+                return;
             }
 
             GoToLocationOfInterest();

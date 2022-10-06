@@ -11,8 +11,7 @@ namespace URPMk2
 		public int sightRange;
 		public int highResDetectionRange;
 		public int fleeAttackRangePow;
-		public int informAlliesRange; 
-		public int informAlliesNum; // max number of allies to infomr about the threat
+		public int informAlliesRangePow; 
 		public int enemiesBufferSize;
 		public int attackRange;
 		public int targetLostDetections;

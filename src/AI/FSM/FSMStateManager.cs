@@ -37,7 +37,6 @@ namespace URPMk2
 		private bool isInformingAllies;
 		private float checkRate, nextCheck;
 		private Vector3 heading;
-		private Collider[] nerbyAllies;
 		private Transform myTransform;
 		private WaitForSeconds waitForRecover;
 		private DamagableMaster dmgMaster;
@@ -62,7 +61,6 @@ namespace URPMk2
 			SightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
 			myTransform = transform;
 			targetNotFound = new FSMTarget(false, null);
-			nerbyAllies = new Collider[FSMSettings.informAlliesNum];
 			enemiesBuffer = new ITeamMember[FSMSettings.enemiesBufferSize];
 			rotationController = GetComponent<FSMRotationController>();
 			currentState = patrolState;
@@ -234,27 +232,15 @@ namespace URPMk2
 
 			isInformingAllies = true;
 
-			int numAllies = Physics.OverlapSphereNonAlloc(myTransform.position, FSMSettings.informAlliesRange, nerbyAllies, FSMSettings.friendlyLayers);
-			if (numAllies <= 1) // 1st is this
-				return;
+			List<ITeamMember> teamMembersInRange = TeamMembersManager.GetTeamMembersInRange(FSMSettings.teamID, myTransform.position, FSMSettings.informAlliesRangePow);
+
+			int numAllies = teamMembersInRange.Count;
 
 			for (int i = 0; i < numAllies; i++)
             {
-				// Debug.Log("Informing " + nerbyAllies[i].transform.root.name);
-				if (nerbyAllies[i].transform.root.GetComponent<FSMStateManager>() == null)
-					continue;
-
-				FSMStateManager allyManager = nerbyAllies[i].transform.root.GetComponent<FSMStateManager>();
-
-				if (allyManager.currentState != allyManager.patrolState)
-					continue;
-
-				allyManager.PursueTarget = PursueTarget;
-				allyManager.LocationOfInterest = PursueTarget.position;
-				allyManager.currentState = allyManager.alertState;
+				teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(PursueTarget);
             }
 
-			System.Array.Clear(nerbyAllies, 0, numAllies);
 			ResetInformState();
 		}
 		public bool CheckIfFollowDestinationReached()

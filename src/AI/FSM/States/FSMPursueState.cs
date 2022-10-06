@@ -76,10 +76,7 @@ namespace URPMk2
 
             if ((fManager.PursueTarget.position - fTransform.position).sqrMagnitude <=
                 attackRangePow)
-            {
-                // Debug.Log("Attacking the target");
                 fManager.currentState = fManager.attackState;
-            }
 
         }
         public void UpdateState()

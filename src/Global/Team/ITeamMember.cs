@@ -8,5 +8,6 @@ namespace URPMk2
 		public Vector3 BoundsExtens { get; }
 		public Transform ObjTransform { get; }
 		public GameObject Object { get; }
+		public NPCMaster NMaster { get; }
 	}
 }
