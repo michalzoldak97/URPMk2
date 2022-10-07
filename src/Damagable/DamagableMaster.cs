@@ -17,6 +17,8 @@ namespace URPMk2
 
         public delegate void DamagableEventsHandler();
         public event DamagableEventsHandler EventDestroyObject;
+        public event DamagableEventsHandler EventHealthLow;
+        public event DamagableEventsHandler EventHealthRecovered;
 
         public delegate void DamagableInformEventshandler(float dmg);
         public event DamagableInformEventshandler EventReceivedDamage;
@@ -41,6 +43,14 @@ namespace URPMk2
         public void CallEventReceivedDamage(float dmg)
         {
             EventReceivedDamage?.Invoke(dmg);
+        }
+        public void CallEventHealthLow()
+        {
+            EventHealthLow?.Invoke();
+        }
+        public void CallEventHealthRecovered()
+        {
+            EventHealthRecovered?.Invoke();
         }
     }
 }

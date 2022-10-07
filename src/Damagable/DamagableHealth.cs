@@ -5,6 +5,7 @@ namespace URPMk2
     public class DamagableHealth : MonoBehaviour
     {
         public float health { get; private set; }
+        private float baseHealth;
         private DamagableMaster dmgMaster;
         private void SetInit()
         {
@@ -13,6 +14,7 @@ namespace URPMk2
         private void Start()
         {
             health = dmgMaster.GetDamagableSettings().health;
+            baseHealth = health;
         }
         private void OnEnable()
         {
@@ -32,6 +34,7 @@ namespace URPMk2
         }
         private void GetDamage(DamageInfo dmgInfo)
         {
+            
             float pDmg = dmgInfo.dmg > health ? health : dmgInfo.dmg;
             dmgMaster.CallEventReceivedDamage(pDmg);
 
@@ -42,6 +45,10 @@ namespace URPMk2
                 dmgMaster.CallEventDestroyObject();
                 DoDestroyActions();
             }
+            if (dmgInfo.dmg < 0)
+                dmgMaster.CallEventHealthRecovered();
+            if (health < (baseHealth * .1f))
+                dmgMaster.CallEventHealthLow();
         }
     }
 }

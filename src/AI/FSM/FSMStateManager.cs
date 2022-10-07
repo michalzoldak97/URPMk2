@@ -9,13 +9,15 @@ namespace URPMk2
 	{
 		[SerializeField] private FSMSettingsSO FSMSettings;
 		public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
+		public bool IsHealthLow { get; private set; }
+		public bool IsAmmoFinished { get; private set; }
 		public int SightRangePow { get; private set; }
 		public float GetCheckRate() { return checkRate; }
 		public Vector3 LocationOfInterest { get; set; }
 		public Vector3 WanderTarget { get; set; }
 		public Transform MyFollowTarget { get; private set; }
 		public Transform PursueTarget { get; set; }
-		public Transform MyAttacker { get; private set; }
+		public Transform RecoverTarget { get; set; }
 		public NavMeshAgent MyNavMeshAgent { get; private set; }
 		public NPCMaster MyNPCMaster { get; private set; }
 
@@ -31,6 +33,7 @@ namespace URPMk2
 		public FSMStruckState struckState;
 		public FSMInvestigateDangerState investigateDangerState;
 		public FSMFollowState followState;
+		public FSMRecoverState recoverState;
 
 		private bool isInformingAllies;
 		private float checkRate, nextCheck;
@@ -61,6 +64,7 @@ namespace URPMk2
 			followState = new FSMFollowState(this);
 			attackState = new FSMAttackState(this);
 			struckState = new FSMStruckState(this);
+			recoverState = new FSMRecoverState(this);
 		}
 
 		private void OnEnable()
@@ -68,11 +72,19 @@ namespace URPMk2
 			SetStateReferences();
 			SetInit();
 			dmgMaster.EventReceivedDamage += ActivateStruckState;
+			dmgMaster.EventHealthLow += ActivateHealthRecoverState;
+			dmgMaster.EventHealthRecovered += StopHealthRecoverState;
+			MyNPCMaster.EventAmmoFinished += ActivateAmmoRecoverState;
+			MyNPCMaster.EventAmmoRecovered += StopAmmoRecoverState;
 		}
 
 		private void OnDisable()
 		{
 			dmgMaster.EventReceivedDamage -= ActivateStruckState;
+			dmgMaster.EventHealthLow -= ActivateHealthRecoverState;
+			dmgMaster.EventHealthRecovered -= StopHealthRecoverState;
+			MyNPCMaster.EventAmmoFinished -= ActivateAmmoRecoverState;
+			MyNPCMaster.EventAmmoRecovered -= StopAmmoRecoverState;
 			StopAllCoroutines();
 		}
 		private void RunUpdateActions()
@@ -108,6 +120,24 @@ namespace URPMk2
 
 			StartCoroutine(RecoverFromStruckState());
         }
+		private void StopHealthRecoverState()
+        {
+			IsHealthLow = false;
+		}
+		private void ActivateHealthRecoverState()
+        {
+			IsHealthLow = true;
+			currentState = recoverState;
+        }
+		private void StopAmmoRecoverState()
+		{
+			IsAmmoFinished = false;
+		}
+		private void ActivateAmmoRecoverState()
+		{
+			IsAmmoFinished = true;
+			currentState = recoverState;
+		}
 		public void SwitchState(bool stopNavMeshAgent, IFSMState toState)
         {
 			MyNavMeshAgent.isStopped = stopNavMeshAgent;

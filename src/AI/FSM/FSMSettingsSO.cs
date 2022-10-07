@@ -16,6 +16,8 @@ namespace URPMk2
 		public int attackRange;
 		public int targetLostDetections;
 		public Teams[] teamsToAttack; // order is team importance
+		public Teams[] healthRecoverTeams;
+		public Teams[] ammoRecoverTeams;
 		public float checkRate;
 		public float checkRateOffset;
 		public float attackRate;
@@ -25,6 +27,7 @@ namespace URPMk2
 		public float rotationAngularSpeed;
 		public float rotationsPerCycle;
 		public float shiftRange;
+		public float nmaStoppingDistance;
 		public LayerMask sightLayers;
 		public LayerMask enemyLayers;
 		public LayerMask friendlyLayers;
@@ -33,6 +36,7 @@ namespace URPMk2
 	[System.Serializable]
 	public class NPCAmmoSlot
 	{
+		public bool isPrimary;
 		public string ammoCode;
 		public int ammoQuantity;
 	}

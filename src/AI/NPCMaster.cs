@@ -16,6 +16,10 @@ namespace URPMk2
 		public delegate void NPCAmmoEventsHandler(string ammoCode, int amount, WeaponAmmo origin);
 		public event NPCAmmoEventsHandler EventAmmoChange;
 
+		public delegate void NPCAmmoStateEventsHandler();
+		public event NPCAmmoStateEventsHandler EventAmmoFinished;
+		public event NPCAmmoStateEventsHandler EventAmmoRecovered;
+
 		private Dictionary<string, int> npcAmmoStore;
 
         private void Start()
@@ -35,6 +39,14 @@ namespace URPMk2
 		public void CallEventAmmoChange(string ammoCode, int amount, WeaponAmmo origin)
         {
 			EventAmmoChange?.Invoke(ammoCode, amount, origin);
+		}
+		public void CallEventAmmoFinished()
+		{
+			EventAmmoFinished?.Invoke();
+		}
+		public void CallEventAmmoRecovered()
+		{
+			EventAmmoRecovered?.Invoke();
 		}
 		public Dictionary<string, int> GetAmmoStore()
 		{
