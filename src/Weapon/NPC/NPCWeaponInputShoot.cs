@@ -4,7 +4,7 @@ namespace URPMk2
 {
 	public class NPCWeaponInputShoot : MonoBehaviour
 	{
-		private float shootRate;
+		private float shootRate, burstShootRate, shootsInBurst;
 		private WeaponMaster weaponMaster;
 		private void SetInit()
 		{
@@ -13,16 +13,21 @@ namespace URPMk2
         private void Start()
         {
 			shootRate = 60f / weaponMaster.GetWeaponSettings().gunSettings.shootRate;
+			BurstFireSettings burstFireSettings = weaponMaster.GetWeaponSettings().burstFireSettings;
+			burstShootRate = 60f / burstFireSettings.burstShootRate;
+			shootsInBurst = burstFireSettings.shootsInBurst;
 		}
         private void OnEnable()
 		{
 			SetInit();
 			weaponMaster.EventPullTrigger += PullTrigger;
+			weaponMaster.EventReleaseTrigger += ReleaseTrigger;
 		}
 		
 		private void OnDisable()
 		{
 			weaponMaster.EventPullTrigger -= PullTrigger;
+			weaponMaster.EventReleaseTrigger -= ReleaseTrigger;
 		}
 		private void AttempShoot()
 		{
@@ -44,9 +49,8 @@ namespace URPMk2
 		private async void BurstShoot()
 		{
 			weaponMaster.isShootingBurst = true;
-			BurstFireSettings burstFireSettings = weaponMaster.GetWeaponSettings().burstFireSettings;
-			float burstShootRate = 60f / burstFireSettings.burstShootRate;
-			for (int i = 0; i < burstFireSettings.shootsInBurst; i++)
+
+			for (int i = 0; i < shootsInBurst; i++)
 			{
 				if (weaponMaster.isWeaponLoaded)
 					AttempShoot();
@@ -71,7 +75,10 @@ namespace URPMk2
 				SingleShoot();
 			else if (weaponMaster.fireMode == WeaponFireMode.Auto)
 				AutoShoot();
-
+		}
+		private void ReleaseTrigger()
+		{
+			weaponMaster.isShootState = false;
 		}
 	}
 }

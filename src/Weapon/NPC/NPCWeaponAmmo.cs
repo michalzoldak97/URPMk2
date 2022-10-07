@@ -26,7 +26,29 @@ namespace URPMk2
 			weaponMaster.EventReloadRequest -= OnReload;
 			BreakReloadProcess(transform);
 		}
-        protected override void OnReload()
+		private async void CallWeaponReload()
+        {
+			float timeToWaitForBurst = 
+				weaponMaster.GetWeaponSettings().burstFireSettings.shootsInBurst * 
+				(60f / weaponMaster.GetWeaponSettings().burstFireSettings.burstShootRate);
+			await System.TimeSpan.FromSeconds(timeToWaitForBurst + .1f);
+			weaponMaster.CallEventReloadRequest();
+		}
+		protected override void OnShoot()
+		{
+			if (currentAmmo > 1)
+			{
+				currentAmmo--;
+			}
+			else
+			{
+				currentAmmo = 0;
+				weaponMaster.isWeaponLoaded = false;
+				weaponMaster.CallEventReleaseTrigger();
+				CallWeaponReload();
+			}
+		}
+		protected override void OnReload()
         {
 			if (weaponMaster.isReloading ||
 				weaponMaster.isAim ||

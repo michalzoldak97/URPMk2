@@ -5,7 +5,7 @@ namespace URPMk2
 {
 	public class WeaponAmmo : MonoBehaviour
 	{
-		public int currentAmmo { get; private set; }
+		public int currentAmmo { get; protected set; }
 		public string currentAmmoCode { get; private set; }
 		public IAmmoMaster ammoMaster { get; protected set; }
 		protected WeaponMaster weaponMaster;
@@ -49,7 +49,7 @@ namespace URPMk2
 
 			weaponMaster.CallEventEventUpdateAmmoUI();
         }
-		protected void OnShoot()
+		protected virtual void OnShoot()
         {
 			if (currentAmmo > 1)
             {
