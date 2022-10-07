@@ -32,7 +32,7 @@ namespace URPMk2
         {
             lastDetectionCnt = targetDetections;
 
-            FSMTarget target = fManager.IsTargetVisible();
+            FSMTarget target = fManager.MyNPCMaster.NpcLook.IsTargetVisible();
             if (target.isVisible)
                 targetDetections++;
 

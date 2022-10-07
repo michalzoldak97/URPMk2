@@ -15,7 +15,7 @@ namespace URPMk2
         }
         private void CheckShouldFlee()
         {
-            FSMTarget possibleEnemy = fManager.IsTargetVisible();
+            FSMTarget possibleEnemy = fManager.MyNPCMaster.NpcLook.IsTargetVisible();
             if (!possibleEnemy.isVisible)
             {
                 fManager.SwitchState(false, fManager.patrolState);

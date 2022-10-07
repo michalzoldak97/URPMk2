@@ -67,7 +67,7 @@ namespace URPMk2
         }
         private void Look()
         {
-            FSMTarget target = fManager.IsTargetVisible();
+            FSMTarget target = fManager.MyNPCMaster.NpcLook.IsTargetVisible();
             if (target.isVisible)
                 SetUpAlertState(target.targetTransform);
         }

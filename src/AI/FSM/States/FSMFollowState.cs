@@ -11,7 +11,7 @@ namespace URPMk2
         }
         private void Look()
         {
-            FSMTarget enemy = fManager.IsTargetVisible();
+            FSMTarget enemy = fManager.MyNPCMaster.NpcLook.IsTargetVisible();
             if (enemy.isVisible)
             {
                 fManager.LocationOfInterest = enemy.targetTransform.position;

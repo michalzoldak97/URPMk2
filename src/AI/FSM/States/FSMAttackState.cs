@@ -23,7 +23,7 @@ namespace URPMk2
                 return;
             }
 
-            ITeamMember[] enemiesInRange = fManager.GetEnemiesInRange();
+            ITeamMember[] enemiesInRange = fManager.MyNPCMaster.NpcLook.GetEnemiesInRange();
             if (!(System.Array.Exists(enemiesInRange, el => el != null))
                 || (fManager.PursueTarget.position - fTransform.position).sqrMagnitude >
                attackRangePow) // see no enemies but target alive or target too far
