@@ -97,15 +97,7 @@ namespace URPMk2
 				currentState.UpdateState();
             }
         }
-		private void ActivateFleeState()
-        {
-			if (currentState == struckState)
-            {
-				capturedState = fleeState;
-				return;
-            }
-			currentState = fleeState;
-        }
+
 		private IEnumerator RecoverFromStruckState()
 		{
 			yield return waitForRecover;
@@ -133,21 +125,6 @@ namespace URPMk2
         {
 			MyNavMeshAgent.isStopped = stopNavMeshAgent;
 			currentState = toState;
-        }
-		public void OnEnemyAttack()
-        {
-
-        }
-		public void SetMyAttacker(Transform attacker)
-        {
-			MyAttacker = attacker;
-        }
-		public void Distract(Vector3 distractionPos)
-        {
-			LocationOfInterest = distractionPos;
-
-			if (currentState == patrolState)
-				currentState = alertState;
         }
 		private float CalculateDotProd(Transform target)
 		{

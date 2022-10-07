@@ -7,23 +7,23 @@ namespace URPMk2
 	{
 		public int currentAmmo { get; private set; }
 		public string currentAmmoCode { get; private set; }
-		public IAmmoMaster ammoMaster { get; private set; }
-		private WeaponMaster weaponMaster;
+		public IAmmoMaster ammoMaster { get; protected set; }
+		protected WeaponMaster weaponMaster;
 		private ItemMaster itemMaster;
-		private void SetInit()
+		protected virtual void SetInit()
 		{
 			weaponMaster = GetComponent<WeaponMaster>();
 			itemMaster = GetComponent<ItemMaster>();
 		}
 
-        private void Start()
+        protected virtual void Start()
         {
 			WeaponSettingsSO weaponSettings = weaponMaster.GetWeaponSettings();
 			currentAmmo = weaponSettings.ammoCapacity;
 			currentAmmoCode = weaponSettings.defaultAmmoCode;
 		}
 
-        private void OnEnable()
+		protected virtual void OnEnable()
 		{
 			SetInit();
 			weaponMaster.EventShoot += OnShoot;
@@ -31,8 +31,8 @@ namespace URPMk2
 			itemMaster.EventItemPickedUp += SetAmmoMaster;
 			itemMaster.EventItemThrow += BreakReloadProcess;
 		}
-		
-		private void OnDisable()
+
+		protected virtual void OnDisable()
 		{
 			weaponMaster.EventShoot -= OnShoot;
 			weaponMaster.EventReloadRequest -= OnReload;
@@ -49,7 +49,7 @@ namespace URPMk2
 
 			weaponMaster.CallEventEventUpdateAmmoUI();
         }
-		private void OnShoot()
+		protected void OnShoot()
         {
 			if (currentAmmo > 1)
             {
@@ -62,7 +62,7 @@ namespace URPMk2
             }
 			weaponMaster.CallEventEventUpdateAmmoUI();
 		}
-		private IEnumerator ReloadAmmo(int amountToRequest)
+		protected IEnumerator ReloadAmmo(int amountToRequest)
         {
 			weaponMaster.isReloading = true;
 			weaponMaster.CallEventStartReload();
@@ -75,7 +75,7 @@ namespace URPMk2
 			weaponMaster.CallEventReload();
 			weaponMaster.isReloading = false;
 		}
-		private void OnReload()
+		protected virtual void OnReload()
         {
 			if (!itemMaster.isSelectedOnParent ||
 				weaponMaster.isReloading ||
@@ -94,7 +94,7 @@ namespace URPMk2
         {
 			ammoMaster = origin.parent.GetComponent<IAmmoMaster>();
         }
-		private void BreakReloadProcess(Transform dummy)
+		protected void BreakReloadProcess(Transform dummy)
         {
 			if (!weaponMaster.isReloading)
 				return;

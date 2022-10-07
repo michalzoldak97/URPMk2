@@ -17,8 +17,7 @@ namespace URPMk2
 		}
 		private void Start()
 		{
-			WeaponSettingsSO weaponSettings = weaponMaster.GetWeaponSettings();
-			shootRate = 60f / weaponSettings.gunSettings.shootRate;
+			shootRate = 60f / weaponMaster.GetWeaponSettings().gunSettings.shootRate;
 			waitNextShootAuto = new WaitForSeconds(shootRate);
 		}
 

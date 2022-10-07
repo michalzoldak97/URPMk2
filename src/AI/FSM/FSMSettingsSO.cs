@@ -28,5 +28,12 @@ namespace URPMk2
 		public LayerMask sightLayers;
 		public LayerMask enemyLayers;
 		public LayerMask friendlyLayers;
+		public NPCAmmoSlot[] npcAmmoStore;
+	}
+	[System.Serializable]
+	public class NPCAmmoSlot
+	{
+		public string ammoCode;
+		public int ammoQuantity;
 	}
 }
