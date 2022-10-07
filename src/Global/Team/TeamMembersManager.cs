@@ -6,6 +6,7 @@ namespace URPMk2
 {
 	public static class TeamMembersManager
 	{
+		public static Dictionary<Teams, Vector3> TeamFinalDestinations;
 		private static bool isTeamMembersRefreshed;
 		private static List<ITeamMember> allMembers = new List<ITeamMember>();
 		private static List<ITeamMember> selectedMembers = new List<ITeamMember>();
@@ -95,6 +96,16 @@ namespace URPMk2
 			GetTeamMembersInRangeByTeam(team, pos, rangePow);
 
 			return selectedMembers;
+		}
+		public static Vector3 GetFinalTeamDestination(Teams team)
+        {
+			if (!TeamFinalDestinations.ContainsKey(team))
+				return Vector3.zero;
+
+			if (TeamFinalDestinations[team] == null)
+				return Vector3.zero;
+
+			return TeamFinalDestinations[team];
 		}
 	}
 }
