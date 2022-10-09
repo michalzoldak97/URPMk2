@@ -7,19 +7,19 @@ namespace URPMk2
 {
 	public class FSMStateManager : MonoBehaviour
 	{
-		[SerializeField] private FSMSettingsSO FSMSettings;
+		[SerializeField] protected FSMSettingsSO FSMSettings;
 		public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
 		public bool IsHealthLow { get; private set; }
 		public bool IsAmmoFinished { get; private set; }
-		public int SightRangePow { get; private set; }
+		public int SightRangePow { get; protected set; }
 		public float GetCheckRate() { return checkRate; }
 		public Vector3 LocationOfInterest { get; set; }
 		public Vector3 WanderTarget { get; set; }
-		public Transform MyFollowTarget { get; private set; }
+		public Transform MyFollowTarget { get; set; }
 		public Transform PursueTarget { get; set; }
 		public Transform RecoverTarget { get; set; }
-		public NavMeshAgent MyNavMeshAgent { get; private set; }
-		public NPCMaster MyNPCMaster { get; private set; }
+		public NavMeshAgent MyNavMeshAgent { get; protected set; }
+		public NPCMaster MyNPCMaster { get; protected set; }
 
 
 		public Transform[] waypoints;
@@ -36,13 +36,24 @@ namespace URPMk2
 		public FSMRecoverState recoverState;
 
 		private bool isInformingAllies;
-		private float checkRate, nextCheck;
-		private Transform myTransform;
-		private WaitForSeconds waitForRecover;
-		private DamagableMaster dmgMaster;
-		private NPCRotationController rotationController;
+		protected float checkRate, nextCheck;
+		protected Transform myTransform;
+		protected WaitForSeconds waitForRecover;
+		protected DamagableMaster dmgMaster;
+		protected NPCRotationController rotationController;
+		protected virtual void SetStateReferences()
+		{
+			patrolState = new FSMPatrolState(this);
+			alertState = new FSMAlertState(this);
+			pursueState = new FSMPursueState(this);
+			fleeState = new FSMFleeState(this);
+			followState = new FSMFollowState(this);
+			attackState = new FSMAttackState(this);
+			struckState = new FSMStruckState(this);
+			recoverState = new FSMRecoverState(this);
+		}
 
-		private void SetInit()
+		protected virtual void SetInit()
 		{
 			MyNPCMaster = GetComponent<NPCMaster>();
 			dmgMaster = GetComponent<DamagableMaster>();
@@ -54,17 +65,6 @@ namespace URPMk2
 			myTransform = transform;
 			rotationController = GetComponent<FSMRotationController>();
 			currentState = patrolState;
-		}
-		private void SetStateReferences()
-        {
-			patrolState = new FSMPatrolState(this);
-			alertState = new FSMAlertState(this);
-			pursueState = new FSMPursueState(this);
-			fleeState = new FSMFleeState(this);
-			followState = new FSMFollowState(this);
-			attackState = new FSMAttackState(this);
-			struckState = new FSMStruckState(this);
-			recoverState = new FSMRecoverState(this);
 		}
 
 		private void OnEnable()
@@ -151,7 +151,8 @@ namespace URPMk2
 		public void AlertAllies()
         {
 			if (!FSMSettings.shouldInformAllies ||
-				isInformingAllies)
+				isInformingAllies ||
+				PursueTarget == null)
 				return;
 
 			isInformingAllies = true;

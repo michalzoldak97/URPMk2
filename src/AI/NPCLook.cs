@@ -85,7 +85,7 @@ namespace URPMk2
 				bool isInHighResRange = heading.sqrMagnitude < visibilityParams.highResSearchSqrRange;
 
 				if (CalculateDotProd(enemiesInRange[i].ObjTransform) < fsmSettings.minDotProd &&
-					!isInHighResRange)
+                    !isInHighResRange)
 					continue;
 
 				if (VisibilityCalculator.IsVisibleSingle(visibilityParams, heading, enemiesInRange[i].ObjTransform)
@@ -102,6 +102,17 @@ namespace URPMk2
 				}
 			}
 			return enemiesBuffer;
+		}
+		public bool IsPursueTargetVisible(Transform target)
+        {
+			if (CalculateDotProd(target) < fsmSettings.minDotProd &&
+				!(heading.sqrMagnitude < visibilityParams.highResSearchSqrRange))
+				return false;
+
+			if (VisibilityCalculator.IsVisibleSingle(visibilityParams, heading, target))
+				return true;
+
+			return false;
 		}
 	}
 }

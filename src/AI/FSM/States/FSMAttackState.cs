@@ -22,6 +22,13 @@ namespace URPMk2
                 fManager.SwitchState(false, fManager.patrolState);
                 return;
             }
+            else if (fManager.MyNPCMaster.NpcLook.IsPursueTargetVisible(fManager.PursueTarget))
+            {
+                Debug.Log(fManager.gameObject.name + "  Ratatatatatatatatatat");
+                fManager.RotateTowardsTarget();
+                fManager.LaunchWeaponSystem();
+                return;
+            }
 
             ITeamMember[] enemiesInRange = fManager.MyNPCMaster.NpcLook.GetEnemiesInRange();
             if (!(System.Array.Exists(enemiesInRange, el => el != null))
@@ -40,8 +47,7 @@ namespace URPMk2
                 return;
             }
 
-            // weaponController.LaunchAtack();
-            // Debug.Log(fManager.gameObject.name + "  Ratatatatatatatatatat");
+            Debug.Log(fManager.gameObject.name + "  Ratatatatatatatatatat");
             fManager.RotateTowardsTarget();
             fManager.LaunchWeaponSystem();
         }

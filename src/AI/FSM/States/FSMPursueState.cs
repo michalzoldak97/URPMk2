@@ -25,6 +25,11 @@ namespace URPMk2
                 fManager.SwitchState(false, fManager.patrolState);
                 return;
             }
+            else if (fManager.MyNPCMaster.NpcLook.IsPursueTargetVisible(fManager.PursueTarget))
+            {
+                fManager.RotateTowardsTarget();
+                return;
+            }
 
             ITeamMember[] enemiesInRange = fManager.MyNPCMaster.NpcLook.GetEnemiesInRange();
             if (!(System.Array.Exists(enemiesInRange, el => el != null)))

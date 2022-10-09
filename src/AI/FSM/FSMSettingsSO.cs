@@ -18,9 +18,9 @@ namespace URPMk2
 		public Teams[] teamsToAttack; // order is team importance
 		public Teams[] healthRecoverTeams;
 		public Teams[] ammoRecoverTeams;
+		public Teams[] teamsToDefend;
 		public float checkRate;
 		public float checkRateOffset;
-		public float attackRate;
 		public float recoverFromDmgTime;
 		public float minDotProd;
 		public float informAlliesPeriod;

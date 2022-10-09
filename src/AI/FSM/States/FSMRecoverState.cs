@@ -14,12 +14,32 @@ namespace URPMk2
         }
         private void Defend()
         {
-            ITeamMember[] enemiesInRange = fManager.MyNPCMaster.NpcLook.GetEnemiesInRange();
+            if (fManager.PursueTarget == null ||
+                !fManager.MyNPCMaster.NpcLook.IsPursueTargetVisible(fManager.PursueTarget))
+            {
+                ITeamMember[] enemiesInRange = fManager.MyNPCMaster.NpcLook.GetEnemiesInRange();
 
-            if (enemiesInRange[0] == null)
-                return;
+                if (!(System.Array.Exists(enemiesInRange, el => el != null)))
+                    return;
 
-            fManager.PursueTarget = enemiesInRange[0].ObjTransform;
+                float minDist = fManager.SightRangePow * 2;
+                float distToEnemy;
+
+                int eirLen = enemiesInRange.Length;
+                for (int i = 0; i < eirLen; i++)
+                {
+                    if (enemiesInRange[i] == null)
+                        continue;
+
+                    distToEnemy = (enemiesInRange[i].ObjTransform.position - fTransform.position).sqrMagnitude;
+
+                    if (distToEnemy < minDist)
+                    {
+                        minDist = distToEnemy;
+                        fManager.PursueTarget = enemiesInRange[i].ObjTransform;
+                    }
+                }
+            }
             fManager.RotateTowardsTarget();
             fManager.LaunchWeaponSystem();
         }
