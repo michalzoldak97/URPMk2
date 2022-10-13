@@ -29,6 +29,7 @@ namespace URPMk2
 	public class GunSettings
     {
 		public int defaultFireMode;
+		public int sharpsNum;
 		public int[] avaliableFireModes;
 		public float shootRate; // shoots / min
 		public float shootRange;

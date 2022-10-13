@@ -59,7 +59,8 @@ namespace URPMk2
 			dmgMaster = GetComponent<DamagableMaster>();
 			MyNavMeshAgent = GetComponent<NavMeshAgent>();
 			checkRate = Random.Range(
-				FSMSettings.checkRate - FSMSettings.checkRateOffset, FSMSettings.checkRate + FSMSettings.checkRateOffset);
+				FSMSettings.checkRate - FSMSettings.checkRateOffset,
+				FSMSettings.checkRate + FSMSettings.checkRateOffset);
 			waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
 			SightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
 			myTransform = transform;
@@ -188,7 +189,6 @@ namespace URPMk2
         {
 			MyNPCMaster.CallEventAttackTarget(PursueTarget);
         }
-
 		private void Update()
         {
 			RunUpdateActions();

@@ -24,7 +24,6 @@ namespace URPMk2
             }
             else if (fManager.MyNPCMaster.NpcLook.IsPursueTargetVisible(fManager.PursueTarget))
             {
-                Debug.Log(fManager.gameObject.name + "  Ratatatatatatatatatat");
                 fManager.RotateTowardsTarget();
                 fManager.LaunchWeaponSystem();
                 return;
@@ -47,7 +46,6 @@ namespace URPMk2
                 return;
             }
 
-            Debug.Log(fManager.gameObject.name + "  Ratatatatatatatatatat");
             fManager.RotateTowardsTarget();
             fManager.LaunchWeaponSystem();
         }

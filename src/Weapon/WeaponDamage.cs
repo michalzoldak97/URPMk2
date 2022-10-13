@@ -23,7 +23,7 @@ namespace URPMk2
             penCoeff = damageSettings.penCoeff;
             penVar = damageSettings.penVar;
             layersToDamage = damageSettings.layersToDamage;
-            dmgInfo = new DamageInfo(DamageType.Gun);
+            dmgInfo = new DamageInfo(DamageType.Gun, myTransform);
         }
         private void OnEnable()
         {

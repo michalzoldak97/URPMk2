@@ -57,9 +57,8 @@ namespace URPMk2
                 return;
 
 			Transform effTransform = effInstance.obj.transform;
-			effTransform.position = hit.point;
-			effTransform.rotation = Quaternion.LookRotation(-hit.normal);
-			effTransform.SetParent(hit.transform);
+			effTransform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(-hit.normal));
+			//effTransform.SetParent(hit.transform); // TODO: rando bug with null obect reference + issue with effect scale need to be fixed
 			effInstance.obj.SetActive(true);
 			effInstance.objBehavior.Activate();
 		}

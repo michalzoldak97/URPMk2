@@ -22,9 +22,10 @@ namespace URPMk2
 		{
 			MyNPCMaster = GetComponent<NPCMaster>();
 			dmgMaster = GetComponent<DamagableMaster>();
-			MyNavMeshAgent = GetComponent<NavMeshAgent>();
+			MyNavMeshAgent = GetComponent<NavMeshAgent>(); 
 			checkRate = Random.Range(
-				FSMSettings.checkRate - FSMSettings.checkRateOffset, FSMSettings.checkRate + FSMSettings.checkRateOffset);
+				 FSMSettings.checkRate - FSMSettings.checkRateOffset,
+				 FSMSettings.checkRate + FSMSettings.checkRateOffset);
 			waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
 			SightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
 			myTransform = transform;
