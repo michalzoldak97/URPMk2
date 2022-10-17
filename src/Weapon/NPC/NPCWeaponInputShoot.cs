@@ -33,10 +33,20 @@ namespace URPMk2
 		{
 			weaponMaster.CallEventShoot();
 		}
-		private void SingleShoot()
+        private async void ResetTriggerLock()
+        {
+            weaponMaster.isTriggerLocked = true;
+            await System.TimeSpan.FromSeconds(shootRate);
+            weaponMaster.isTriggerLocked = false;
+        }
+        private void SingleShoot()
 		{
-			AttempShoot();
-		}
+            if (weaponMaster.isTriggerLocked)
+                return;
+
+            AttempShoot();
+            ResetTriggerLock();
+        }
 		private async void AutoShoot()
 		{
 			while (weaponMaster.isShootState &&

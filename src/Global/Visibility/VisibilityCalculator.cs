@@ -10,8 +10,6 @@ namespace URPMk2
             {
 				if (hit.transform == target)
 					return true;
-				else
-					return false;
             }
 			return false;
         }
@@ -26,8 +24,6 @@ namespace URPMk2
 			{
 				if (hit.transform == target)
 					return true;
-				else
-					return false;
 			}
 			return false;
         }
