@@ -37,6 +37,7 @@ namespace URPMk2
             
             float pDmg = dmgInfo.dmg > health ? health : dmgInfo.dmg;
             dmgMaster.CallEventReceivedDamage(pDmg);
+            Debug.Log(transform.name + " recevied " + pDmg + " damage");
 
             health -= dmgInfo.dmg;
             if (health < 0)
