@@ -8,12 +8,12 @@ namespace URPMk2
         public ExplosiveSettings GetExplosiveSettings(){ return explosiveSettings; }
 
         public delegate void ExplosiveEventsHandler();
-        public event ExplosiveEventsHandler EventTriggerFuze;
+        public event ExplosiveEventsHandler EventTriggerFuse;
         public event ExplosiveEventsHandler EventExplode;
 
-        public void CallEventTriggerFuze()
+        public void CallEventTriggerFuse()
         {
-            EventTriggerFuze?.Invoke();
+            EventTriggerFuse?.Invoke();
         }
         public void CallEventExplode()
         {
