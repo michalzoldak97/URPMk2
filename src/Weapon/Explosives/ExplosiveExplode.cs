@@ -118,6 +118,7 @@ namespace URPMk2
 				Mathf.Abs((1 - (distToTarget / (e.expRadius * e.expRadius))) * e.expDamage);
             dmgInfo.pen = e.expPenetration * (dmgInfo.dmg / e.expDamage);
             dmgInfo.toDmg = targetCol.transform;
+			dmgInfo.origin = explosiveMaster.damageOrigin;
 
             GlobalDamageMaster.DamageObj(dmgInfo);
         }

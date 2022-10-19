@@ -13,6 +13,7 @@ namespace URPMk2
         public bool isTriggerLocked;
         public bool isWeaponLoaded = true;
         public WeaponFireMode fireMode;
+        public Transform dmgOrigin;
         public delegate void WeaponInputEvenHandler();
         public event WeaponInputEvenHandler EventAimRequest;
         public event WeaponInputEvenHandler EventPullTrigger;
@@ -30,6 +31,15 @@ namespace URPMk2
         public delegate void WeaponDamageEventHandler(RaycastHit hit);
         public event WeaponDamageEventHandler EventHitByGun;
 
+        public delegate void WeaponHandGrenadeEventHandler(float force, float xAngle);
+        public event WeaponHandGrenadeEventHandler EventThrowGrenade;
+
+        public void SetDmgOrigin(Transform origin)
+        {
+            if (origin == dmgOrigin)
+                return;
+            dmgOrigin = origin;
+        }
         public void CallEventAimRequest()
         {
             EventAimRequest?.Invoke();
@@ -73,6 +83,10 @@ namespace URPMk2
         public void CallEventHitByGun(RaycastHit hit)
         {
             EventHitByGun?.Invoke(hit);
+        }
+        public void CallEventThrowGrenade(float force, float angle)
+        {
+            EventThrowGrenade?.Invoke(force, angle);
         }
         private void Start()
         {

@@ -12,8 +12,11 @@ namespace URPMk2
 			npcMaster = GetComponent<NPCMaster>();
 			shootFieldValidator = GetComponent<NPCWeaponShootFieldValidator>();
 		}
-		
-		private void OnEnable()
+        protected virtual void Start()
+        {
+            myTransform = transform;
+        }
+        private void OnEnable()
 		{
 			SetInit();
 			npcMaster.EventAttackTarget += OnAttackTarget;
@@ -31,15 +34,11 @@ namespace URPMk2
         {
 			if (CalculateDotProd(target) > .99f &&
 				shootFieldValidator.IsShootFieldClean(transform))
-				weaponController.LaunchAtack();
+				weaponController.LaunchAtack(myTransform);
         }
 		protected virtual void OnAttackTarget(Transform target)
         {
 
-		}
-		protected virtual void Start()
-        {
-			myTransform = transform;
 		}
 	}
 }

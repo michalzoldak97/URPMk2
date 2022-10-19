@@ -7,9 +7,19 @@ namespace URPMk2
         [SerializeField] private ExplosiveSettings explosiveSettings;
         public ExplosiveSettings GetExplosiveSettings(){ return explosiveSettings; }
 
+        public Transform damageOrigin { get; private set; }
+
         public delegate void ExplosiveEventsHandler();
         public event ExplosiveEventsHandler EventTriggerFuse;
         public event ExplosiveEventsHandler EventExplode;
+
+        public void SetDamageOrigin(Transform origin)
+        {
+            if (origin == damageOrigin)
+                return;
+
+            damageOrigin = origin;
+        }
 
         public void CallEventTriggerFuse()
         {

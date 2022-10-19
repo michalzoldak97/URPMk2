@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace URPMk2
 {
@@ -10,10 +11,13 @@ namespace URPMk2
         protected float stopDist, shiftRange;
 		protected LayerMask friendlyLayers;
 		protected NavMeshAgent navMeshAgent;
+        protected Transform myTransform;
+        protected RaycastHit[] obstacles;
         protected virtual void Start()
         {
-
-		}
+            myTransform = transform;
+            obstacles = new RaycastHit[1];
+        }
         private async void RestoreDistance()
         {
             isRestoringStopDistance = true;
@@ -54,10 +58,10 @@ namespace URPMk2
         }
         public bool IsShootFieldClean(Transform weapon)
         {
-			if (Physics.Raycast(
+            if (Physics.Raycast(
 				weapon.position,
 				weapon.forward,
-				out RaycastHit hit,
+				out _,
 				attackRange,
 				friendlyLayers
 				))
@@ -65,6 +69,33 @@ namespace URPMk2
                 TryToChangePos(weapon);
                 return false;
             }
+            return true;
+        }
+        private bool IsGrenadeFieldCleanHorizontal(float hCheckRadius, Transform target, Transform weapon)
+        {
+            float distToTarget = Vector3.Distance(myTransform.position, target.position);
+            Vector3 checkStart = weapon.position;
+            checkStart.z += 2f;
+            int numObstacles = Physics.SphereCastNonAlloc(
+                checkStart,
+                hCheckRadius,
+                (target.position - weapon.position).normalized,
+                obstacles,
+                distToTarget,
+                friendlyLayers);
+
+            Debug.Log("Found: " + numObstacles + " obstacles");
+
+            if (numObstacles > 0)
+                return false;
+
+            return true;
+        }
+        public bool IsThrowGrenadeFieldClean(float hCheckRadius, float vCheckRadius, Transform target, Transform weapon)
+        {
+            if (!IsGrenadeFieldCleanHorizontal(hCheckRadius, target, weapon))
+                return false;
+
             return true;
         }
     }

@@ -9,9 +9,11 @@ namespace URPMk2
 		{
 			weaponMaster = GetComponent<WeaponMaster>();
 		}
-		public void LaunchAtack()
+		public void LaunchAtack(Transform origin)
         {
+			weaponMaster.SetDmgOrigin(origin);
 			weaponMaster.CallEventPullTrigger();
 		}
-	}
+        public void LaunchHGAttack(float force, float angle, Transform origin) { }
+    }
 }

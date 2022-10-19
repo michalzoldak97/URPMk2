@@ -52,6 +52,7 @@ namespace URPMk2
             dmgInfo.pen = penCoeff == 0 ? 1 : GetPenetration(dmgInfo.dmg);
             dmgInfo.toDmg = hit.transform;
             dmgInfo.hit = hit;
+            dmgInfo.origin = weaponMaster.dmgOrigin;
             GlobalDamageMaster.DamageObj(dmgInfo);
             Debug.Log("Was hit: " + hit.transform.name + " dist: " + dist + " damage: " + dmgInfo.dmg + " penetration: " + dmgInfo.pen);
         }

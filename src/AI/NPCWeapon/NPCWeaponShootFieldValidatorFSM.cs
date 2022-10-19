@@ -6,6 +6,7 @@ namespace URPMk2
 	{
         protected override void Start()
         {
+            base.Start();
             FSMStateManager fManager = GetComponent<FSMStateManager>();
             attackRange = fManager.GetFSMSettings().attackRange;
             shiftRange = fManager.GetFSMSettings().shiftRange;

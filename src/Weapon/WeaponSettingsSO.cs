@@ -15,6 +15,7 @@ namespace URPMk2
 		public GunSettings gunSettings;
 		public GunDamageSettings damageSettings;
 		public BurstFireSettings burstFireSettings;
+		public GameObject projectileObj;
 	}
 	[System.Serializable]
 	public class GunDamageSettings

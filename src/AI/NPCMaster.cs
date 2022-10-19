@@ -8,7 +8,9 @@ namespace URPMk2
 
 		[SerializeField] private FSMSettingsSO FSMSettings;
 		public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
-		public NPCLook NpcLook {get; private set;}
+        [SerializeField] private NPCWeaponSO weaponSettings;
+		public NPCWeaponSO GetNPCWeaponSettings() { return weaponSettings; }
+        public NPCLook NpcLook {get; private set;}
 		public delegate void NPCEnemyEventsHandler(Transform target);
 		public event NPCEnemyEventsHandler EventAttackTarget;
 		public event NPCEnemyEventsHandler EventAlertAboutEnemy;
