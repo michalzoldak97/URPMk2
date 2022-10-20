@@ -15,6 +15,8 @@ namespace URPMk2
 	{
 		public float horizontalObstacleCheckRadius;
         public float verticalObstacleCheckRadius;
+		public float grenadeThrowRange;
+		public float checkOffset;
         public float[] minMaxThrowForce;
     }
 }

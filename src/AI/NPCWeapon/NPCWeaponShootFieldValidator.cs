@@ -12,11 +12,13 @@ namespace URPMk2
 		protected LayerMask friendlyLayers;
 		protected NavMeshAgent navMeshAgent;
         protected Transform myTransform;
-        protected RaycastHit[] obstacles;
+        protected RaycastHit[] hitObstacles;
+        protected Collider[] colObstacles;
         protected virtual void Start()
         {
             myTransform = transform;
-            obstacles = new RaycastHit[1];
+            hitObstacles = new RaycastHit[1];
+            colObstacles = new Collider[1];
         }
         private async void RestoreDistance()
         {
@@ -71,29 +73,47 @@ namespace URPMk2
             }
             return true;
         }
-        private bool IsGrenadeFieldCleanHorizontal(float hCheckRadius, Transform target, Transform weapon)
+        private bool IsGrenadeFieldCleanHorizontal(float distToTarget, NPCWeaponGreanadeSettings wgs, Transform target, Transform weapon)
         {
-            float distToTarget = Vector3.Distance(myTransform.position, target.position);
             Vector3 checkStart = weapon.position;
-            checkStart.z += 2f;
+            checkStart.z += wgs.checkOffset;
+
             int numObstacles = Physics.SphereCastNonAlloc(
                 checkStart,
-                hCheckRadius,
+                wgs.horizontalObstacleCheckRadius,
                 (target.position - weapon.position).normalized,
-                obstacles,
+                hitObstacles,
                 distToTarget,
-                friendlyLayers);
+                friendlyLayers
+            );
 
-            Debug.Log("Found: " + numObstacles + " obstacles");
+            Debug.Log("Found: " + numObstacles + " horizontal obstacles");
 
             if (numObstacles > 0)
                 return false;
 
             return true;
         }
-        public bool IsThrowGrenadeFieldClean(float hCheckRadius, float vCheckRadius, Transform target, Transform weapon)
+        private bool IsGrenadeFieldCleanVertical(NPCWeaponGreanadeSettings wgs, Transform target)
         {
-            if (!IsGrenadeFieldCleanHorizontal(hCheckRadius, target, weapon))
+            int numObstacles = Physics.OverlapSphereNonAlloc(
+                target.position,
+                wgs.verticalObstacleCheckRadius,
+                colObstacles,
+                friendlyLayers
+            );
+
+            Debug.Log("Found: " + numObstacles + " vertical obstacles");
+
+            if (numObstacles > 0)
+                return false;
+
+            return true;
+        }
+        public bool IsThrowGrenadeFieldClean(float distToTarget, NPCWeaponGreanadeSettings wgs, Transform target, Transform weapon)
+        {
+            if (!IsGrenadeFieldCleanVertical(wgs, target) ||
+                !IsGrenadeFieldCleanHorizontal(distToTarget, wgs, target, weapon))
                 return false;
 
             return true;

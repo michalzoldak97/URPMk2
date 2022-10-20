@@ -8,6 +8,7 @@ namespace URPMk2
         [SerializeField] private Transform launcher;
         private Transform myTransform;
         private NPCMaster npcMaster;
+        private WeaponMaster launcherMaster;
         private NPCWeaponShootFieldValidator shootFieldValidator;
         private INPCWeaponController weaponController, launcherController;
         private void SetInit()
@@ -16,6 +17,7 @@ namespace URPMk2
             shootFieldValidator = GetComponent<NPCWeaponShootFieldValidator>();
             weaponController = weapon.GetComponent<INPCWeaponController>();
             launcherController = launcher.GetComponent<INPCWeaponController>();
+            launcherMaster = launcher.GetComponent<WeaponMaster>();
         }
         private void Start()
         {
@@ -36,12 +38,29 @@ namespace URPMk2
             return Vector3.Dot((target.position - myTransform.position).normalized, myTransform.forward);
         }
 
+        private void AttemptToShootWeapon(Transform target)
+        {
+            if (!(CalculateDotProd(target) >
+                npcMaster.GetNPCWeaponSettings().minDotProd))
+                return;
+
+            if (shootFieldValidator.IsShootFieldClean(weapon))
+                weaponController.LaunchAtack(myTransform);
+        }
         private void AttemptToShootLauncher(Transform target)
         {
+            if (!launcherMaster.isWeaponLoaded)
+                return;
+
             NPCWeaponGreanadeSettings wgs = npcMaster.GetNPCWeaponSettings().greanadeSettings;
+            float distToTarget = Vector3.Distance(myTransform.position, target.position);
+
+            if (distToTarget > wgs.grenadeThrowRange)
+                return;
+
             if (!shootFieldValidator.IsThrowGrenadeFieldClean(
-                wgs.horizontalObstacleCheckRadius,
-                wgs.verticalObstacleCheckRadius,
+                distToTarget,
+                wgs,
                 target,
                 launcher))
                 return;
@@ -50,13 +69,7 @@ namespace URPMk2
         }
         private void OnAttackTarget(Transform target)
         {
-            if (!(CalculateDotProd(target) >
-                npcMaster.GetNPCWeaponSettings().minDotProd))
-                return;
-
-            if (shootFieldValidator.IsShootFieldClean(transform))
-                weaponController.LaunchAtack(myTransform);
-
+            AttemptToShootWeapon(target);
             AttemptToShootLauncher(target);
         }
     }
