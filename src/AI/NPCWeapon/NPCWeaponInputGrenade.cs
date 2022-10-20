@@ -53,19 +53,26 @@ namespace URPMk2
                 return;
 
             NPCWeaponGreanadeSettings wgs = npcMaster.GetNPCWeaponSettings().greanadeSettings;
-            float distToTarget = Vector3.Distance(myTransform.position, target.position);
 
-            if (distToTarget > wgs.grenadeThrowRange)
+            if (wgs.isRandomAttack &&
+                Random.Range(0, 11) > wgs.randAttackChance)
                 return;
 
-            if (!shootFieldValidator.IsThrowGrenadeFieldClean(
+            float distToTarget = Vector3.Distance(myTransform.position, target.position);
+
+            if (distToTarget > wgs.grenadeThrowRange ||
+                !shootFieldValidator.IsThrowGrenadeFieldClean(
                 distToTarget,
                 wgs,
                 target,
-                launcher))
+                launcher
+                ))
                 return;
 
-            launcherController.LaunchHGAttack(20f, -20f, myTransform);
+            float throwForce = (wgs.forceEquation[0] * distToTarget) + wgs.forceEquation[1];
+            float throwAngle = (wgs.angleEquation[0] * distToTarget) + wgs.angleEquation[1];
+
+            launcherController.LaunchHGAttack(throwForce, throwAngle, myTransform);
         }
         private void OnAttackTarget(Transform target)
         {

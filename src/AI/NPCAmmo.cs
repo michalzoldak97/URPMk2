@@ -5,12 +5,12 @@ namespace URPMk2
 {
 	public class NPCAmmo : MonoBehaviour
 	{
-		public Dictionary<string, int> npcAmmoStore { get; private set; }
+		public Dictionary<string, int> NpcAmmoStore { get; private set; }
 		private string primaryAmmoCode;
 		private NPCMaster npcMaster;
 		private void SetInit()
 		{
-			npcAmmoStore = new Dictionary<string, int>();
+			NpcAmmoStore = new Dictionary<string, int>();
 			npcMaster = GetComponent<NPCMaster>();
 		}
         private void Start()
@@ -20,7 +20,7 @@ namespace URPMk2
 				if (ammoSlot.isPrimary)
 					primaryAmmoCode = ammoSlot.ammoCode;
 
-				npcAmmoStore.Add(ammoSlot.ammoCode, ammoSlot.ammoQuantity);
+				NpcAmmoStore.Add(ammoSlot.ammoCode, ammoSlot.ammoQuantity);
 			}
 		}
         private void OnEnable()
@@ -35,30 +35,24 @@ namespace URPMk2
 		}
 		private void ChangeAmmo(string ammoCode, int amount, WeaponAmmo origin)
         {
-			Debug.Log("Change ammo called");
-
-			if (!npcAmmoStore.ContainsKey(ammoCode))
+			if (!NpcAmmoStore.ContainsKey(ammoCode))
 				return;
 
 			if (amount > 0)
 			{
-				npcAmmoStore[ammoCode] += amount;
+				NpcAmmoStore[ammoCode] += amount;
 				npcMaster.CallEventAmmoRecovered();
 				return;
 			}
 
-			int availableAmount = npcAmmoStore[ammoCode] + amount >= 0 ?
-				-amount :
-				npcAmmoStore[ammoCode];
+			int availableAmount = NpcAmmoStore[ammoCode] + amount >= 0 ? -amount :
+				NpcAmmoStore[ammoCode];
 
 			if (ammoCode == primaryAmmoCode &&
 				availableAmount < 1)
-			{
-				Debug.Log("Ammo finished called");
 				npcMaster.CallEventAmmoFinished();
-			}
 
-			npcAmmoStore[ammoCode] -= availableAmount;
+			NpcAmmoStore[ammoCode] -= availableAmount;
 
 			origin.ChangeAmmo(availableAmount);
 		}

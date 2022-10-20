@@ -27,7 +27,7 @@ namespace URPMk2
         private void Start()
         {
 			NpcLook = GetComponent<NPCLook>();
-			npcAmmoStore = GetComponent<NPCAmmo>().npcAmmoStore;
+			npcAmmoStore = GetComponent<NPCAmmo>().NpcAmmoStore;
         }
 
         public void CallEventAttackTarget(Transform target)

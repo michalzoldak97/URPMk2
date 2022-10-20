@@ -13,10 +13,13 @@ namespace URPMk2
 	[System.Serializable]
 	public struct NPCWeaponGreanadeSettings
 	{
+		public bool isRandomAttack;
+		public int randAttackChance; // max 10
 		public float horizontalObstacleCheckRadius;
         public float verticalObstacleCheckRadius;
 		public float grenadeThrowRange;
 		public float checkOffset;
-        public float[] minMaxThrowForce;
+        public float[] forceEquation;
+		public float[] angleEquation;
     }
 }
