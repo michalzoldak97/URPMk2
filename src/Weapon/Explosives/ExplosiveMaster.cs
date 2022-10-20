@@ -15,9 +15,7 @@ namespace URPMk2
 
         public void SetDamageOrigin(Transform origin)
         {
-            if (origin == damageOrigin)
-                return;
-
+            Debug.Log("Set origin as: " + origin.name);
             damageOrigin = origin;
         }
 

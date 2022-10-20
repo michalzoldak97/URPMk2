@@ -3,8 +3,17 @@ using UnityEngine;
 
 namespace URPMk2
 {
+    public struct DamageObjectData
+    {
+        public string uID;
+        public Teams objTeam;
+        public float dmg;
+    }
     public static class GlobalDamageMaster
     {
+        public static Dictionary<string, DamageObjectData> dmgStatistics =
+            new Dictionary<string, DamageObjectData>();
+
         private static Dictionary<Transform, IDamagableMaster> damagableObjects = 
             new Dictionary<Transform, IDamagableMaster>();
 
@@ -32,6 +41,24 @@ namespace URPMk2
                 case DamageType.Explosion:
                     damagableObjects[dmgInfo.toDmg].CallEventHitByExplosion(dmgInfo);
                     break;
+            }
+        }
+        public static void RegisterDamage(Transform origin, float dmg)
+        {
+            string key = origin.name + origin.GetInstanceID();
+            if (!dmgStatistics.ContainsKey(key))
+            {
+                DamageObjectData objData = new DamageObjectData();
+                objData.uID = key;
+                objData.dmg = dmg;
+                objData.objTeam = origin.GetComponent<ITeamMember>().TeamID;
+                dmgStatistics.Add(key, objData);
+            }
+            else
+            {
+                DamageObjectData objData = dmgStatistics[key];
+                objData.dmg += dmg;
+                dmgStatistics[key] = objData;
             }
         }
     }

@@ -297,6 +297,15 @@ namespace URPMk2
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleDamageSettings"",
+                    ""type"": ""Button"",
+                    ""id"": ""0bc8ccce-043a-4b03-88c2-6f3912f73d25"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -541,6 +550,17 @@ namespace URPMk2
                     ""action"": ""ChangeFireMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75eeeb01-b481-4d9c-b3ff-fb54d8a721f2"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleDamageSettings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -642,6 +662,15 @@ namespace URPMk2
                     ""name"": ""ToggleInventory"",
                     ""type"": ""Button"",
                     ""id"": ""2466e617-2215-40ec-99ad-f7e7cfc04d02"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleDamageScreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""e970f663-6ab1-4c7c-b4e5-161db09d8513"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1033,6 +1062,17 @@ namespace URPMk2
                     ""action"": ""ToggleInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41cadc09-b5c4-4e6e-8a71-3d606bccdad1"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleDamageScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1061,6 +1101,7 @@ namespace URPMk2
             m_Humanoid_Shoot = m_Humanoid.FindAction("Shoot", throwIfNotFound: true);
             m_Humanoid_Reload = m_Humanoid.FindAction("Reload", throwIfNotFound: true);
             m_Humanoid_ChangeFireMode = m_Humanoid.FindAction("ChangeFireMode", throwIfNotFound: true);
+            m_Humanoid_ToggleDamageSettings = m_Humanoid.FindAction("ToggleDamageSettings", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1074,6 +1115,7 @@ namespace URPMk2
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
             m_UI_ToggleInventory = m_UI.FindAction("ToggleInventory", throwIfNotFound: true);
+            m_UI_ToggleDamageScreen = m_UI.FindAction("ToggleDamageScreen", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1211,6 +1253,7 @@ namespace URPMk2
         private readonly InputAction m_Humanoid_Shoot;
         private readonly InputAction m_Humanoid_Reload;
         private readonly InputAction m_Humanoid_ChangeFireMode;
+        private readonly InputAction m_Humanoid_ToggleDamageSettings;
         public struct HumanoidActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1228,6 +1271,7 @@ namespace URPMk2
             public InputAction @Shoot => m_Wrapper.m_Humanoid_Shoot;
             public InputAction @Reload => m_Wrapper.m_Humanoid_Reload;
             public InputAction @ChangeFireMode => m_Wrapper.m_Humanoid_ChangeFireMode;
+            public InputAction @ToggleDamageSettings => m_Wrapper.m_Humanoid_ToggleDamageSettings;
             public InputActionMap Get() { return m_Wrapper.m_Humanoid; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1276,6 +1320,9 @@ namespace URPMk2
                     @ChangeFireMode.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnChangeFireMode;
                     @ChangeFireMode.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnChangeFireMode;
                     @ChangeFireMode.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnChangeFireMode;
+                    @ToggleDamageSettings.started -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleDamageSettings;
+                    @ToggleDamageSettings.performed -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleDamageSettings;
+                    @ToggleDamageSettings.canceled -= m_Wrapper.m_HumanoidActionsCallbackInterface.OnToggleDamageSettings;
                 }
                 m_Wrapper.m_HumanoidActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1319,6 +1366,9 @@ namespace URPMk2
                     @ChangeFireMode.started += instance.OnChangeFireMode;
                     @ChangeFireMode.performed += instance.OnChangeFireMode;
                     @ChangeFireMode.canceled += instance.OnChangeFireMode;
+                    @ToggleDamageSettings.started += instance.OnToggleDamageSettings;
+                    @ToggleDamageSettings.performed += instance.OnToggleDamageSettings;
+                    @ToggleDamageSettings.canceled += instance.OnToggleDamageSettings;
                 }
             }
         }
@@ -1338,6 +1388,7 @@ namespace URPMk2
         private readonly InputAction m_UI_TrackedDevicePosition;
         private readonly InputAction m_UI_TrackedDeviceOrientation;
         private readonly InputAction m_UI_ToggleInventory;
+        private readonly InputAction m_UI_ToggleDamageScreen;
         public struct UIActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -1353,6 +1404,7 @@ namespace URPMk2
             public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
             public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
             public InputAction @ToggleInventory => m_Wrapper.m_UI_ToggleInventory;
+            public InputAction @ToggleDamageScreen => m_Wrapper.m_UI_ToggleDamageScreen;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1395,6 +1447,9 @@ namespace URPMk2
                     @ToggleInventory.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleInventory;
                     @ToggleInventory.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleInventory;
                     @ToggleInventory.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleInventory;
+                    @ToggleDamageScreen.started -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleDamageScreen;
+                    @ToggleDamageScreen.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleDamageScreen;
+                    @ToggleDamageScreen.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnToggleDamageScreen;
                 }
                 m_Wrapper.m_UIActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1432,6 +1487,9 @@ namespace URPMk2
                     @ToggleInventory.started += instance.OnToggleInventory;
                     @ToggleInventory.performed += instance.OnToggleInventory;
                     @ToggleInventory.canceled += instance.OnToggleInventory;
+                    @ToggleDamageScreen.started += instance.OnToggleDamageScreen;
+                    @ToggleDamageScreen.performed += instance.OnToggleDamageScreen;
+                    @ToggleDamageScreen.canceled += instance.OnToggleDamageScreen;
                 }
             }
         }
@@ -1459,6 +1517,7 @@ namespace URPMk2
             void OnShoot(InputAction.CallbackContext context);
             void OnReload(InputAction.CallbackContext context);
             void OnChangeFireMode(InputAction.CallbackContext context);
+            void OnToggleDamageSettings(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
@@ -1473,6 +1532,7 @@ namespace URPMk2
             void OnTrackedDevicePosition(InputAction.CallbackContext context);
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
             void OnToggleInventory(InputAction.CallbackContext context);
+            void OnToggleDamageScreen(InputAction.CallbackContext context);
         }
     }
 }

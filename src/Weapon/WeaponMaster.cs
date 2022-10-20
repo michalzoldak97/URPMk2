@@ -13,7 +13,7 @@ namespace URPMk2
         public bool isTriggerLocked;
         public bool isWeaponLoaded = true;
         public WeaponFireMode fireMode;
-        public Transform dmgOrigin;
+        public Transform dmgOrigin { get; private set; }
         public delegate void WeaponInputEvenHandler();
         public event WeaponInputEvenHandler EventAimRequest;
         public event WeaponInputEvenHandler EventPullTrigger;

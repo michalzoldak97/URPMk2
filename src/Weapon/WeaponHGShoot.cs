@@ -37,6 +37,7 @@ namespace URPMk2
                     myTransform.rotation
                     );
             projectile.GetComponent<Rigidbody>().AddForce(myTransform.forward * force, ForceMode.Impulse);
+            projectile.GetComponent<ExplosiveMaster>().SetDamageOrigin(weaponMaster.dmgOrigin);
 
             weaponMaster.CallEventShoot();
         }
