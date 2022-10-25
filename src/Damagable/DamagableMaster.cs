@@ -23,6 +23,8 @@ namespace URPMk2
         public delegate void DamagableInformEventshandler(float dmg);
         public event DamagableInformEventshandler EventReceivedDamage;
 
+        private bool receivedExplosionDmg;
+
         private void Start()
         {
             // register obj in dictionary
@@ -32,8 +34,20 @@ namespace URPMk2
         {
             EventHitByGun?.Invoke(dmgInfo);
         }
+        private IEnumerator ResetReceivedExplosion()
+        {
+            yield return Utils.waitForEndOfFrame;
+            receivedExplosionDmg = false;
+        }
         public void CallEventHitByExplosion(DamageInfo dmgInfo)
         {
+            if (receivedExplosionDmg)
+                return;
+            else
+            {
+                receivedExplosionDmg = true;
+                StartCoroutine(ResetReceivedExplosion());
+            }
             EventHitByExplosion?.Invoke(dmgInfo);
         }
         public void CallEventDestroyObject()

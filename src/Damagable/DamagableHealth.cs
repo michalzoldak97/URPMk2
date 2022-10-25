@@ -45,6 +45,7 @@ namespace URPMk2
                 health = 0;
                 dmgMaster.CallEventDestroyObject();
                 DoDestroyActions();
+                return;
             }
             if (dmgInfo.dmg < 0)
                 dmgMaster.CallEventHealthRecovered();

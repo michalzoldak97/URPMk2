@@ -40,8 +40,8 @@ namespace URPMk2
 
         private void AttemptToShootWeapon(Transform target)
         {
-            if (!(CalculateDotProd(target) >
-                npcMaster.GetNPCWeaponSettings().minDotProd))
+            if (CalculateDotProd(target) <
+                npcMaster.GetNPCWeaponSettings().minDotProd)
                 return;
 
             if (shootFieldValidator.IsShootFieldClean(weapon))
