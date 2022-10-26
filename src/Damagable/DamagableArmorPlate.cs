@@ -38,7 +38,7 @@ namespace URPMk2
         {
             float myArmor = dmgMaster.GetArmor();
             float pen = dmgInfo.pen - myArmor;
-            float dmg = (pen / myArmor) * dmgInfo.dmg;
+            float dmg = (1 - (myArmor / pen)) * dmgInfo.dmg;
 
             dmgInfoToPass.toDmg = dmgInfo.toDmg;
             dmgInfoToPass.origin = dmgInfo.origin;
@@ -58,7 +58,7 @@ namespace URPMk2
                 return;
             
             float pen = dmgInfo.pen - myArmor;
-            float dmg = (pen / myArmor) * dmgInfo.dmg;
+            float dmg = (1 - (myArmor / pen)) * dmgInfo.dmg;
 
             dmgInfoToPass.toDmg = dmgInfo.toDmg;
             dmgInfoToPass.origin = dmgInfo.origin;

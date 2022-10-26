@@ -36,6 +36,7 @@ namespace URPMk2
         {
             
             float pDmg = dmgInfo.dmg > health ? health : dmgInfo.dmg;
+
             dmgMaster.CallEventReceivedDamage(pDmg);
             GlobalDamageMaster.RegisterDamage(dmgInfo.origin, pDmg);
 

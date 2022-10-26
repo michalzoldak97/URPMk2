@@ -18,8 +18,8 @@ namespace URPMk2
 			myTransform = transform;
             hitColliders = new Collider[explosiveMaster.GetExplosiveSettings().maxHitColliders];
             dmgInfo = new DamageInfo(DamageType.Explosion, myTransform);
-			dmgInfo.dmg = e.expAbsDamage;
-            dmgInfo.pen = e.expPenetration;
+			dmgInfo.dmg = explosiveMaster.GetExplosiveSettings().expAbsDamage;
+            dmgInfo.pen = explosiveMaster.GetExplosiveSettings().expPenetration;
         }
 		private void OnEnable()
 		{
@@ -44,7 +44,7 @@ namespace URPMk2
 			int numColliders = Physics.OverlapSphereNonAlloc(myTransform.position, e.expAbsRadius, hitColliders, e.layersToDamage);
 			for (int i = 0; i < numColliders; i++)
 			{
-				ApplyAbsDamage(hitColliders[i]);
+				ApplyAbsDamage(hitColliders[i], e);
 			}
         }
     }

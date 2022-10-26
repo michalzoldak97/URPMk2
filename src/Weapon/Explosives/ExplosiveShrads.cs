@@ -31,6 +31,7 @@ namespace URPMk2
 			dmgInfo.dmg = forceAndDamage;
 			dmgInfo.pen = Random.Range(e.minMaxShradPenetration[0], e.minMaxShradPenetration[1]);
             dmgInfo.toDmg = target;
+			dmgInfo.origin = explosiveMaster.damageOrigin;
 
             GlobalDamageMaster.DamageObj(dmgInfo);
         }

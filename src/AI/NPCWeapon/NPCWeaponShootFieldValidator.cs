@@ -87,8 +87,6 @@ namespace URPMk2
                 friendlyLayers
             );
 
-            Debug.Log("Found: " + numObstacles + " horizontal obstacles");
-
             if (numObstacles > 0)
                 return false;
 
@@ -102,8 +100,6 @@ namespace URPMk2
                 colObstacles,
                 friendlyLayers
             );
-
-            Debug.Log("Found: " + numObstacles + " vertical obstacles");
 
             if (numObstacles > 0)
                 return false;
