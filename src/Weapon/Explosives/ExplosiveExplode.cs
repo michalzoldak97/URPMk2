@@ -104,8 +104,8 @@ namespace URPMk2
 
 			float distToTarget = (targetCol.ClosestPointOnBounds(pos) - pos).sqrMagnitude;
 
-			float realForce = distToTarget <= e.dmgTresholdPow ? e.expForce :
-                e.expForce / (distToTarget / e.dmgTresholdPow);
+			float realForce = distToTarget <= e.dmgThresholdPow ? e.expForce :
+                e.expForce / (distToTarget / e.dmgThresholdPow);
 
 			if (targetCol.GetComponent<Rigidbody>() != null)
 				targetCol.transform.GetComponent<Rigidbody>().AddExplosionForce(realForce, pos, e.expRadius);
@@ -113,7 +113,7 @@ namespace URPMk2
 			if (!((e.layersToDamage.value & (1 << targetCol.transform.gameObject.layer)) > 0))
 				return;
 
-            dmgInfo.dmg = distToTarget <= e.dmgTresholdPow ? e.expDamage : 
+            dmgInfo.dmg = distToTarget <= e.dmgThresholdPow ? e.expDamage : 
 				Mathf.Abs((1 - (distToTarget / (e.expRadius * e.expRadius))) * e.expDamage);
             dmgInfo.pen = e.expPenetration * (dmgInfo.dmg / e.expDamage);
             dmgInfo.toDmg = targetCol.transform;

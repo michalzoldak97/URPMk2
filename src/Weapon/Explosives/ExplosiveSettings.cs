@@ -7,7 +7,7 @@ namespace URPMk2
 	{
 		public float expDamage;
 		public float expAbsDamage;
-		public float dmgTresholdPow;
+		public float dmgThresholdPow;
 		public float expPenetration;
 		public float expForce;
 		public float expRadius;
