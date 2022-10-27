@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace URPMk2
 {
@@ -89,7 +90,7 @@ namespace URPMk2
         {
             ClearUI();
             UpdateSummaryText();
-            foreach (KeyValuePair<string, DamageObjectData> td in GlobalDamageMaster.dmgStatistics)
+            foreach (KeyValuePair<string, DamageObjectData> td in GlobalDamageMaster.dmgStatistics.OrderByDescending( x => x.Value.dmg))
             {
                 AddDamageInfoEntity(td.Value.dmg, td.Key);
             }

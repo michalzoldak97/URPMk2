@@ -7,18 +7,18 @@ namespace URPMk2
 		[SerializeField] private AIWaypoints[] inceptorPaths;
         [SerializeField] private AIWaypoints[] convoPaths;
 
-        [SerializeField] private IAISpawner[] inceptorSpawners;
-        [SerializeField] private IAISpawner[] convoSpawners;
+        [SerializeField] private Transform[] inceptorSpawners;
+        [SerializeField] private Transform[] convoSpawners;
         
         private void Start()
         {
-            foreach (IAISpawner iSpawner in inceptorSpawners)
+            foreach (Transform iSpawner in inceptorSpawners)
             {
-                iSpawner.StartSpawnProcess(inceptorPaths);
+                iSpawner.GetComponent<IAISpawner>().StartSpawnProcess(inceptorPaths);
             }
-            foreach (IAISpawner cSpawner in convoSpawners)
+            foreach (Transform cSpawner in convoSpawners)
             {
-                iSpawner.StartSpawnProcess(convoPaths);
+                cSpawner.GetComponent<IAISpawner>().StartSpawnProcess(convoPaths);
             }
         }
 	}

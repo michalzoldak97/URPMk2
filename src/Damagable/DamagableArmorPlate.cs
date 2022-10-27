@@ -37,16 +37,16 @@ namespace URPMk2
         private void TransferGunDamage(DamageInfo dmgInfo)
         {
             float myArmor = dmgMaster.GetArmor();
-            float pen = dmgInfo.pen - myArmor;
-            float dmg = (1 - (myArmor / pen)) * dmgInfo.dmg;
+            float dmg = (myArmor / dmgInfo.pen) * dmgInfo.dmg;
 
             dmgInfoToPass.toDmg = dmgInfo.toDmg;
             dmgInfoToPass.origin = dmgInfo.origin;
             dmgInfoToPass.hit = dmgInfo.hit;
             dmgInfoToPass.damageType = DamageType.Gun;
-            dmgInfoToPass.pen = pen;
+            dmgInfoToPass.pen = dmgInfo.pen - myArmor;
             dmgInfoToPass.dmg = dmg;
 
+            Debug.Log("Passing armour damage: " + dmg);
             parentDmgMaster.CallEventHitByGun(dmgInfoToPass);
 
         }
@@ -57,13 +57,12 @@ namespace URPMk2
             if (dmgInfo.pen < myArmor)
                 return;
             
-            float pen = dmgInfo.pen - myArmor;
-            float dmg = (1 - (myArmor / pen)) * dmgInfo.dmg;
+            float dmg = (myArmor / dmgInfo.pen) * dmgInfo.dmg;
 
             dmgInfoToPass.toDmg = dmgInfo.toDmg;
             dmgInfoToPass.origin = dmgInfo.origin;
             dmgInfoToPass.damageType = DamageType.Explosion;
-            dmgInfoToPass.pen = pen;
+            dmgInfoToPass.pen = dmgInfo.pen - myArmor;
             dmgInfoToPass.dmg = dmg;
 
             parentDmgMaster.CallEventHitByExplosion(dmgInfoToPass);

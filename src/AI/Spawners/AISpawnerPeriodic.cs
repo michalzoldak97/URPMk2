@@ -1,50 +1,62 @@
+using UnityEngine;
+using UnityEngine.AI;
 namespace URPMk2
 {
     public class AISpawnerPeriodic : MonoBehaviour, IAISpawner
     {
         [SerializeField] private AISpawnerSettingsSO spawnerSettings;
 
-        private int squadsSpawned;
-        private GameObject[] squadMembers;
-
         private Vector3 SampleSpawnPosition()
         {
-            bool foundCleanPos = false;
             int numAttempts = 0;
-            Vector3 rndPoint = pos.position;
-            rndPoint.x += Random.Range(-shiftRange, shiftRange);
-            rndPoint.y += Random.Range(-shiftRange, shiftRange);
+            float spawnRadius = spawnerSettings.spawnRadius;
+            Vector3 rndPoint = transform.position + Utils.GetVector3FromFloat(spawnerSettings.spawnPointOffset);
 
-            while (!foundCleanPos &&
-                numAttempts < 10)
+            rndPoint.x += Random.Range(0f, spawnRadius);
+            rndPoint.y += Random.Range(0f, spawnRadius);
+
+            while (numAttempts < 50)
             {
-                if (Physics.Raycast(rndPoint, -Vector3.up * rndPoint.y, out RaycastHit hit, shiftRange + 1f))
+                if (Physics.Raycast(rndPoint, -Vector3.up * rndPoint.y, out RaycastHit hit, spawnRadius))
                     rndPoint = hit.point;
 
-                if (NavMesh.SamplePosition(rndPoint, out NavMeshHit navHit, shiftRange, NavMesh.AllAreas))
-                {
-                    MoveToCleanPos(navHit.position);
-                    foundCleanPos = true;
-                }
-                rndPoint = Random.insideUnitSphere * 3f;
+                if (NavMesh.SamplePosition(rndPoint, out NavMeshHit _, 1f, NavMesh.AllAreas))
+                    return rndPoint;
+                rndPoint += Random.insideUnitSphere * Random.Range(-3f, 3f);
                 numAttempts++;
             }
+            return transform.position;
         }
 
-        private void SpawnSquad(AIWaypoints path)
+        private async void SpawnSquad(AIWaypoints path)
         {
             foreach (AISquadType aType in spawnerSettings.squad)
             {
                 for (int i = 0; i < aType.numToSpawn; i++)
                 {
-                    
+                    GameObject agent = Instantiate(aType.agent, SampleSpawnPosition(), transform.rotation);
+                    agent.GetComponent<FSMStateManager>().waypoints = path.waypoints;
+                    await System.TimeSpan.FromSeconds(
+                        Random.Range(
+                            spawnerSettings.singleSpawnFreqRange[0],
+                            spawnerSettings.singleSpawnFreqRange[1]
+                        )
+                    );
                 }
             }
         }
-
+        private async void SpawnSquadPeriodic(AIWaypoints[] paths)
+        {
+            for (int i = 1; i < spawnerSettings.maxSquads; i++)
+            {
+                await System.TimeSpan.FromSeconds(spawnerSettings.squadSpawnPeriod);
+                SpawnSquad(paths[Random.Range(0, paths.Length)]);
+            }
+        }
         public void StartSpawnProcess(AIWaypoints[] paths)
         {
-            SpawnSquad(paths[Random.Range(0, path.Length + 1)]);
+            SpawnSquad(paths[Random.Range(0, paths.Length)]);
+            SpawnSquadPeriodic(paths);
         }
     }
 }
