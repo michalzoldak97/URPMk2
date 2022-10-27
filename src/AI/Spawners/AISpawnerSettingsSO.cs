@@ -9,6 +9,7 @@ namespace URPMk2
         public float spawnRadius;
         public float squadCheckPeriod;
         public float[] singleSpawnFreqRange; //min max
+        public float[] spawnPointOffset;
         public AISquadType[] squad;
     }
 }
