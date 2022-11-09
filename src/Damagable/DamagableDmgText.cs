@@ -37,6 +37,10 @@ namespace URPMk2
         {
             PooledObjectInstance effInstance = objectPool.GetObjectFromPool(
                 DamagableDmgTextManager.dmgTextTag);
+
+            if (effInstance == null)
+                return;
+
             effInstance.obj.transform.SetPositionAndRotation(myTransform.position, myTransform.rotation);
             effInstance.obj.SetActive(true);
 			effInstance.objBehavior.Activate(dmgInfo.dmg.ToString("N1"));

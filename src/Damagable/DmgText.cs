@@ -12,20 +12,20 @@ namespace URPMk2
         private void SetInit()
         {
             myTransform = transform;
-            cameraTransform = Camera.main.transform;
+            cameraTransform = CurrentMainCameraManager.CurrentCamera;
         }
         private IEnumerator ShowDmgText()
         {
             textColor = DamagableDmgTextManager.startColor;
             Vector3 posToGo = myTransform.position;
             posToGo.y += 4;
-            posToGo = posToGo + Random.insideUnitSphere * 3;
+            posToGo += Random.insideUnitSphere * 3;
             for (int i = 0; i < 60; i++)
             {
                 yield return DamagableDmgTextManager.loopDelaySec;
                 myTransform.LookAt(cameraTransform);
-                myTransform.rotation = Quaternion.LookRotation(cameraTransform.forward);
-                myTransform.position = Vector3.Lerp(myTransform.position, posToGo, 0.1f);
+                myTransform.SetPositionAndRotation(Vector3.Lerp(myTransform.position, posToGo, 0.1f), 
+                    Quaternion.LookRotation(cameraTransform.forward));
                 if (textColor.a > 8)
                 {
                     textColor.a -= 8;
@@ -48,6 +48,9 @@ namespace URPMk2
         public void Activate(string toSet)
         {
             myText.text = toSet;
+            StopAllCoroutines();
+            SetInit();
+            StartCoroutine(ShowDmgText());
         }
     }
 }

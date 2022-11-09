@@ -23,6 +23,8 @@ namespace URPMk2
     [System.Serializable]
     public struct PlayerMiniMapSettings
     {
+        public int cameraInitHeight;
+        public int cameraMinHeight;
         public float cameraMoveSpeed;
         public int[] maxXYZcameraPos;
     }

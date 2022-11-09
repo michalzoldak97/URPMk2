@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +17,16 @@ namespace URPMk2
             playerMaster = GetComponent<PlayerMaster>();
             playerMiniMapSettings = playerMaster.GetPlayerSettings().playerMiniMapSettings;
             cameraMoveDirections = new bool[6];
+        }
+        private void SetCameraPosOnStart()
+        {
+            Vector3 cPosHeight = transform.position;
+            cPosHeight.y = playerMiniMapSettings.cameraInitHeight;
+            miniMapCamera.position = cPosHeight;
+        }
+        private void Start()
+        {
+            SetCameraPosOnStart();
         }
         private void OnEnable()
         {
@@ -72,7 +81,8 @@ namespace URPMk2
                     mv.y = playerMiniMapSettings.cameraMoveSpeed;
 
                 else if (cameraMoveDirections[5] &&
-                miniMapCamera.position.y - playerMiniMapSettings.cameraMoveSpeed >= 5)
+                miniMapCamera.position.y - playerMiniMapSettings.cameraMoveSpeed >= 
+                playerMiniMapSettings.cameraMinHeight)
                     mv.y = -playerMiniMapSettings.cameraMoveSpeed;
 
                 miniMapCamera.position += mv;
@@ -82,10 +92,7 @@ namespace URPMk2
         }
         public void MoveMiniMapCamera(int dir)
         {
-            for (int i = 0; i < cameraMoveDirections.Length; i++)
-            {
-                cameraMoveDirections[i] = false;
-            }
+            StopCameraMove();
             cameraMoveDirections[dir] = true;
             isCameraMoving = true;
             StartCoroutine(MoveMiniMapCameraActions());
@@ -108,7 +115,14 @@ namespace URPMk2
                 InputManager.playerInputActions.UI.Disable();
                 InputManager.playerInputActions.Humanoid.Enable();
             }
+
             miniMapCamera.gameObject.SetActive(isMiniMapActive);
+
+            if (isMiniMapActive)
+                CurrentMainCameraManager.SetCurrentCamera(miniMapCamera);
+            else
+                CurrentMainCameraManager.RestoreMainCamera();
+
             mipMapUIParent.SetActive(isMiniMapActive);
         }
         private void EnableMiniMapUI(InputAction.CallbackContext obj)
