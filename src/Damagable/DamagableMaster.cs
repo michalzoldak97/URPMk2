@@ -14,7 +14,7 @@ namespace URPMk2
         public delegate void DamageEventsHandler(DamageInfo dmgInfo);
         public event DamageEventsHandler EventHitByGun;
         public event DamageEventsHandler EventHitByExplosion;
-
+        
         public delegate void DamagableEventsHandler();
         public event DamagableEventsHandler EventDestroyObject;
         public event DamagableEventsHandler EventHealthLow;

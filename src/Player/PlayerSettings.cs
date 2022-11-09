@@ -10,6 +10,7 @@ namespace URPMk2
         public Teams TeamID { get { return Teams.Player; } set { } }
         public PlayerMoveSettings playerMoveSettings;
         public PlayerInventorySettings playerInventorySettings;
+        public PlayerMiniMapSettings playerMiniMapSettings;
         public PlayerAmmoSlot[] playerAmmoStore;
     }
     [System.Serializable]
@@ -18,6 +19,14 @@ namespace URPMk2
         public int labelFontSize;
         public float itemCheckRate;
         public float[] itemLabelWidthHeight;
+    }
+    [System.Serializable]
+    public struct PlayerMiniMapSettings
+    {
+        public int cameraInitHeight;
+        public int cameraMinHeight;
+        public float cameraMoveSpeed;
+        public int[] maxXYZcameraPos;
     }
     [System.Serializable]
     public class PlayerMoveSettings

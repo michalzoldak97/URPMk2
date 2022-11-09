@@ -6,6 +6,7 @@ namespace URPMk2
 	public static class Utils
 	{
 		public static WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
+		public static WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
 		// will not work for 31!!!
 		public static int GetLayerIndexFromSingleLayer(LayerMask layer)
         {

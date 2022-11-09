@@ -37,35 +37,52 @@ namespace URPMk2
 			InputManager.playerInputActions.Humanoid.ChangeFireMode.performed -= CallChangeFireMode;
 			InputManager.playerInputActions.Humanoid.ChangeFireMode.Disable();
 		}
-		private bool IsNotItemWeapon()
+		private WeaponMaster ItemWeaponMaster()
         {
-			return playerInventory.selectedItem == null || 
-				playerInventory.selectedItem.GetComponent<WeaponMaster>() == null;
+			if (playerInventory.selectedItem == null)
+				return null;
+
+			return playerInventory.selectedItem.GetComponent<WeaponMaster>();
 		}
 		private void CallAimOnWeapon(InputAction.CallbackContext obj)
         {
-			if (IsNotItemWeapon()) return;
-			playerInventory.selectedItem.GetComponent<WeaponMaster>().CallEventAimRequest();
+			WeaponMaster itemWeaponMaster = ItemWeaponMaster();
+			if (itemWeaponMaster == null) return;
+
+			itemWeaponMaster.SetDmgOrigin(transform);
+			itemWeaponMaster.CallEventAimRequest();
 		}
 		private void CallPullTrigger(InputAction.CallbackContext obj)
         {
-			if (IsNotItemWeapon()) return;
-			playerInventory.selectedItem.GetComponent<WeaponMaster>().CallEventPullTrigger();
+			WeaponMaster itemWeaponMaster = ItemWeaponMaster();
+			if (itemWeaponMaster == null) return;
+
+			itemWeaponMaster.SetDmgOrigin(transform);
+			itemWeaponMaster.CallEventPullTrigger();
 		}
 		private void CallReleaseTrigger(InputAction.CallbackContext obj)
 		{
-			if (IsNotItemWeapon()) return;
-			playerInventory.selectedItem.GetComponent<WeaponMaster>().CallEventReleaseTrigger();
+			WeaponMaster itemWeaponMaster = ItemWeaponMaster();
+			if (itemWeaponMaster == null) return;
+
+			itemWeaponMaster.SetDmgOrigin(transform);
+			itemWeaponMaster.CallEventReleaseTrigger();
 		}
 		private void CallReloadRequest(InputAction.CallbackContext obj)
 		{
-			if (IsNotItemWeapon()) return;
-			playerInventory.selectedItem.GetComponent<WeaponMaster>().CallEventReloadRequest();
+			WeaponMaster itemWeaponMaster = ItemWeaponMaster();
+			if (itemWeaponMaster == null) return;
+
+			itemWeaponMaster.SetDmgOrigin(transform);
+			itemWeaponMaster.CallEventReloadRequest();
 		}
 		private void CallChangeFireMode(InputAction.CallbackContext obj)
 		{
-			if (IsNotItemWeapon()) return;
-			playerInventory.selectedItem.GetComponent<WeaponMaster>().CallEventFireModeChangeRequest();
+			WeaponMaster itemWeaponMaster = ItemWeaponMaster();
+			if (itemWeaponMaster == null) return;
+
+			itemWeaponMaster.SetDmgOrigin(transform);
+			itemWeaponMaster.CallEventFireModeChangeRequest();
 		}
 	}
 }

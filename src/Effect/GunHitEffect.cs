@@ -36,5 +36,6 @@ namespace URPMk2
             PlayHitSound();
             PlayEffect();
         }
+        public void Activate(string dummy) {}
     }
 }

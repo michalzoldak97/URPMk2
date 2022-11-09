@@ -4,11 +4,10 @@ namespace URPMk2
 {
 	public class GeneralAgentSpawnManager : MonoBehaviour 
 	{
-		[SerializeField] private AIWaypoints[] inceptorPaths;
-        [SerializeField] private AIWaypoints[] convoPaths;
-
         [SerializeField] private Transform[] inceptorSpawners;
+		[SerializeField] private AIWaypoints[] inceptorPaths;
         [SerializeField] private Transform[] convoSpawners;
+        [SerializeField] private AIWaypoints[] convoPaths;
         
         private void Start()
         {

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
@@ -45,7 +44,7 @@ namespace URPMk2
         }
 		private IEnumerator ResetPooledObject(GameObject obj)
         {
-			yield return new WaitForEndOfFrame();
+			yield return Utils.waitForEndOfFrame;
 			obj.transform.SetParent(null);
 		}
 		private IEnumerator UpdateObjects()
