@@ -32,7 +32,7 @@ namespace URPMk2
 		}
 		protected void AttemptToShoot(Transform target, INPCWeaponController weaponController)
         {
-			if (CalculateDotProd(target) > .99f &&
+            if (CalculateDotProd(target) > .99f &&
 				shootFieldValidator.IsShootFieldClean(transform))
 				weaponController.LaunchAtack(myTransform);
         }

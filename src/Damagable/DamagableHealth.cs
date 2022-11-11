@@ -4,8 +4,8 @@ namespace URPMk2
 {
     public class DamagableHealth : MonoBehaviour
     {
-        public float health { get; private set; }
-        private float baseHealth;
+        private bool isHealthLow;
+        private float health;
         private DamagableMaster dmgMaster;
         private void SetInit()
         {
@@ -14,7 +14,6 @@ namespace URPMk2
         private void Start()
         {
             health = dmgMaster.GetDamagableSettings().health;
-            baseHealth = health;
         }
         private void OnEnable()
         {
@@ -29,6 +28,9 @@ namespace URPMk2
         }
         private void DoDestroyActions()
         {
+            if (!isHealthLow)
+                dmgMaster.CallEventHealthLow();
+
             gameObject.SetActive(false);
             Destroy(gameObject, GameConfig.secToDestroy);
         }
@@ -48,10 +50,21 @@ namespace URPMk2
                 DoDestroyActions();
                 return;
             }
+
             if (dmgInfo.dmg < 0)
+            {
                 dmgMaster.CallEventHealthRecovered();
-            if (health < (baseHealth * .1f))
+
+                if (health > dmgMaster.GetDamagableSettings().lowHealth)
+                    isHealthLow = false;
+            }
+
+            if (!isHealthLow &&
+                health < dmgMaster.GetDamagableSettings().lowHealth)
+            {
                 dmgMaster.CallEventHealthLow();
+                isHealthLow = true;
+            }
         }
     }
 }

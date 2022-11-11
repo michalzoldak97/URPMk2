@@ -8,7 +8,6 @@ namespace URPMk2
     {
         [SerializeField] private DamagableSettingsSO damagableSettings;
         public DamagableSettingsSO GetDamagableSettings() { return damagableSettings; }
-
         public int GetArmor() { return damagableSettings.armor; }
 
         public delegate void DamageEventsHandler(DamageInfo dmgInfo);

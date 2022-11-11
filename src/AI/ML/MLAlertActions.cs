@@ -10,7 +10,7 @@ namespace URPMk2
         private void SetInit()
 		{
 			mlManager = GetComponent<MLStateManager>();
-			npcMaster = mlManager.MyNPCMaster;
+			npcMaster = GetComponent<NPCMaster>();
 			waitForAlertRestore = new WaitForSeconds(mlManager.GetFSMSettings().informAlliesPeriod);
         }
 		

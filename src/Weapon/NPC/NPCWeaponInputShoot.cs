@@ -1,10 +1,12 @@
+using System.Collections;
 using UnityEngine;
 
 namespace URPMk2
 {
 	public class NPCWeaponInputShoot : MonoBehaviour
 	{
-		private float shootRate, burstShootRate, shootsInBurst;
+		private float shootRate, shootsInBurst;
+		private WaitForSeconds waitForNextBurstShoot;
 		private WeaponMaster weaponMaster;
 		private void SetInit()
 		{
@@ -14,7 +16,7 @@ namespace URPMk2
         {
 			shootRate = 60f / weaponMaster.GetWeaponSettings().gunSettings.shootRate;
 			BurstFireSettings burstFireSettings = weaponMaster.GetWeaponSettings().burstFireSettings;
-			burstShootRate = 60f / burstFireSettings.burstShootRate;
+            waitForNextBurstShoot = new WaitForSeconds(60f / burstFireSettings.burstShootRate);
 			shootsInBurst = burstFireSettings.shootsInBurst;
 		}
         private void OnEnable()
@@ -56,9 +58,9 @@ namespace URPMk2
 				await System.TimeSpan.FromSeconds(shootRate);
 			}
 		}
-		private async void BurstShoot()
+		private IEnumerator BurstShoot()
 		{
-			weaponMaster.isShootingBurst = true;
+            weaponMaster.SetShootingBurst(true);
 
 			for (int i = 0; i < shootsInBurst; i++)
 			{
@@ -66,10 +68,10 @@ namespace URPMk2
 					AttempShoot();
 				else
 					break;
-				await System.TimeSpan.FromSeconds(burstShootRate);
-			}
-			weaponMaster.isShootingBurst = false;
-		}
+				yield return waitForNextBurstShoot;
+            }
+            weaponMaster.SetShootingBurst(false);
+        }
 		private void PullTrigger()
 		{
 			if (weaponMaster.isReloading ||
@@ -80,7 +82,7 @@ namespace URPMk2
 			weaponMaster.isShootState = true;
 
 			if (weaponMaster.fireMode == WeaponFireMode.Burst)
-				BurstShoot();
+				StartCoroutine(BurstShoot());
 			else if (weaponMaster.fireMode == WeaponFireMode.Single)
 				SingleShoot();
 			else if (weaponMaster.fireMode == WeaponFireMode.Auto)

@@ -67,7 +67,7 @@ namespace URPMk2
 		}
 		private IEnumerator BurstShoot()
 		{
-			weaponMaster.isShootingBurst = true;
+			weaponMaster.SetShootingBurst(true);
 			BurstFireSettings burstFireSettings = weaponMaster.GetWeaponSettings().burstFireSettings;
 			WaitForSeconds waitNextShootBurst = new WaitForSeconds(60f / burstFireSettings.burstShootRate);
 			for (int i = 0; i < burstFireSettings.shootsInBurst; i++)
@@ -78,8 +78,8 @@ namespace URPMk2
 					break;
 				yield return waitNextShootBurst;
 			}
-			weaponMaster.isShootingBurst = false;
-		}
+            weaponMaster.SetShootingBurst(false);
+        }
 		private void ReleaseTrigger()
 		{
 			if (itemMaster.isSelectedOnParent)
@@ -123,7 +123,7 @@ namespace URPMk2
         {
 			StopAllCoroutines();
 			weaponMaster.isShootState = false;
-			weaponMaster.isShootingBurst = false;
+            weaponMaster.SetShootingBurst(false);
         }
 	}
 }

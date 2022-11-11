@@ -9,7 +9,12 @@ namespace URPMk2
 
         public bool isAim;
         public bool isReloading;
-        public bool isShootState, isShootingBurst;
+        public bool isShootState;
+        public bool isShootingBurst { get; private set; }
+        public void SetShootingBurst(bool isShootingBurst)
+        {
+            this.isShootingBurst = isShootingBurst;
+        }
         public bool isTriggerLocked;
         public bool isWeaponLoaded = true;
         public WeaponFireMode fireMode;

@@ -24,7 +24,7 @@ namespace URPMk2
 
 		private Dictionary<string, int> npcAmmoStore;
 
-        private void Start()
+        private void Awake()
         {
 			NpcLook = GetComponent<NPCLook>();
 			npcAmmoStore = GetComponent<NPCAmmo>().NpcAmmoStore;
