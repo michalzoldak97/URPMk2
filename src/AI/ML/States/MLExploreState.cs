@@ -17,12 +17,10 @@ namespace URPMk2
                 return;
 
             mlManager.PursueTarget = target.targetTransform;
-            mlManager.currentState = mlManager.combatState;
+            mlManager.currentState = mlManager.alertState;
         }
         private void UpdateObservations()
         {
-            mlManager.AgentObservations.teamPerformance = mlManager.GetTeamPerformance();
-
             if (!isFirstUpdate)
                 return;
 

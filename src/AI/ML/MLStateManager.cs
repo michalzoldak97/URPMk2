@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -23,6 +22,7 @@ namespace URPMk2
         public IMLState currentState;
         public IMLState capturedState;
         public MLExploreState exploreState;
+        public MLAlertState alertState;
         public MLCombatState combatState;
 
         private float checkRate, nextCheck;
@@ -32,6 +32,7 @@ namespace URPMk2
         private void SetStateReferences()
         {
             exploreState = new MLExploreState(this);
+            alertState = new MLAlertState(this);
             combatState = new MLCombatState(this);
         }
         private void SetInit()
@@ -76,23 +77,10 @@ namespace URPMk2
 
             StartCoroutine(RecoverFromStruckState());
         }
-        private void RunUpdateActions()
-        {
-            float t = Time.time;
-            if (t <= nextCheck)
-                return;
-
-            nextCheck = checkRate + t;
-            currentState.UpdateState();
-        }
-        private void Update()
-        {
-            RunUpdateActions();
-        }
-        ///<summary> Gives agent an information about the whole team performance
-        /// If team inflicted more damage than enemies which should be fought with - result is 1
-        /// Othervise team damage divided by enemy damage is returned///</summary>
-        public int GetTeamPerformance()
+        ///<summary> Gives agent an information about the whole team performance.
+        /// If team inflicted more damage than enemies which should be fought with - result is 1.
+        /// Othervise team damage divided by enemy damage is returned.</summary>
+        private int GetTeamPerformance()
         {
             int teamDmg = 0;
             int enemyDmg = 0;
@@ -117,6 +105,20 @@ namespace URPMk2
                 return 1;
 
             return teamPerformance;
+        }
+        private void RunUpdateActions()
+        {
+            float t = Time.time;
+            if (t <= nextCheck)
+                return;
+
+            nextCheck = checkRate + t;
+            currentState.UpdateState();
+            AgentObservations.teamPerformance = GetTeamPerformance();
+        }
+        private void Update()
+        {
+            RunUpdateActions();
         }
     }
 }
