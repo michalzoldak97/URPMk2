@@ -35,6 +35,11 @@ namespace URPMk2
 					numOfEnemies++;
 			}
 			numOfEnemies += 1;
+
+            mlManager.RotateTowardsTarget();
+            mlManager.LaunchWeaponSystem();
+
+            mlManager.AlertAllies(target.ObjTransform);
         }
 		private void UpdateObservations()
 		{

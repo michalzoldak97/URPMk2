@@ -8,6 +8,6 @@ namespace URPMk2
 		public int teamPerformance;
 		public int targetTeamID;
 		public Vector3 targetPosition;
-		public Vector3 spottedEnemy;
+		public Vector3 spottedEnemy = Vector3.zero;
 	}
 }

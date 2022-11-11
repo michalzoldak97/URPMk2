@@ -23,6 +23,8 @@ namespace URPMk2
 
             enemyNotSeenCnt = 0;
             enemyDetections++;
+
+            mlManager.AlertAllies(target.targetTransform);
         }
         private void DoAlertActions()
         {

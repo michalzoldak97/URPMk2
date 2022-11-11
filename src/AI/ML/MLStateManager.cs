@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 namespace URPMk2
@@ -25,9 +27,11 @@ namespace URPMk2
         public MLAlertState alertState;
         public MLCombatState combatState;
 
+        private bool isInformingAllies;
         private float checkRate, nextCheck;
         private WaitForSeconds waitForRecover;
         private DamagableMaster dmgMaster;
+        private FSMRotationController rotationController;
 
         private void SetStateReferences()
         {
@@ -44,6 +48,7 @@ namespace URPMk2
             MyNPCMaster = GetComponent<NPCMaster>();
             dmgMaster = GetComponent<DamagableMaster>();
             MyNavMeshAgent = GetComponent<NavMeshAgent>();
+            rotationController = GetComponent<FSMRotationController>();
             waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
             AgentObservations = new MLAgentObservations();
 
@@ -119,6 +124,40 @@ namespace URPMk2
         private void Update()
         {
             RunUpdateActions();
+        }
+
+        private async void ResetInformState()
+        {
+            await System.TimeSpan.FromSeconds(FSMSettings.informAlliesPeriod);
+            isInformingAllies = false;
+        }
+        public void AlertAllies(Transform target)
+        {
+            if (!FSMSettings.shouldInformAllies ||
+                isInformingAllies ||
+                target == null)
+                return;
+
+            isInformingAllies = true;
+
+            List<ITeamMember> teamMembersInRange = TeamMembersManager.GetTeamMembersInRange(FSMSettings.teamID, AgentTransform.position, FSMSettings.informAlliesRangePow);
+
+            int numAllies = teamMembersInRange.Count;
+
+            for (int i = 0; i < numAllies; i++)
+            {
+                teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(target);
+            }
+
+            ResetInformState();
+        }
+        public void RotateTowardsTarget()
+        {
+            rotationController.RotateTowardsTransform(PursueTarget);
+        }
+        public void LaunchWeaponSystem()
+        {
+            MyNPCMaster.CallEventAttackTarget(PursueTarget);
         }
     }
 }
