@@ -5,8 +5,8 @@ using UnityEngine.AI;
 
 namespace URPMk2
 {
-	public class FSMStateManager : MonoBehaviour
-	{
+	public class FSMStateManager : MonoBehaviour, IStateManager
+    {
 		[SerializeField] protected FSMSettingsSO FSMSettings;
 		public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
 		public bool IsHealthLow { get; private set; }
@@ -20,7 +20,10 @@ namespace URPMk2
 		public Transform RecoverTarget { get; set; }
 		public NavMeshAgent MyNavMeshAgent { get; protected set; }
 		public NPCMaster MyNPCMaster { get; protected set; }
-
+		public void SetWaypoints(Transform[] waypoints) 
+		{
+			this.waypoints = waypoints;
+		}
 
 		public Transform[] waypoints;
 		public IFSMState currentState;

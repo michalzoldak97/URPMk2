@@ -5,8 +5,8 @@ namespace URPMk2
 {
     public class FSMRecoverState : IFSMState
     {
-        private Transform fTransform;
-        private FSMStateManager fManager;
+        private readonly Transform fTransform;
+        private readonly FSMStateManager fManager;
         public FSMRecoverState(FSMStateManager fManager)
         {
             this.fManager = fManager;

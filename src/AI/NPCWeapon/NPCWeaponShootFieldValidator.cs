@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.GraphicsBuffer;
-
 namespace URPMk2
 {
 	public class NPCWeaponShootFieldValidator : MonoBehaviour

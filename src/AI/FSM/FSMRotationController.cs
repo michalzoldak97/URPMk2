@@ -4,7 +4,7 @@ namespace URPMk2
 	{
 		protected override void SetParams()
 		{
-			FSMStateManager fManager = GetComponent<FSMStateManager>();
+			IStateManager fManager = GetComponent<IStateManager>();
 			rotationAngularSpeed = fManager.GetFSMSettings().rotationAngularSpeed;
 			rotationsPerCycle = fManager.GetFSMSettings().rotationsPerCycle;
 			nextRot = (fManager.GetCheckRate() - 0.1f) / rotationsPerCycle;
