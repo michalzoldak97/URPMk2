@@ -9,6 +9,7 @@ namespace URPMk2
         [SerializeField] private DamagableSettingsSO damagableSettings;
         public DamagableSettingsSO GetDamagableSettings() { return damagableSettings; }
         public int GetArmor() { return damagableSettings.armor; }
+        public float GetHealth() { return dmgHealth.GetHealth(); }
 
         public delegate void DamageEventsHandler(DamageInfo dmgInfo);
         public event DamageEventsHandler EventHitByGun;
@@ -23,11 +24,13 @@ namespace URPMk2
         public event DamagableInformEventshandler EventReceivedDamage;
 
         private bool receivedExplosionDmg;
+        private DamagableHealth dmgHealth;
 
         private void Start()
         {
             // register obj in dictionary
             GlobalDamageMaster.RegisterDamagable(transform, this);
+            dmgHealth = GetComponent<DamagableHealth>();
         }
         public void CallEventHitByGun(DamageInfo dmgInfo)
         {

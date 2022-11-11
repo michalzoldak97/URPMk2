@@ -32,6 +32,7 @@ namespace URPMk2
         private WaitForSeconds waitForRecover;
         private DamagableMaster dmgMaster;
         private FSMRotationController rotationController;
+        private IMLAgent mlAgent;
 
         private void SetStateReferences()
         {
@@ -51,6 +52,7 @@ namespace URPMk2
             rotationController = GetComponent<FSMRotationController>();
             waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
             AgentObservations = new MLAgentObservations();
+            mlAgent = GetComponent<IMLAgent>();
 
             currentState = exploreState;
         }
@@ -120,6 +122,7 @@ namespace URPMk2
             nextCheck = checkRate + t;
             currentState.UpdateState();
             AgentObservations.teamPerformance = GetTeamPerformance();
+            mlAgent.PassReward();
         }
         private void Update()
         {

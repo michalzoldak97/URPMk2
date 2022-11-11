@@ -4,6 +4,8 @@ namespace URPMk2
 {
     public class DamagableHealth : MonoBehaviour
     {
+        public float GetHealth() { return health; }
+
         private bool isHealthLow;
         private float health;
         private DamagableMaster dmgMaster;

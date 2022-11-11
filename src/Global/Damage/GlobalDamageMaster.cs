@@ -61,5 +61,12 @@ namespace URPMk2
                 dmgStatistics[key] = objData;
             }
         }
+        public static float GetDamageForEntity(string key)
+        {
+            if (!dmgStatistics.ContainsKey(key))
+                return 0f;
+
+            return dmgStatistics[key].dmg;
+        }
     }
 }
