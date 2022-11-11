@@ -25,12 +25,15 @@ namespace URPMk2
 
         private bool receivedExplosionDmg;
         private DamagableHealth dmgHealth;
+        private void Awake()
+        {
 
+            dmgHealth = GetComponent<DamagableHealth>();
+        }
         private void Start()
         {
             // register obj in dictionary
             GlobalDamageMaster.RegisterDamagable(transform, this);
-            dmgHealth = GetComponent<DamagableHealth>();
         }
         public void CallEventHitByGun(DamageInfo dmgInfo)
         {

@@ -6,7 +6,7 @@ namespace URPMk2
 {
 	public static class TeamMembersManager
 	{
-		public static Dictionary<Teams, Vector3> TeamFinalDestinations;
+		public static Dictionary<Teams, Vector3> TeamFinalDestinations = new Dictionary<Teams, Vector3>();
 		private static bool isTeamMembersRefreshed;
 		private static List<ITeamMember> allMembers = new List<ITeamMember>();
 		private static List<ITeamMember> selectedMembers = new List<ITeamMember>();

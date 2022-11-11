@@ -8,12 +8,12 @@ namespace URPMk2
 		{
 			dmgKey = origin.name + origin.GetInstanceID();
 			dmgMaster = origin.GetComponent<DamagableMaster>();
-			lastHealth = dmgMaster.GetHealth();
+			// lastHealth = dmgMaster.GetHealth();
         }
 		private float lastHealth;
 		private float dmgInflicted;
-		private string dmgKey;
-		private DamagableMaster dmgMaster;
+		private readonly string dmgKey;
+		private readonly DamagableMaster dmgMaster;
 
 		private float[] GetData()
 		{
@@ -34,7 +34,7 @@ namespace URPMk2
 			float[] inflictedReceived = GetData();
 
 			inflictedReceived[0] *= 0.01f;
-			inflictedReceived[0] *= 0.002f;
+			inflictedReceived[0] *= -0.002f;
 
 			return inflictedReceived;
         }

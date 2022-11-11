@@ -54,7 +54,7 @@ namespace URPMk2
             dmgInfo.hit = hit;
             dmgInfo.origin = weaponMaster.dmgOrigin;
             GlobalDamageMaster.DamageObj(dmgInfo);
-            Debug.Log("Was hit: " + hit.transform.name + " dist: " + dist + " damage: " + dmgInfo.dmg + " penetration: " + dmgInfo.pen);
+            // Debug.Log("Was hit: " + hit.transform.name + " dist: " + dist + " damage: " + dmgInfo.dmg + " penetration: " + dmgInfo.pen);
         }
     }
 }

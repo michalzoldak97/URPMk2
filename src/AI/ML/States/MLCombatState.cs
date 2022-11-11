@@ -19,7 +19,7 @@ namespace URPMk2
             
 			if (enemiesInRange[0] == null)
 			{
-				Debug.Log("First is null");
+				// Debug.Log("First is null");
                 target = null;
 				mlManager.PursueTarget = null;
 				mlManager.currentState = mlManager.exploreState;
@@ -56,7 +56,7 @@ namespace URPMk2
         }
         public void UpdateState()
 		{
-			Debug.Log("Im in combat state");
+			// Debug.Log("Im in combat state");
 			Look();
 			UpdateObservations();
         }
