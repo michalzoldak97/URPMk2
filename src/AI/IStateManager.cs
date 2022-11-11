@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.AI;
+
 namespace URPMk2
 {
 	public interface IStateManager
@@ -6,7 +8,7 @@ namespace URPMk2
 		public float GetCheckRate();
 
         public FSMSettingsSO GetFSMSettings();
-		public void SetWaypoints(Transform[] waypoints);
+        public void SetWaypoints(Transform[] waypoints);
 
     }
 }
