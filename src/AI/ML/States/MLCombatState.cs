@@ -50,8 +50,8 @@ namespace URPMk2
 
             mlManager.AgentObservations.distanceToEnemy =
                 targetExists ?
-                Vector3.Distance(target.ObjTransform.position, mlManager.AgentTransform.position) / GameConfig.maxSceneDistance :
-                0f;
+                Vector3.Distance(target.ObjTransform.position, mlManager.AgentTransform.position) / mlManager.GetFSMSettings().sightRange :
+                -1f;
 
             mlManager.AgentObservations.enemyDirection =
                 targetExists ?

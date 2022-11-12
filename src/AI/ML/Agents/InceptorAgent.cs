@@ -52,7 +52,10 @@ namespace URPMk2
                 pos = hit.point;
 
             if (NavMesh.SamplePosition(pos, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
-                navAgent.SetDestination(navHit.position); // forward or not?
+			{
+                navAgent.SetDestination(navHit.position);
+				AddReward(0.0001f);
+            }
 		}
 		public override void OnEpisodeBegin()
 		{
@@ -72,10 +75,6 @@ namespace URPMk2
 					navAgent.SetDestination(navHit.position);
 					isSearchPos = false;
                 }
-				else
-				{
-					AddReward(-0.001f);
-				}
 				numAttempts++;
 			}
 		}

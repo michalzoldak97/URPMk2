@@ -25,7 +25,7 @@ namespace URPMk2
                 return;
 
             mlManager.AgentObservations.numOfVisibleEnemies = 0f;
-            mlManager.AgentObservations.distanceToEnemy = 0f;
+            mlManager.AgentObservations.distanceToEnemy = -1f;
             mlManager.AgentObservations.enemyDirection = Vector3.zero;
             isFirstUpdate = false;
         }

@@ -23,7 +23,7 @@ namespace URPMk2
             inflictedReceived[0] = currentDmg > dmgInflicted ? currentDmg - dmgInflicted : 0f;
 
 			if (inflictedReceived[0] == 0f)
-				inflictedReceived[1] += 10f; // penalty for not inflicting damage
+				inflictedReceived[1] += 2f; // penalty for not inflicting damage
 
             float currentHealth = dmgMaster.GetHealth();
             inflictedReceived[1] = currentHealth < lastHealth ? lastHealth - currentHealth : 0f;

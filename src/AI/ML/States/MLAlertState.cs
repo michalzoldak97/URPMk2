@@ -46,8 +46,8 @@ namespace URPMk2
                 pursueTargetExists ? (1 / mlManager.GetFSMSettings().enemiesBufferSize) : 0;
             mlManager.AgentObservations.distanceToEnemy =
                 pursueTargetExists ?
-                Vector3.Distance(mlManager.PursueTarget.position, mlManager.AgentTransform.position) / GameConfig.maxSceneDistance :
-                0f;
+                Vector3.Distance(mlManager.PursueTarget.position, mlManager.AgentTransform.position) / mlManager.GetFSMSettings().sightRange :
+                -1f;
             mlManager.AgentObservations.enemyDirection =
                 pursueTargetExists ? 
                 (mlManager.PursueTarget.position - mlManager.AgentTransform.position).normalized :
