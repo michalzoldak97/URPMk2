@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace URPMk2
@@ -13,16 +14,20 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
-			explosiveMaster.EventTriggerFuse += TriggerTimeFuse;
+			explosiveMaster.EventTriggerFuse += StartTriggerTimeFuse;
 		}
 		
 		private void OnDisable()
 		{
-            explosiveMaster.EventTriggerFuse -= TriggerTimeFuse;
+            explosiveMaster.EventTriggerFuse -= StartTriggerTimeFuse;
         }
-		private async void TriggerTimeFuse()
+		private void StartTriggerTimeFuse()
 		{
-			await System.TimeSpan.FromSeconds(
+			StartCoroutine(TriggerTimeFuse());
+		}
+		private IEnumerator TriggerTimeFuse()
+		{
+			yield return new WaitForSeconds(
 				explosiveMaster.GetExplosiveSettings().timeToExplode);
 
 			if (explosiveMaster != null)

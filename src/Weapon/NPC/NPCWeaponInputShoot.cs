@@ -5,8 +5,8 @@ namespace URPMk2
 {
 	public class NPCWeaponInputShoot : MonoBehaviour
 	{
-		private float shootRate, shootsInBurst;
-		private WaitForSeconds waitForNextBurstShoot;
+		private float shootsInBurst;
+		private WaitForSeconds waitForNextBurstShoot, waitForNextShoot;
 		private WeaponMaster weaponMaster;
 		private void SetInit()
 		{
@@ -14,7 +14,7 @@ namespace URPMk2
 		}
         private void Start()
         {
-			shootRate = 60f / weaponMaster.GetWeaponSettings().gunSettings.shootRate;
+            waitForNextShoot = new WaitForSeconds(60f / weaponMaster.GetWeaponSettings().gunSettings.shootRate);
 			BurstFireSettings burstFireSettings = weaponMaster.GetWeaponSettings().burstFireSettings;
             waitForNextBurstShoot = new WaitForSeconds(60f / burstFireSettings.burstShootRate);
 			shootsInBurst = burstFireSettings.shootsInBurst;
@@ -35,10 +35,10 @@ namespace URPMk2
 		{
 			weaponMaster.CallEventShoot();
 		}
-        private async void ResetTriggerLock()
+        private IEnumerator ResetTriggerLock()
         {
             weaponMaster.isTriggerLocked = true;
-            await System.TimeSpan.FromSeconds(shootRate);
+			yield return waitForNextShoot;
             weaponMaster.isTriggerLocked = false;
         }
         private void SingleShoot()
@@ -47,15 +47,15 @@ namespace URPMk2
                 return;
 
             AttempShoot();
-            ResetTriggerLock();
+            StartCoroutine(ResetTriggerLock());
         }
-		private async void AutoShoot()
+		private IEnumerator AutoShoot()
 		{
 			while (weaponMaster.isShootState &&
 				weaponMaster.isWeaponLoaded)
 			{
 				AttempShoot();
-				await System.TimeSpan.FromSeconds(shootRate);
+				yield return waitForNextShoot;
 			}
 		}
 		private IEnumerator BurstShoot()
@@ -86,7 +86,7 @@ namespace URPMk2
 			else if (weaponMaster.fireMode == WeaponFireMode.Single)
 				SingleShoot();
 			else if (weaponMaster.fireMode == WeaponFireMode.Auto)
-				AutoShoot();
+				StartCoroutine(AutoShoot());
 		}
 		private void ReleaseTrigger()
 		{

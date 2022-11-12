@@ -41,7 +41,7 @@ namespace URPMk2
 		private bool isInformingAllies;
 		protected float checkRate, nextCheck;
 		protected Transform myTransform;
-		protected WaitForSeconds waitForRecover;
+		protected WaitForSeconds waitForRecover, waitForNextAlliesInform;
 		protected DamagableMaster dmgMaster;
 		protected NPCRotationController rotationController;
 		protected virtual void SetStateReferences()
@@ -65,7 +65,8 @@ namespace URPMk2
 				FSMSettings.checkRate - FSMSettings.checkRateOffset,
 				FSMSettings.checkRate + FSMSettings.checkRateOffset);
 			waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
-			SightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
+			waitForNextAlliesInform = new WaitForSeconds(FSMSettings.informAlliesPeriod);
+            SightRangePow = FSMSettings.sightRange * FSMSettings.sightRange;
 			myTransform = transform;
 			rotationController = GetComponent<FSMRotationController>();
 			currentState = patrolState;
@@ -147,10 +148,11 @@ namespace URPMk2
 			MyNavMeshAgent.isStopped = stopNavMeshAgent;
 			currentState = toState;
         }
-		private async void ResetInformState()
+		private IEnumerator ResetInformState()
         {
-			await System.TimeSpan.FromSeconds(FSMSettings.informAlliesPeriod);
-			isInformingAllies = false;
+			yield return waitForNextAlliesInform;
+
+            isInformingAllies = false;
 		}
 		public void AlertAllies()
         {
@@ -170,7 +172,7 @@ namespace URPMk2
 				teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(PursueTarget);
             }
 
-			ResetInformState();
+			StartCoroutine(ResetInformState());
 		}
 		public bool CheckIfFollowDestinationReached()
         {
@@ -186,7 +188,7 @@ namespace URPMk2
 		}
 		public void RotateTowardsTarget()
         {
-			rotationController.RotateTowardsTransform(PursueTarget);
+			rotationController.StartRotateTowardsTransform(PursueTarget);
 		}
 		public void LaunchWeaponSystem()
         {

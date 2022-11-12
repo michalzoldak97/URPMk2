@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 namespace URPMk2
@@ -12,16 +13,22 @@ namespace URPMk2
         protected Transform myTransform;
         protected RaycastHit[] hitObstacles;
         protected Collider[] colObstacles;
+        private WaitForSeconds waitForRestoreDistance;
         protected virtual void Start()
         {
             myTransform = transform;
             hitObstacles = new RaycastHit[1];
             colObstacles = new Collider[1];
+            waitForRestoreDistance = new WaitForSeconds(3f);
         }
-        private async void RestoreDistance()
+        private IEnumerator RestoreDistance()
         {
             isRestoringStopDistance = true;
-            await System.TimeSpan.FromSeconds(3f);
+            yield return waitForRestoreDistance;
+
+            if (navMeshAgent == null)
+                yield break;
+
             navMeshAgent.stoppingDistance = stopDist;
             isRestoringStopDistance = false;
         }
@@ -31,7 +38,7 @@ namespace URPMk2
             navMeshAgent.SetDestination(pos);
             navMeshAgent.isStopped = false;
             if (!isRestoringStopDistance)
-                RestoreDistance();
+                StartCoroutine(RestoreDistance());
         }
         private void TryToChangePos(Transform pos)
         {

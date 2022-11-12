@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace URPMk2
@@ -8,6 +9,7 @@ namespace URPMk2
         private bool isRotatnig;
         private Transform myTransform;
         private Quaternion myRotation;
+        private WaitForSeconds waitNextRot;
 		protected virtual void SetParams() { }
 
         private void Start()
@@ -15,15 +17,12 @@ namespace URPMk2
             SetParams();
             myTransform = transform;
             rotShift = (1 - rotationAngularSpeed) / rotationsPerCycle;
+            waitNextRot = new WaitForSeconds(nextRot);
         }
 
-        public async void RotateTowardsTransform(Transform target)
+        private IEnumerator RotateTowardsTransform(Transform target)
         {
-            // Debug.Log("Is rotating = " + isRotatnig + " next Rot = " + nextRot);
-
-            if (isRotatnig)
-                return;
-
+           
             isRotatnig = true;
 
             float t = rotationAngularSpeed;
@@ -42,11 +41,16 @@ namespace URPMk2
                 myRotation.z = 0f;
                 myTransform.rotation = Quaternion.Slerp(myTransform.rotation, myRotation, t);
                 t += rotShift;
-                await System.TimeSpan.FromSeconds(nextRot);
+                yield return waitNextRot;
             }
 
             isRotatnig = false;
         }
-
+        public void StartRotateTowardsTransform(Transform target)
+        {
+            if (isRotatnig)
+                return;
+            StartCoroutine(RotateTowardsTransform(target));
+        }
     }
 }

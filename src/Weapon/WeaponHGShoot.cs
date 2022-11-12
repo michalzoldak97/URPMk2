@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace URPMk2
@@ -41,9 +42,9 @@ namespace URPMk2
 
             weaponMaster.CallEventShoot();
         }
-        private async void ResetShootState()
+        private IEnumerator ResetShootState()
         {
-            await System.TimeSpan.FromSeconds(60f / 
+            yield return new WaitForSeconds(60f / 
                 weaponMaster.GetWeaponSettings().gunSettings.shootRate);
             weaponMaster.isShootState = false;
         }
@@ -57,7 +58,7 @@ namespace URPMk2
             weaponMaster.isShootState = true;
 
             ThrowGrenade(force, angle);
-            ResetShootState();
+            StartCoroutine(ResetShootState());
         }
     }
 }

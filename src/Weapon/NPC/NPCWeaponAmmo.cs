@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace URPMk2
@@ -26,12 +27,12 @@ namespace URPMk2
 			weaponMaster.EventReloadRequest -= OnReload;
 			BreakReloadProcess(transform);
 		}
-		private async void CallWeaponReload()
+		private IEnumerator CallWeaponReload()
         {
 			float timeToWaitForBurst = 
 				weaponMaster.GetWeaponSettings().burstFireSettings.shootsInBurst * 
 				(60f / weaponMaster.GetWeaponSettings().burstFireSettings.burstShootRate);
-			await System.TimeSpan.FromSeconds(timeToWaitForBurst + .1f);
+			yield return new WaitForSeconds(timeToWaitForBurst + .1f);
 			weaponMaster.CallEventReloadRequest();
 		}
 		protected override void OnShoot()
@@ -45,7 +46,7 @@ namespace URPMk2
 				currentAmmo = 0;
 				weaponMaster.isWeaponLoaded = false;
 				weaponMaster.CallEventReleaseTrigger();
-				CallWeaponReload();
+				StartCoroutine(CallWeaponReload());
 			}
 		}
 		protected override void OnReload()

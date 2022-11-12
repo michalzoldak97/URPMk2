@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 namespace URPMk2
@@ -28,7 +29,7 @@ namespace URPMk2
             return transform.position;
         }
 
-        private async void SpawnSquad(AIWaypoints path)
+        private IEnumerator SpawnSquad(AIWaypoints path)
         {
             foreach (AISquadType aType in spawnerSettings.squad)
             {
@@ -36,7 +37,7 @@ namespace URPMk2
                 {
                     GameObject agent = Instantiate(aType.agent, SampleSpawnPosition(), transform.rotation);
                     agent.GetComponent<IStateManager>().SetWaypoints(path.waypoints);
-                    await System.TimeSpan.FromSeconds(
+                    yield return new WaitForSeconds(
                         Random.Range(
                             spawnerSettings.singleSpawnFreqRange[0],
                             spawnerSettings.singleSpawnFreqRange[1]
@@ -45,18 +46,18 @@ namespace URPMk2
                 }
             }
         }
-        private async void SpawnSquadPeriodic(AIWaypoints[] paths)
+        private IEnumerator SpawnSquadPeriodic(AIWaypoints[] paths)
         {
             for (int i = 1; i < spawnerSettings.maxSquads; i++)
             {
-                await System.TimeSpan.FromSeconds(spawnerSettings.squadSpawnPeriod);
-                SpawnSquad(paths[Random.Range(0, paths.Length)]);
+                yield return new WaitForSeconds(spawnerSettings.squadSpawnPeriod);
+                StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
             }
         }
         public void StartSpawnProcess(AIWaypoints[] paths)
         {
-            SpawnSquad(paths[Random.Range(0, paths.Length)]);
-            SpawnSquadPeriodic(paths);
+            StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
+            StartCoroutine(SpawnSquadPeriodic(paths));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace URPMk2
 
         private bool isInformingAllies;
         private float checkRate, nextCheck;
-        private WaitForSeconds waitForRecover;
+        private WaitForSeconds waitForRecover, waitForNextAlliesInform;
         private DamagableMaster dmgMaster;
         private FSMRotationController rotationController;
         private IMLAgent mlAgent;
@@ -51,6 +51,7 @@ namespace URPMk2
             MyNavMeshAgent = GetComponent<NavMeshAgent>();
             rotationController = GetComponent<FSMRotationController>();
             waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
+            waitForNextAlliesInform = new WaitForSeconds(FSMSettings.informAlliesPeriod);
             AgentObservations = new MLAgentObservations();
             mlAgent = GetComponent<IMLAgent>();
 
@@ -129,9 +130,9 @@ namespace URPMk2
             RunUpdateActions();
         }
 
-        private async void ResetInformState()
+        private IEnumerator ResetInformState()
         {
-            await System.TimeSpan.FromSeconds(FSMSettings.informAlliesPeriod);
+            yield return waitForNextAlliesInform;
             isInformingAllies = false;
         }
         public void AlertAllies(Transform target)
@@ -152,11 +153,11 @@ namespace URPMk2
                 teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(target);
             }
 
-            ResetInformState();
+            StartCoroutine(ResetInformState());
         }
         public void RotateTowardsTarget()
         {
-            rotationController.RotateTowardsTransform(PursueTarget);
+            rotationController.StartRotateTowardsTransform(PursueTarget);
         }
         public void LaunchWeaponSystem()
         {
