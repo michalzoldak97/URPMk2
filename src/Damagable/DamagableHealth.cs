@@ -48,6 +48,7 @@ namespace URPMk2
             if (health < 0)
             {
                 health = 0;
+                GlobalDamageMaster.RegisterDamage(dmgInfo.origin, dmgMaster.GetDamagableSettings().health); // reward for destruction
                 dmgMaster.CallEventDestroyObject();
                 DoDestroyActions();
                 return;

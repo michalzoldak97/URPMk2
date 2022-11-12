@@ -3,16 +3,12 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 using UnityEngine.AI;
-
 namespace URPMk2
 {
 	public class InceptorAgent : Agent, IMLAgent
 	{
 		[SerializeField] private bool isTrainingMode;
-		private const float dirThreshold = 0.0025f;
-        private const float rangeThreshold = 3f;
 		private const float rangeMultiply = 10f;
-        private float lastRange;
 		private Vector3 lastDir;
 		private NavMeshAgent navAgent;
 		private MLStateManager mlManager;
@@ -24,24 +20,33 @@ namespace URPMk2
             navAgent = GetComponent<NavMeshAgent>();
 			rewardCalculator = new InceptorRewardCalculator(transform);
 		}
-		private bool IsChnageSiginificant(Vector3 dir, float range)
+		private bool IsChnageSiginificant(Vector3 pos)
 		{
-            for (int i = 0; i < 3; i++)
-			{
-				if (Mathf.Abs(dir[i] - lastDir[i]) > dirThreshold)
-					return true;
-			}
-			if (Mathf.Abs(range - lastRange) > rangeThreshold)
-				return true;
+			if ((pos - lastDir).sqrMagnitude < 1)
+				return false;
 
-			return false;
+			return true;
 		}
+		private bool IsPlaceDifferent(Vector3 pos) // disable for precision fight
+		{
+            if ((pos - lastDir).sqrMagnitude < 400)
+                return false;
+
+            return true;
+        }
 		private void SetAgentDestination(Vector3 dir, float range)
 		{
-			/*if (!IsChnageSiginificant(dir, range))
-				return;*/
-
 			Vector3 pos = (dir + transform.position) * range;
+
+            if (!IsChnageSiginificant(pos))
+                return;
+
+            AddReward(0.0001f);
+
+			if (IsPlaceDifferent(pos)) // encurage longer distances for the begining
+				AddReward(0.0002f);
+
+            lastDir = pos;
 
             if (Physics.Raycast(pos, -Vector3.up * pos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
                 pos = hit.point;
@@ -56,9 +61,9 @@ namespace URPMk2
 			while (isSearchPos && numAttempts < 100)
 			{
                 Vector3 rndPos = new Vector3(
-					Random.Range(5f, 128f),
+					Random.Range(5f, 256f),
 					1f,
-					Random.Range(5f, 128f)
+					Random.Range(5f, 256f)
 				);
 				if (Physics.Raycast(rndPos, -Vector3.up * rndPos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
                     rndPos = hit.point;
@@ -84,8 +89,6 @@ namespace URPMk2
 
 			Vector3 moveDir = new Vector3(conActions[0], conActions[1], conActions[2]);
 			float range = conActions[3] * rangeMultiply;
-
-			lastDir = moveDir; lastRange = range;
 
             SetAgentDestination(moveDir, range);
         }

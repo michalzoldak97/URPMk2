@@ -21,6 +21,10 @@ namespace URPMk2
 
 			float currentDmg = GlobalDamageMaster.GetDamageForEntity(dmgKey);
             inflictedReceived[0] = currentDmg > dmgInflicted ? currentDmg - dmgInflicted : 0f;
+
+			if (inflictedReceived[0] == 0f)
+				inflictedReceived[1] += 10f; // penalty for not inflicting damage
+
             float currentHealth = dmgMaster.GetHealth();
             inflictedReceived[1] = currentHealth < lastHealth ? lastHealth - currentHealth : 0f;
 
@@ -33,8 +37,8 @@ namespace URPMk2
 		{
 			float[] inflictedReceived = GetData();
 
-			inflictedReceived[0] *= 0.01f;
-			inflictedReceived[0] *= -0.002f;
+			inflictedReceived[0] *= 0.025f;
+			inflictedReceived[1] *= -0.002f;
 
 			return inflictedReceived;
         }
