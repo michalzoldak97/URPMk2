@@ -44,9 +44,9 @@ namespace URPMk2
 		}
 		private async void ResetTriggerLock()
 		{
-            weaponMaster.isTriggerLocked = true;
-			await System.TimeSpan.FromSeconds(shootRate);
-			weaponMaster.isTriggerLocked = false;
+            weaponMaster.SetIsTriggerLocked(true);
+            await System.TimeSpan.FromSeconds(shootRate);
+            weaponMaster.SetIsTriggerLocked(false);
         }
 		private void SingleShoot()
 		{
@@ -83,17 +83,17 @@ namespace URPMk2
 		private void ReleaseTrigger()
 		{
 			if (itemMaster.isSelectedOnParent)
-				weaponMaster.isShootState = false;
-		}
+                weaponMaster.SetIsShootState(false);
+        }
 		private void PullTrigger()
 		{
-			if (!itemMaster.isSelectedOnParent ||
+            if (!itemMaster.isSelectedOnParent ||
 				weaponMaster.isReloading ||
 				!weaponMaster.isWeaponLoaded ||
 				weaponMaster.isShootingBurst)
 				return;
 
-			weaponMaster.isShootState = true;
+			weaponMaster.SetIsShootState(true);
 
 			switch (weaponMaster.fireMode)
 			{
@@ -117,12 +117,12 @@ namespace URPMk2
 		}
 		public void InputMapChange(InputActionMap actionMapToSet)
 		{
-			weaponMaster.isShootState = false;
-		}
+            weaponMaster.SetIsShootState(false);
+        }
 		private void CancelShooting(Transform dummy)
         {
 			StopAllCoroutines();
-			weaponMaster.isShootState = false;
+            weaponMaster.SetIsShootState(false);
             weaponMaster.SetShootingBurst(false);
         }
 	}

@@ -44,11 +44,13 @@ namespace URPMk2
 
             mlManager.AgentObservations.numOfVisibleEnemies =
                 pursueTargetExists ? (1 / mlManager.GetFSMSettings().enemiesBufferSize) : 0;
-            mlManager.AgentObservations.targetTeamID =
-                pursueTargetExists ? (int)mlManager.PursueTarget.GetComponent<TeamMember>().TeamID :
-                -1;
-            mlManager.AgentObservations.targetPosition =
-                pursueTargetExists ? mlManager.PursueTarget.position :
+            mlManager.AgentObservations.distanceToEnemy =
+                pursueTargetExists ?
+                Vector3.Distance(mlManager.PursueTarget.position, mlManager.AgentTransform.position) / GameConfig.maxSceneDistance :
+                0f;
+            mlManager.AgentObservations.enemyDirection =
+                pursueTargetExists ? 
+                (mlManager.PursueTarget.position - mlManager.AgentTransform.position).normalized :
                 Vector3.zero;
         }
 

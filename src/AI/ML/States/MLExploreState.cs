@@ -24,9 +24,9 @@ namespace URPMk2
             if (!isFirstUpdate)
                 return;
 
-            mlManager.AgentObservations.numOfVisibleEnemies = 0;
-            mlManager.AgentObservations.targetTeamID = -1;
-            mlManager.AgentObservations.targetPosition = Vector3.zero;
+            mlManager.AgentObservations.numOfVisibleEnemies = 0f;
+            mlManager.AgentObservations.distanceToEnemy = 0f;
+            mlManager.AgentObservations.enemyDirection = Vector3.zero;
             isFirstUpdate = false;
         }
         public void UpdateState()

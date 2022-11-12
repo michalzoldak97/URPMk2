@@ -8,7 +8,7 @@ namespace URPMk2
 	public class InceptorAgent : Agent, IMLAgent
 	{
 		[SerializeField] private bool isTrainingMode;
-		private const float rangeMultiply = 10f;
+		private const float rangeMultiply = 256f;
 		private Vector3 lastDir;
 		private NavMeshAgent navAgent;
 		private MLStateManager mlManager;
@@ -72,16 +72,19 @@ namespace URPMk2
 					navAgent.SetDestination(navHit.position);
 					isSearchPos = false;
                 }
+				else
+				{
+					AddReward(-0.001f);
+				}
 				numAttempts++;
 			}
 		}
 		public override void CollectObservations(VectorSensor sensor)
 		{
 			sensor.AddObservation(mlManager.AgentObservations.numOfVisibleEnemies);
-			sensor.AddObservation(mlManager.AgentObservations.teamPerformance);
-			sensor.AddObservation(mlManager.AgentObservations.targetTeamID);
-			sensor.AddObservation(mlManager.AgentObservations.targetPosition.normalized);
-            sensor.AddObservation(mlManager.AgentObservations.spottedEnemy.normalized);
+			sensor.AddObservation(mlManager.AgentObservations.distanceToEnemy);
+			sensor.AddObservation(mlManager.AgentObservations.enemyDirection);
+			sensor.AddObservation(mlManager.AgentObservations.spottedEnemyDirection);
         }
         public override void OnActionReceived(ActionBuffers actions)
 		{

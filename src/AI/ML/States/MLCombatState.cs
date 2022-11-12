@@ -48,11 +48,15 @@ namespace URPMk2
 
 			bool targetExists = target != null;
 
-			mlManager.AgentObservations.targetTeamID = targetExists ?
-				(int)target.TeamID : -1;
+            mlManager.AgentObservations.distanceToEnemy =
+                targetExists ?
+                Vector3.Distance(target.ObjTransform.position, mlManager.AgentTransform.position) / GameConfig.maxSceneDistance :
+                0f;
 
-			mlManager.AgentObservations.targetPosition = targetExists ?
-				target.ObjTransform.position : Vector3.zero;
+            mlManager.AgentObservations.enemyDirection =
+                targetExists ?
+                (target.ObjTransform.position - mlManager.AgentTransform.position).normalized :
+                Vector3.zero;
         }
         public void UpdateState()
 		{

@@ -58,23 +58,24 @@ namespace URPMk2
             else
             {
 				currentAmmo = 0;
-				weaponMaster.isWeaponLoaded = false;
+                weaponMaster.SetIsWeaponLoaded(false);
             }
 			weaponMaster.CallEventEventUpdateAmmoUI();
 		}
 		protected IEnumerator ReloadAmmo(int amountToRequest)
         {
-			weaponMaster.isReloading = true;
+			weaponMaster.SetIsReloading(true);
 			weaponMaster.CallEventStartReload();
 			yield return new WaitForSeconds(weaponMaster.GetWeaponSettings().reloadTime);
 			
 			ammoMaster.CallEventAmmoChange(currentAmmoCode, -amountToRequest, this);
 			if (currentAmmo > 0)
-				weaponMaster.isWeaponLoaded = true;
+                weaponMaster.SetIsWeaponLoaded(true);
 
-			weaponMaster.CallEventReload();
-			weaponMaster.isReloading = false;
-		}
+            weaponMaster.CallEventReload();
+            weaponMaster.SetIsReloading(false);
+
+        }
 		protected virtual void OnReload()
         {
 			if (!itemMaster.isSelectedOnParent ||
@@ -100,8 +101,8 @@ namespace URPMk2
 				return;
 
 			StopAllCoroutines();
-			weaponMaster.isWeaponLoaded = currentAmmo > 0;
-			weaponMaster.isReloading = false;
+            weaponMaster.SetIsWeaponLoaded(currentAmmo > 0);
+            weaponMaster.SetIsReloading(false);
         }
 	}
 }

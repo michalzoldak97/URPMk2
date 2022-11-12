@@ -37,9 +37,9 @@ namespace URPMk2
 		}
         private IEnumerator ResetTriggerLock()
         {
-            weaponMaster.isTriggerLocked = true;
-			yield return waitForNextShoot;
-            weaponMaster.isTriggerLocked = false;
+			weaponMaster.SetIsTriggerLocked(true);
+            yield return waitForNextShoot;
+            weaponMaster.SetIsTriggerLocked(false);
         }
         private void SingleShoot()
 		{
@@ -74,14 +74,16 @@ namespace URPMk2
         }
 		private void PullTrigger()
 		{
-			if (weaponMaster.isReloading ||
+            // Debug.Log("Gun input shoot: is reloadin: " + weaponMaster.isReloading + " is not loaded: " + !weaponMaster.isWeaponLoaded + " is shooting burst " + weaponMaster.isShootingBurst);
+
+            if (weaponMaster.isReloading ||
 				!weaponMaster.isWeaponLoaded ||
 				weaponMaster.isShootingBurst)
 				return;
 
-			weaponMaster.isShootState = true;
+            weaponMaster.SetIsShootState(true);
 
-			if (weaponMaster.fireMode == WeaponFireMode.Burst)
+            if (weaponMaster.fireMode == WeaponFireMode.Burst)
 				StartCoroutine(BurstShoot());
 			else if (weaponMaster.fireMode == WeaponFireMode.Single)
 				SingleShoot();
@@ -90,7 +92,7 @@ namespace URPMk2
 		}
 		private void ReleaseTrigger()
 		{
-			weaponMaster.isShootState = false;
-		}
+            weaponMaster.SetIsShootState(false);
+        }
 	}
 }

@@ -4,10 +4,9 @@ namespace URPMk2
 {
 	public class MLAgentObservations
 	{
-		public int numOfVisibleEnemies;
-		public int teamPerformance;
-		public int targetTeamID;
-		public Vector3 targetPosition;
-		public Vector3 spottedEnemy = Vector3.zero;
+		public float numOfVisibleEnemies;
+		public float distanceToEnemy;
+		public Vector3 enemyDirection;
+		public Vector3 spottedEnemyDirection;
 	}
 }

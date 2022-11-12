@@ -28,11 +28,11 @@ namespace URPMk2
 		{
 			yield return waitForAlertRestore;
 
-			mlManager.AgentObservations.spottedEnemy = Vector3.zero;
+			mlManager.AgentObservations.spottedEnemyDirection = Vector3.zero;
         }
         private void OnAlertReceived(Transform target)
 		{
-			mlManager.AgentObservations.spottedEnemy = target.position;
+			mlManager.AgentObservations.spottedEnemyDirection = (target.position - mlManager.AgentTransform.position).normalized;
 			StopAllCoroutines();
 			StartCoroutine(ClearSpottedEnemyInfo());
 		}

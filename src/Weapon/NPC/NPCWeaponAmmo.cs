@@ -44,8 +44,8 @@ namespace URPMk2
 			else
 			{
 				currentAmmo = 0;
-				weaponMaster.isWeaponLoaded = false;
-				weaponMaster.CallEventReleaseTrigger();
+				weaponMaster.SetIsWeaponLoaded(false);
+                weaponMaster.CallEventReleaseTrigger();
 				StartCoroutine(CallWeaponReload());
 			}
 		}

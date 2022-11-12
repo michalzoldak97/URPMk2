@@ -8,15 +8,32 @@ namespace URPMk2
         public WeaponSettingsSO GetWeaponSettings() { return weaponSettings; }
 
         public bool isAim;
-        public bool isReloading;
-        public bool isShootState;
+        public bool isReloading { get; private set; }
+        public void SetIsReloading(bool isReloading)
+        {
+            this.isReloading = isReloading;
+        }
+        public bool isShootState { get; private set; }
+        public void SetIsShootState(bool isShootState)
+        {
+            this.isShootState = isShootState;
+        }
         public bool isShootingBurst { get; private set; }
         public void SetShootingBurst(bool isShootingBurst)
         {
             this.isShootingBurst = isShootingBurst;
         }
-        public bool isTriggerLocked;
-        public bool isWeaponLoaded = true;
+        public bool isTriggerLocked { get; private set; }
+        public void SetIsTriggerLocked(bool isTriggerLocked)
+        {
+            this.isTriggerLocked = isTriggerLocked;
+        }
+        public bool isWeaponLoaded { get; private set; }
+        public void SetIsWeaponLoaded(bool isWeaponLoaded)
+        {
+            Debug.Log("Setting is weapon loaded to: " + isWeaponLoaded);
+            this.isWeaponLoaded = isWeaponLoaded;
+        }
         public WeaponFireMode fireMode;
         public Transform dmgOrigin { get; private set; }
         public delegate void WeaponInputEvenHandler();
@@ -96,6 +113,7 @@ namespace URPMk2
         private void Start()
         {
             fireMode = (WeaponFireMode)weaponSettings.gunSettings.defaultFireMode;
+            isWeaponLoaded = true;
         }
     }
 }

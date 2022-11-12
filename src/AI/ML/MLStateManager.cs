@@ -122,7 +122,6 @@ namespace URPMk2
 
             nextCheck = checkRate + t;
             currentState.UpdateState();
-            AgentObservations.teamPerformance = GetTeamPerformance();
             mlAgent.PassReward();
         }
         private void Update()

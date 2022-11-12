@@ -46,7 +46,7 @@ namespace URPMk2
         {
             yield return new WaitForSeconds(60f / 
                 weaponMaster.GetWeaponSettings().gunSettings.shootRate);
-            weaponMaster.isShootState = false;
+            weaponMaster.SetIsWeaponLoaded(false);
         }
         private void OnThrowGrenade(float force, float angle)
 		{
@@ -55,7 +55,7 @@ namespace URPMk2
                 weaponMaster.isShootingBurst)
                 return;
 
-            weaponMaster.isShootState = true;
+            weaponMaster.SetIsWeaponLoaded(true);
 
             ThrowGrenade(force, angle);
             StartCoroutine(ResetShootState());

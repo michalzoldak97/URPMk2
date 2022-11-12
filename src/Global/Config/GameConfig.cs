@@ -9,6 +9,7 @@ namespace URPMk2
         public static float secEffectAlive = 10;
         public static float wanderTargetRandomRadius = 3.0f;
         public static float checkRateSetDelay = 0.7f;
+        public static float maxSceneDistance = 360f;
         public static double refreshTeamsEverySec = 1;
         public static string shootKey = "shoot";
         public static string reloadKey = "reload";
