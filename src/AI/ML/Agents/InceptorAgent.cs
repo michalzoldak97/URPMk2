@@ -17,7 +17,7 @@ namespace URPMk2
 		{
 			mlManager = GetComponent<MLStateManager>();
             navAgent = GetComponent<NavMeshAgent>();
-			rewardCalculator = new InceptorRewardCalculator(this, mlManager.AgentTransform);
+			rewardCalculator = new InceptorRewardCalculator(this, transform);
         }
 		private void Start()
 		{

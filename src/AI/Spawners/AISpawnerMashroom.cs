@@ -29,7 +29,16 @@ namespace URPMk2
         }
         private Vector3 SampleSpawnPosition()
         {
-            return possibleSpawnPositions[Random.Range(0, possibleSpawnPositions.Length - 1)].position;
+            Vector3 newSpawnPos = 
+                possibleSpawnPositions[Random.Range(0, possibleSpawnPositions.Length - 1)].position;
+            int safetyLimiter = 0;
+            while (newSpawnPos == currentSpawnPos &&
+                safetyLimiter < 999)
+            {
+                newSpawnPos = possibleSpawnPositions[Random.Range(0, possibleSpawnPositions.Length - 1)].position;
+                safetyLimiter++;
+            }
+            return newSpawnPos;
         }
 
         private IEnumerator SpawnSquad(AIWaypoints path)

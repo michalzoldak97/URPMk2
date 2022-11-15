@@ -5,11 +5,12 @@ namespace URPMk2
 {
 	public class InceptorRewardCalculator
 	{
-		public InceptorRewardCalculator(Agent myAgent, Transform origin)
+		public InceptorRewardCalculator(Agent myAgent, Transform t)
 		{
 			this.myAgent = myAgent;
-            dmgKey = origin.name + origin.GetInstanceID();
-			dmgMaster = origin.GetComponent<DamagableMaster>();
+		    agentTransform = t;
+            dmgKey = t.name + t.GetInstanceID();
+			dmgMaster = t.GetComponent<DamagableMaster>();
             GlobalDamageMaster.EventRegisterDestruction += VerifyFrag;
         }
 		private float lastHealth;
@@ -22,7 +23,7 @@ namespace URPMk2
 		private void VerifyFrag(Transform origin)
 		{
 			if (origin == agentTransform)
-				myAgent.AddReward(0.25f);
+                myAgent.AddReward(0.25f);
 		}
 
         private float[] GetData()
