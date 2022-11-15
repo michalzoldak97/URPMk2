@@ -6,6 +6,7 @@ namespace URPMk2
 	{
 		public float numOfVisibleEnemies;
 		public float distanceToEnemy;
+		public Vector3 agentMapPosition;
 		public Vector3 enemyDirection;
 		public Vector3 spottedEnemyDirection;
 	}

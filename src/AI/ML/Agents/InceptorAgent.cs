@@ -8,8 +8,7 @@ namespace URPMk2
 	public class InceptorAgent : Agent, IMLAgent
 	{
 		[SerializeField] private bool isTrainingMode;
-		private const float rangeMultiply = 256f;
-		private Vector3 lastDir;
+		private float rangeMultiply = 64f;
 		private NavMeshAgent navAgent;
 		private MLStateManager mlManager;
 		private InceptorRewardCalculator rewardCalculator;
@@ -18,43 +17,23 @@ namespace URPMk2
 		{
 			mlManager = GetComponent<MLStateManager>();
             navAgent = GetComponent<NavMeshAgent>();
-			rewardCalculator = new InceptorRewardCalculator(transform);
-		}
-		private bool IsChnageSiginificant(Vector3 pos)
+			rewardCalculator = new InceptorRewardCalculator(this, mlManager.AgentTransform);
+        }
+		private void Start()
 		{
-			if ((pos - lastDir).sqrMagnitude < 1)
-				return false;
-
-			return true;
-		}
-		private bool IsPlaceDifferent(Vector3 pos) // disable for precision fight
-		{
-            if ((pos - lastDir).sqrMagnitude < 400)
-                return false;
-
-            return true;
+            rangeMultiply += (mlManager.AgentTransform.position.x + mlManager.AgentTransform.position.z) / 2f;
         }
 		private void SetAgentDestination(Vector3 dir, float range)
 		{
-			Vector3 pos = (dir + transform.position) * range;
+			Vector3 pos = (dir + mlManager.AgentTransform.position) * range;
 
-            if (!IsChnageSiginificant(pos))
-                return;
-
-            AddReward(0.0001f);
-
-			if (IsPlaceDifferent(pos)) // encurage longer distances for the begining
-				AddReward(0.0002f);
-
-            lastDir = pos;
-
+            
             if (Physics.Raycast(pos, -Vector3.up * pos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
                 pos = hit.point;
 
             if (NavMesh.SamplePosition(pos, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
 			{
                 navAgent.SetDestination(navHit.position);
-				AddReward(0.0001f);
             }
 		}
 		public override void OnEpisodeBegin()
@@ -64,9 +43,9 @@ namespace URPMk2
 			while (isSearchPos && numAttempts < 100)
 			{
                 Vector3 rndPos = new Vector3(
-					Random.Range(5f, 256f),
+					Random.Range(5f, 128f),
 					1f,
-					Random.Range(5f, 256f)
+					Random.Range(5f, 128f)
 				);
 				if (Physics.Raycast(rndPos, -Vector3.up * rndPos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
                     rndPos = hit.point;
@@ -78,9 +57,22 @@ namespace URPMk2
 				numAttempts++;
 			}
 		}
+		private void SetOnMapPosition()
+		{
+			Vector3 aPos = mlManager.AgentTransform.position;
+			Vector3 maxPos = GameConfig.maxMapDim;
+            mlManager.AgentObservations.agentMapPosition = new Vector3(
+				aPos.x / maxPos.x,
+				aPos.y / maxPos.y,
+				aPos.z / maxPos.z
+                );
+		}
 		public override void CollectObservations(VectorSensor sensor)
 		{
-			sensor.AddObservation(mlManager.AgentObservations.numOfVisibleEnemies);
+			SetOnMapPosition();
+
+            sensor.AddObservation(mlManager.AgentObservations.agentMapPosition);
+            sensor.AddObservation(mlManager.AgentObservations.numOfVisibleEnemies);
 			sensor.AddObservation(mlManager.AgentObservations.distanceToEnemy);
 			sensor.AddObservation(mlManager.AgentObservations.enemyDirection);
 			sensor.AddObservation(mlManager.AgentObservations.spottedEnemyDirection);

@@ -122,6 +122,7 @@ namespace URPMk2
 
             nextCheck = checkRate + t;
             currentState.UpdateState();
+
             mlAgent.PassReward();
         }
         private void Update()

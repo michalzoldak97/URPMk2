@@ -14,8 +14,16 @@ namespace URPMk2
         public static Dictionary<string, DamageObjectData> dmgStatistics =
             new Dictionary<string, DamageObjectData>();
 
-        private static Dictionary<Transform, IDamagableMaster> damagableObjects = 
+        private static readonly Dictionary<Transform, IDamagableMaster> damagableObjects = 
             new Dictionary<Transform, IDamagableMaster>();
+
+        public delegate void GlobalDamageEventHandler(Transform origin);
+        public static event GlobalDamageEventHandler EventRegisterDestruction;
+
+        public static void CallEventRegisterDestruction(Transform origin)
+        {
+            EventRegisterDestruction?.Invoke(origin);
+        }
 
         public static void RegisterDamagable(Transform k, IDamagableMaster v)
         {
