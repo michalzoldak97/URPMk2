@@ -21,14 +21,14 @@ namespace URPMk2
         {
             SetInit();
             tuManager.EventStartNewEpisode += StartGroupEpisode;
-            tuManager.EventEndEpisode += MultiAgentGroup.EndGroupEpisode;
+            tuManager.EventEndEpisode += EndGroupEpisode;
             tuManager.EventAddGroupReward += GetGroupReward;
         }
 
         private void OnDisable()
         {
             tuManager.EventStartNewEpisode -= StartGroupEpisode;
-            tuManager.EventEndEpisode -= MultiAgentGroup.EndGroupEpisode;
+            tuManager.EventEndEpisode -= EndGroupEpisode;
             tuManager.EventAddGroupReward -= GetGroupReward;
         }
         private void InstantiateNewAgentGroup()
@@ -52,7 +52,11 @@ namespace URPMk2
                 return;
 
             MultiAgentGroup.AddGroupReward(reward);
-            Debug.Log("Group of id " + groupID + " recieves reward");
+            Debug.Log("Group of id " + groupID + " recieves reward ");
+        }
+        private void EndGroupEpisode(int foo, int barr)
+        {
+            MultiAgentGroup.EndGroupEpisode();
         }
     }
 }

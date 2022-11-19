@@ -15,12 +15,14 @@ namespace URPMk2
 			SetInit();
 			tuManager.EventAgentDamaged += OnAgentDamaged;
 			tuManager.EventAgentDestroyed += OnAgentDestroyed;
+			tuManager.EventEndEpisode += OnEpisodeEnd;
         }
 		
 		private void OnDisable()
 		{
             tuManager.EventAgentDamaged -= OnAgentDamaged;
             tuManager.EventAgentDestroyed -= OnAgentDestroyed;
+            tuManager.EventEndEpisode += OnEpisodeEnd;
         }
 		private void OnAgentDamaged(Transform origin, Transform damaged,float dmg)
 		{
@@ -38,8 +40,22 @@ namespace URPMk2
 			if (agentToReward == null)
 				return;
 
-			agentToReward.Agent.AddReward(1f);
+			agentToReward.Agent.AddReward(0.25f);
 			tuManager.CallEventAddGroupReward(agentToReward.GroupID, 0.25f);
 		}
+		private void OnEpisodeEnd(int winID, int looseID)
+		{
+			foreach(IMultiAgentGroupMember agent in tuManager.GetMultiAgentGroupMembers())
+			{
+				if (agent.GroupID == winID)
+					agent.Agent.AddReward(1f);
+
+				if (agent.GroupID == looseID)
+					agent.Agent.AddReward(-1f);
+			}
+
+            tuManager.CallEventAddGroupReward(winID, 1f);
+            tuManager.CallEventAddGroupReward(winID, -1f);
+        }
     }
 }
