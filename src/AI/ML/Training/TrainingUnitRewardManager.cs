@@ -55,7 +55,7 @@ namespace URPMk2
 			}
 
             tuManager.CallEventAddGroupReward(winID, 1f);
-            tuManager.CallEventAddGroupReward(winID, -1f);
+            tuManager.CallEventAddGroupReward(looseID, -1f);
         }
     }
 }

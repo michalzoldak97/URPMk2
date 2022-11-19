@@ -11,8 +11,8 @@ namespace URPMk2
 		    agentTransform = t;
             dmgKey = t.name + t.GetInstanceID();
 			dmgMaster = t.GetComponent<DamagableMaster>();
-			dmgMaster.EventReceivedDamage += AddDamagePenalty;
-            GlobalDamageMaster.EventRegisterDestruction += VerifyFrag;
+			// dmgMaster.EventReceivedDamage += AddDamagePenalty;
+            // GlobalDamageMaster.EventRegisterDestruction += VerifyFrag;
         }
 		private float dmgInflicted;
 		private readonly string dmgKey;
