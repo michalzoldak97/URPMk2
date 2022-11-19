@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace URPMk2
 {
@@ -18,6 +19,13 @@ namespace URPMk2
             {
                 enemyNotSeenCnt++;
                 enemyDetections = 0;
+
+                if (enemyNotSeenCnt >= mlManager.GetFSMSettings().targetLostDetections)
+                {
+                    mlManager.PursueTarget = null;
+                    mlManager.currentState = mlManager.exploreState;
+                }
+
                 return;
             }
 
@@ -25,19 +33,14 @@ namespace URPMk2
             enemyDetections++;
 
             mlManager.AlertAllies(target.targetTransform);
-        }
-        private void DoAlertActions()
-        {
-            if (enemyNotSeenCnt >= mlManager.GetFSMSettings().targetLostDetections)
-            {
-                mlManager.PursueTarget = null;
-                mlManager.currentState = mlManager.exploreState;
-                return;
-            }
 
             if (enemyDetections >= mlManager.GetFSMSettings().requiredDetectionCount)
+            {
+                mlManager.PursueTarget = target.targetTransform;
                 mlManager.currentState = mlManager.combatState;
+            }
         }
+
         private void UpdateObservations()
         {
             bool pursueTargetExists = mlManager.PursueTarget != null;
@@ -57,7 +60,6 @@ namespace URPMk2
         public void UpdateState()
 		{
 			Look();
-            DoAlertActions();
             UpdateObservations();
 		}
 	}

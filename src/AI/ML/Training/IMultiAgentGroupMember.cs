@@ -1,3 +1,4 @@
+using Unity.MLAgents;
 using UnityEngine;
 
 namespace URPMk2
@@ -6,6 +7,7 @@ namespace URPMk2
 	{
 		public int GroupID { get; set; }
 		public Transform AgentTransform { get; set; }
-		public DamagableMaster AgentDmgMaster { get; set; }
+		public Agent Agent { get; set; }
+
 	}
 }

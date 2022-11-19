@@ -74,7 +74,7 @@ namespace URPMk2
             if (MyNavMeshAgent.enabled)
                 MyNavMeshAgent.isStopped = false;
         }
-        private void ActivateStruckState(float dmg)
+        private void ActivateStruckState(Transform dummy, float dmg)
         {
             StopAllCoroutines();
 

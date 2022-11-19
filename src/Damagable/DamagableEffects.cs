@@ -34,7 +34,7 @@ namespace URPMk2
 		{
 			dmgMaster.EventDestroyObject -= SpawnDestructionEffect;
 		}
-		private void SpawnDestructionEffect()
+		private void SpawnDestructionEffect(Transform foo)
         {
 			destructionEffect.transform.SetParent(null);
 			destructionEffect.SetActive(true);

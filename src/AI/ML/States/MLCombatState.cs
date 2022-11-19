@@ -14,11 +14,13 @@ namespace URPMk2
         }
 		private void Look()
 		{
+			bool shouldAssignTarget = target?.ObjTransform == null;
+
             numOfEnemies = 0;
 
             ITeamMember[] enemiesInRange  = mlManager.MyNPCMaster.NpcLook.GetEnemiesInRange();
-            
-			if (enemiesInRange[0] == null)
+
+            if (enemiesInRange[0] == null)
 			{
                 target = null;
 				mlManager.PursueTarget = null;
@@ -26,22 +28,33 @@ namespace URPMk2
 				return;
 			}
 
-			if (!Array.Exists(enemiesInRange, enemy => enemy.ObjTransform == mlManager.PursueTarget))
+			if (enemiesInRange[0].ObjTransform != mlManager.PursueTarget)
 			{
-                target = enemiesInRange[0];
-                mlManager.PursueTarget = target.ObjTransform;
+                if (!Array.Exists(enemiesInRange, enemy => enemy != null && 
+				enemy.ObjTransform == mlManager.PursueTarget))
+                {
+                    target = enemiesInRange[0];
+                    mlManager.PursueTarget = target.ObjTransform;
+                }
             }
 
-			for (int i = 1; i < enemiesInRange.Length; i++)
+            for (int i = 0; i < enemiesInRange.Length; i++)
 			{
 				if (enemiesInRange[i] != null)
 					numOfEnemies++;
-			}
-			numOfEnemies += 1;
+				else
+					continue;
+
+				if (shouldAssignTarget &&
+					enemiesInRange[i].ObjTransform == mlManager.PursueTarget)
+				{
+                    target = enemiesInRange[i];
+					shouldAssignTarget = false;
+                }
+            }
 
             mlManager.RotateTowardsTarget();
             mlManager.LaunchWeaponSystem();
-
             mlManager.AlertAllies(target.ObjTransform);
         }
 		private void UpdateObservations()

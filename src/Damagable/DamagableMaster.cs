@@ -15,12 +15,14 @@ namespace URPMk2
         public event DamageEventsHandler EventHitByExplosion;
         
         public delegate void DamagableEventsHandler();
-        public event DamagableEventsHandler EventDestroyObject;
         public event DamagableEventsHandler EventHealthLow;
         public event DamagableEventsHandler EventHealthRecovered;
 
-        public delegate void DamagableInformEventshandler(float dmg);
-        public event DamagableInformEventshandler EventReceivedDamage;
+        public delegate void DamagableDestructionEventsHandler(Transform killer);
+        public event DamagableDestructionEventsHandler EventDestroyObject;
+
+        public delegate void DamagableInformEventsHandler(Transform origin, float dmg);
+        public event DamagableInformEventsHandler EventReceivedDamage;
 
         private bool receivedExplosionDmg;
         private DamagableHealth dmgHealth;
@@ -54,13 +56,13 @@ namespace URPMk2
             }
             EventHitByExplosion?.Invoke(dmgInfo);
         }
-        public void CallEventDestroyObject()
+        public void CallEventDestroyObject(Transform killer)
         {
-            EventDestroyObject?.Invoke();
+            EventDestroyObject?.Invoke(killer);
         }
-        public void CallEventReceivedDamage(float dmg)
+        public void CallEventReceivedDamage(Transform origin, float dmg)
         {
-            EventReceivedDamage?.Invoke(dmg);
+            EventReceivedDamage?.Invoke(origin, dmg);
         }
         public void CallEventHealthLow()
         {

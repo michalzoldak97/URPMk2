@@ -6,7 +6,7 @@ namespace URPMk2
     public class TrainingMultiAgentGroupManager : MonoBehaviour
     {
         [SerializeField] private int groupID;
-        [SerializeField] private int numAgents;
+        [SerializeField] private Transform[] agentSpawnPositions;
         [SerializeField] private GameObject agentPrefab;
         public SimpleMultiAgentGroup MultiAgentGroup { get; private set; }
         private TrainingUnitManager tuManager;
@@ -20,13 +20,39 @@ namespace URPMk2
         private void OnEnable()
         {
             SetInit();
-
+            tuManager.EventStartNewEpisode += StartGroupEpisode;
+            tuManager.EventEndEpisode += MultiAgentGroup.EndGroupEpisode;
+            tuManager.EventAddGroupReward += GetGroupReward;
         }
 
         private void OnDisable()
         {
-
+            tuManager.EventStartNewEpisode -= StartGroupEpisode;
+            tuManager.EventEndEpisode -= MultiAgentGroup.EndGroupEpisode;
+            tuManager.EventAddGroupReward -= GetGroupReward;
         }
+        private void InstantiateNewAgentGroup()
+        {
+            foreach(Transform sPos in agentSpawnPositions)
+            {
+                GameObject aObj = Instantiate(agentPrefab, sPos.position, sPos.rotation);
+                aObj.GetComponent<TrainingUnitInstance>().SetTrainingUnitManager(tuManager);
+                IMultiAgentGroupMember agent = new MultiAgentGroupMember(groupID, aObj.transform, aObj.GetComponent<Agent>());
+                tuManager.RegisterAgent(agent);
+                MultiAgentGroup.RegisterAgent(agent.Agent);
+            }
+        }
+        private void StartGroupEpisode()
+        {
+            InstantiateNewAgentGroup();
+        }
+        private void GetGroupReward(int groupID, float reward)
+        {
+            if (groupID != this.groupID)
+                return;
 
+            MultiAgentGroup.AddGroupReward(reward);
+            Debug.Log("Group of id " + groupID + " recieves reward");
+        }
     }
 }

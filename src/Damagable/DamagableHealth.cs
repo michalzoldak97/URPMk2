@@ -41,7 +41,7 @@ namespace URPMk2
             
             float pDmg = dmgInfo.dmg > health ? health : dmgInfo.dmg;
 
-            dmgMaster.CallEventReceivedDamage(pDmg);
+            dmgMaster.CallEventReceivedDamage(dmgInfo.origin, pDmg);
             GlobalDamageMaster.RegisterDamage(dmgInfo.origin, pDmg);
 
             health -= dmgInfo.dmg;
@@ -49,7 +49,7 @@ namespace URPMk2
             {
                 health = 0; 
                 GlobalDamageMaster.CallEventRegisterDestruction(dmgInfo.origin); // reward for destruction
-                dmgMaster.CallEventDestroyObject();
+                dmgMaster.CallEventDestroyObject(dmgInfo.origin);
                 DoDestroyActions();
                 return;
             }

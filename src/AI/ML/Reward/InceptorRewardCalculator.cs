@@ -25,7 +25,7 @@ namespace URPMk2
 			if (origin == agentTransform)
                 myAgent.AddReward(0.25f);
 		}
-		private void AddDamagePenalty(float dmg)
+		private void AddDamagePenalty(Transform dummy, float dmg)
 		{
 			myAgent.AddReward(dmg * - 0.002f);
 		}

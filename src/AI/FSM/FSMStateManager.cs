@@ -111,7 +111,7 @@ namespace URPMk2
 
 			currentState = capturedState;
 		}
-		private void ActivateStruckState(float dmg)
+		private void ActivateStruckState(Transform dummy, float dmg)
         {
 			StopAllCoroutines();
 
