@@ -51,7 +51,7 @@ namespace URPMk2
             mlManager.AgentObservations.enemyDirection =
                 pursueTargetExists ? 
                 (mlManager.PursueTarget.position - mlManager.AgentTransform.position).normalized :
-                Vector3.zero;
+                new Vector3(-1f, -1f, -1f);
         }
 
         public void UpdateState()

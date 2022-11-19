@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 namespace URPMk2
@@ -85,35 +83,6 @@ namespace URPMk2
 
             StartCoroutine(RecoverFromStruckState());
         }
-        ///<summary> Gives agent an information about the whole team performance.
-        /// If team inflicted more damage than enemies which should be fought with - result is 1.
-        /// Othervise team damage divided by enemy damage is returned.</summary>
-        private int GetTeamPerformance()
-        {
-            int teamDmg = 0;
-            int enemyDmg = 0;
-            foreach (DamageObjectData d in GlobalDamageMaster.dmgStatistics.Values)
-            {
-                if (d.objTeam == FSMSettings.teamID)
-                {
-                    teamDmg += (int)d.dmg;
-                    continue;
-                }
-
-                if (Array.Exists(FSMSettings.teamsToAttack, teamID => teamID == d.objTeam))
-                    enemyDmg += (int)d.dmg;
-            }
-
-            if (teamDmg == 0 || enemyDmg == 0)
-                return 0;
-
-            int teamPerformance = (teamDmg / enemyDmg);
-
-            if (teamPerformance > 1)
-                return 1;
-
-            return teamPerformance;
-        }
         private void RunUpdateActions()
         {
             float t = Time.time;
@@ -129,7 +98,6 @@ namespace URPMk2
         {
             RunUpdateActions();
         }
-
         private IEnumerator ResetInformState()
         {
             yield return waitForNextAlliesInform;

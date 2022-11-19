@@ -11,9 +11,9 @@ namespace URPMk2
 		    agentTransform = t;
             dmgKey = t.name + t.GetInstanceID();
 			dmgMaster = t.GetComponent<DamagableMaster>();
+			dmgMaster.EventReceivedDamage += AddDamagePenalty;
             GlobalDamageMaster.EventRegisterDestruction += VerifyFrag;
         }
-		private float lastHealth;
 		private float dmgInflicted;
 		private readonly string dmgKey;
 		private readonly Transform agentTransform;
@@ -24,6 +24,10 @@ namespace URPMk2
 		{
 			if (origin == agentTransform)
                 myAgent.AddReward(0.25f);
+		}
+		private void AddDamagePenalty(float dmg)
+		{
+			myAgent.AddReward(dmg * - 0.002f);
 		}
 
         private float[] GetData()
@@ -36,11 +40,7 @@ namespace URPMk2
 			if (inflictedReceived[0] == 0f)
 				inflictedReceived[1] += 1f; // penalty for not inflicting damage
 
-            float currentHealth = dmgMaster.GetHealth();
-            inflictedReceived[1] = currentHealth < lastHealth ? lastHealth - currentHealth : 0f;
-
             dmgInflicted = currentDmg;
-            lastHealth = currentHealth;
 
             return inflictedReceived;
         }

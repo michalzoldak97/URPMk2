@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace URPMk2
@@ -19,15 +20,17 @@ namespace URPMk2
             
 			if (enemiesInRange[0] == null)
 			{
-				// Debug.Log("First is null");
                 target = null;
 				mlManager.PursueTarget = null;
 				mlManager.currentState = mlManager.exploreState;
 				return;
 			}
 
-			target = enemiesInRange[0];
-			mlManager.PursueTarget = target.ObjTransform;
+			if (!Array.Exists(enemiesInRange, enemy => enemy.ObjTransform == mlManager.PursueTarget))
+			{
+                target = enemiesInRange[0];
+                mlManager.PursueTarget = target.ObjTransform;
+            }
 
 			for (int i = 1; i < enemiesInRange.Length; i++)
 			{
@@ -56,11 +59,10 @@ namespace URPMk2
             mlManager.AgentObservations.enemyDirection =
                 targetExists ?
                 (target.ObjTransform.position - mlManager.AgentTransform.position).normalized :
-                Vector3.zero;
+                 new Vector3(-1f, -1f, -1f);
         }
         public void UpdateState()
 		{
-			// Debug.Log("Im in combat state");
 			Look();
 			UpdateObservations();
         }

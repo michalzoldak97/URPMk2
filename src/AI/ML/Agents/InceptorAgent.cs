@@ -8,7 +8,9 @@ namespace URPMk2
 	public class InceptorAgent : Agent, IMLAgent
 	{
 		[SerializeField] private bool isTrainingMode;
-		private float rangeMultiply = 64f;
+		[SerializeField] private Vector3 maxPos;
+		private const float rangeMultiply = 128f;
+		private Vector3 lastPos;
 		private NavMeshAgent navAgent;
 		private MLStateManager mlManager;
 		private InceptorRewardCalculator rewardCalculator;
@@ -19,14 +21,18 @@ namespace URPMk2
             navAgent = GetComponent<NavMeshAgent>();
 			rewardCalculator = new InceptorRewardCalculator(this, transform);
         }
-		private void Start()
+		private bool IsChangeRelevant(Vector3 newPos)
 		{
-            rangeMultiply += (mlManager.AgentTransform.position.x + mlManager.AgentTransform.position.z) / 2f;
-        }
-		private void SetAgentDestination(Vector3 dir, float range)
+			return (lastPos - newPos).sqrMagnitude > 1f;
+		}
+		private void SetAgentDestination(Vector3 dir)
 		{
-			Vector3 pos = (dir + mlManager.AgentTransform.position) * range;
+			Vector3 pos = (dir + mlManager.AgentTransform.position);
 
+			if (!IsChangeRelevant(pos))
+				return;
+
+            lastPos = pos;
             
             if (Physics.Raycast(pos, -Vector3.up * pos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
                 pos = hit.point;
@@ -60,7 +66,6 @@ namespace URPMk2
 		private void SetOnMapPosition()
 		{
 			Vector3 aPos = mlManager.AgentTransform.position;
-			Vector3 maxPos = GameConfig.maxMapDim;
             mlManager.AgentObservations.agentMapPosition = new Vector3(
 				aPos.x / maxPos.x,
 				aPos.y / maxPos.y,
@@ -81,10 +86,11 @@ namespace URPMk2
 		{
             ActionSegment<float> conActions = actions.ContinuousActions;
 
-			Vector3 moveDir = new Vector3(conActions[0], conActions[1], conActions[2]);
-			float range = conActions[3] * rangeMultiply;
+			Vector3 moveDir = new Vector3(conActions[0], conActions[1], conActions[2]) * (rangeMultiply * conActions[3]);
+			/*Vector3 moveMqn = new Vector3(conActions[3], conActions[4], conActions[5]) * rangeMultiply;
+			moveDir.x *= moveMqn.x; moveDir.y *= moveMqn.y; moveDir.z *= moveMqn.z;*/
 
-            SetAgentDestination(moveDir, range);
+            SetAgentDestination(moveDir);
         }
 		public void PassReward()
 		{
