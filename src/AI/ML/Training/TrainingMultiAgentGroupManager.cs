@@ -52,11 +52,17 @@ namespace URPMk2
                 return;
 
             MultiAgentGroup.AddGroupReward(reward);
-            Debug.Log("Group of id " + groupID + " recieves reward " + reward);
+            Debug.Log("Group of id " + groupID + "  recieves reward " + reward);
         }
         private void EndGroupEpisode(int foo, int barr)
         {
-            MultiAgentGroup.EndGroupEpisode();
+            if (foo == -1)
+            {
+                MultiAgentGroup.AddGroupReward(0f);
+                MultiAgentGroup.GroupEpisodeInterrupted();
+            }
+            else
+                MultiAgentGroup.EndGroupEpisode();
         }
     }
 }

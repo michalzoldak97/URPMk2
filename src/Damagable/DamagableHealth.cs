@@ -6,7 +6,7 @@ namespace URPMk2
     {
         public float GetHealth() { return health; }
 
-        private bool isHealthLow;
+        private bool isHealthLow, isDestroyed;
         private float health;
         private DamagableMaster dmgMaster;
         private void SetInit()
@@ -38,7 +38,9 @@ namespace URPMk2
         }
         private void GetDamage(DamageInfo dmgInfo)
         {
-            
+            if (isDestroyed)
+                return;
+
             float pDmg = dmgInfo.dmg > health ? health : dmgInfo.dmg;
 
             dmgMaster.CallEventReceivedDamage(dmgInfo.origin, pDmg);
@@ -47,6 +49,7 @@ namespace URPMk2
             health -= dmgInfo.dmg;
             if (health < 0)
             {
+                isDestroyed = true;
                 health = 0; 
                 GlobalDamageMaster.CallEventRegisterDestruction(dmgInfo.origin); // reward for destruction
                 dmgMaster.CallEventDestroyObject(dmgInfo.origin);

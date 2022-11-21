@@ -107,7 +107,8 @@ namespace URPMk2
         {
             if (!FSMSettings.shouldInformAllies ||
                 isInformingAllies ||
-                target == null)
+                target == null ||
+                !gameObject.activeSelf)
                 return;
 
             isInformingAllies = true;
@@ -118,7 +119,9 @@ namespace URPMk2
 
             for (int i = 0; i < numAllies; i++)
             {
-                teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(target);
+                if (teamMembersInRange[i].Object.activeSelf &&
+                    teamMembersInRange[i].Object != gameObject)
+                    teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(target);
             }
 
             StartCoroutine(ResetInformState());

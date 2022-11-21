@@ -87,9 +87,6 @@ namespace URPMk2
             ActionSegment<float> conActions = actions.ContinuousActions;
 
 			Vector3 moveDir = new Vector3(conActions[0], conActions[1], conActions[2]) * (rangeMultiply * conActions[3]);
-			/*Vector3 moveMqn = new Vector3(conActions[3], conActions[4], conActions[5]) * rangeMultiply;
-			moveDir.x *= moveMqn.x; moveDir.y *= moveMqn.y; moveDir.z *= moveMqn.z;*/
-
             SetAgentDestination(moveDir);
         }
 		public void PassReward()

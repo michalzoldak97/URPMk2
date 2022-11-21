@@ -46,7 +46,8 @@ namespace URPMk2
 				currentAmmo = 0;
 				weaponMaster.SetIsWeaponLoaded(false);
                 weaponMaster.CallEventReleaseTrigger();
-				StartCoroutine(CallWeaponReload());
+				if (gameObject.activeInHierarchy)
+					StartCoroutine(CallWeaponReload());
 			}
 		}
 		protected override void OnReload()

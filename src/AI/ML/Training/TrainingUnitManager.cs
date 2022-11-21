@@ -78,7 +78,8 @@ namespace URPMk2
             if (!IsEpisodeFinished(agentGroupID))
                 return;
 
-            CallEventEndEpisode(agents[killer].GroupID, agentGroupID);
+            int winGroupID = agents.ContainsKey(killer) ? agents[killer].GroupID : 2; // TODO: handle Player
+            CallEventEndEpisode(winGroupID, agentGroupID);
         }
         public void CallEventAddGroupReward(int groupID, float reward)
         {
@@ -88,9 +89,15 @@ namespace URPMk2
         {
             //EventAgentDamaged?.Invoke(origin, damaged, dmg);
         }
+        private IEnumerator ResetEpisode()
+        {
+            yield return new WaitForSeconds(9000);
+            CallEventEndEpisode(-1, -1);
+        }
         private void StartNewEpisode()
         {
             CallEventStartNewEpisode();
+            StartCoroutine(ResetEpisode());
         }
         private void ClearAgentsList()
         {
@@ -106,6 +113,7 @@ namespace URPMk2
         {
             EventEndEpisode?.Invoke(winID, looseID);
 			ClearAgentsList();
+            StopAllCoroutines();
 			StartNewEpisode();
         }
     }

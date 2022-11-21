@@ -36,6 +36,9 @@ namespace URPMk2
 		}
 		private void SpawnDestructionEffect(Transform foo)
         {
+			if (destructionEffect == null)
+				return;
+
 			destructionEffect.transform.SetParent(null);
 			destructionEffect.SetActive(true);
 		}
