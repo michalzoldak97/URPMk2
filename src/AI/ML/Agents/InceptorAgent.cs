@@ -32,6 +32,9 @@ namespace URPMk2
 			if (!IsChangeRelevant(pos))
 				return;
 
+			if (pos.z > lastPos.z)
+				AddReward(0.0005f);
+
             lastPos = pos;
             
             if (Physics.Raycast(pos, -Vector3.up * pos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))

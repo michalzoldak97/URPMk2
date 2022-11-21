@@ -32,8 +32,12 @@ namespace URPMk2
 		{
 			activeAgentsCount--;
 
-			if (activeAgentsCount < 1 &&
-				isTargetGroup)
+			if (!isTargetGroup)
+				return;
+
+			tuManager.CallEventAddGroupReward(oppositeAgentTeamGroupID, 0.075f);
+
+			if (activeAgentsCount < 1)
 				tuManager.CallEventEndEpisode(oppositeAgentTeamGroupID, 2);
         }
 		private void SpawnNewTeam()
