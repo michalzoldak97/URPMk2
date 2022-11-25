@@ -28,7 +28,7 @@ namespace URPMk2
 			if (agentToReward == null)
 				return;
 
-			agentToReward.Agent.AddReward(0.25f);
+			agentToReward.Agent.AddReward(0.01f);
 			tuManager.CallEventAddGroupReward(agentToReward.GroupID, 0.01f);
 		}
 		private void OnEpisodeEnd(int winID, int looseID)

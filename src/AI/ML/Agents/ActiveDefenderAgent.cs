@@ -11,7 +11,7 @@ namespace URPMk2
         [SerializeField] private bool isTrainingMode;
         [SerializeField] private Vector3 maxPos;
         private float dmgInflicted;
-        private const float rangeMultiply = 128f;
+        private const float rangeMultiply = 256f;
         private string dmgKey;
         private Vector3 lastPos, lastAgentMapPos, lastEnemyMapPos;
         private NavMeshAgent navAgent;
@@ -23,16 +23,16 @@ namespace URPMk2
             navAgent = GetComponent<NavMeshAgent>(); 
             dmgKey = transform.name + transform.GetInstanceID();
         }
-        private bool IsChangeRelevant(Vector3 newPos)
-        {
-            return (lastPos - newPos).sqrMagnitude > 9f;
-        }
         private void SetAgentDestination(Vector3 dir)
         {
             Vector3 pos = (dir + mlManager.AgentTransform.position);
 
-            if (!IsChangeRelevant(pos))
+            float change = (lastPos - pos).sqrMagnitude;
+            if (change < 9f)
                 return;
+
+            if (change > 400f)
+                AddReward(0.001f);
 
             lastPos = pos;
 
@@ -75,7 +75,6 @@ namespace URPMk2
                     aPos.y / maxPos.y,
                     aPos.z / maxPos.z
                );
-               Debug.Log("Set agent position to: " + mlManager.AgentObservations.AgentMapPosition + " max pos " + maxPos);
                lastAgentMapPos = aPos;
             }
            
