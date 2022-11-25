@@ -38,7 +38,7 @@ namespace URPMk2
             inflictedReceived[0] = currentDmg > dmgInflicted ? currentDmg - dmgInflicted : 0f;
 
 			if (inflictedReceived[0] == 0f)
-				inflictedReceived[1] += 1f; // penalty for not inflicting damage
+				inflictedReceived[1] += 5f; // penalty for not inflicting damage
 
             dmgInflicted = currentDmg;
 

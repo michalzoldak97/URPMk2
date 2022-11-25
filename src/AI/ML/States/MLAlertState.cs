@@ -1,16 +1,10 @@
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-
 namespace URPMk2
 {
 	public class MLAlertState : IMLState
 	{
+
+        protected MLStateManager mlManager;
         private int enemyNotSeenCnt, enemyDetections;
-        private readonly MLStateManager mlManager;
-        public MLAlertState(MLStateManager mlManager)
-        {
-            this.mlManager = mlManager;
-        }
         private void Look()
 		{
             FSMTarget target = mlManager.MyNPCMaster.NpcLook.IsTargetVisible();
@@ -41,21 +35,8 @@ namespace URPMk2
             }
         }
 
-        private void UpdateObservations()
-        {
-            bool pursueTargetExists = mlManager.PursueTarget != null;
-
-            mlManager.AgentObservations.numOfVisibleEnemies =
-                pursueTargetExists ? (1 / mlManager.GetFSMSettings().enemiesBufferSize) : 0;
-            mlManager.AgentObservations.distanceToEnemy =
-                pursueTargetExists ?
-                Vector3.Distance(mlManager.PursueTarget.position, mlManager.AgentTransform.position) / mlManager.GetFSMSettings().sightRange :
-                -1f;
-            mlManager.AgentObservations.enemyDirection =
-                pursueTargetExists ? 
-                (mlManager.PursueTarget.position - mlManager.AgentTransform.position).normalized :
-                new Vector3(-1f, -1f, -1f);
-        }
+        protected virtual void UpdateObservations() { }
+ 
 
         public void UpdateState()
 		{

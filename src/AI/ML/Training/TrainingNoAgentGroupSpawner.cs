@@ -1,5 +1,4 @@
-using System.IO;
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 namespace URPMk2
@@ -13,29 +12,40 @@ namespace URPMk2
 	{
 		[SerializeField] private bool isTargetGroup;
 		[SerializeField] private int oppositeAgentTeamGroupID;
+		[SerializeField] private int maxSquads;
 		[SerializeField] private GameObject agentPrefab;
 		[SerializeField] private Transform[] spawnPoints;
         [SerializeField] private AIWaypoints[] agentPaths;
 		[SerializeField] private TrainingUnitManager tuManager;
 
 		private int activeAgentsCount;
-		private void OnEnable()
+        private int squadsNum;
+        private void OnEnable()
 		{
-			tuManager.EventStartNewEpisode += SpawnNewTeam;
+            tuManager.EventStartNewEpisode += ResetSquadsNum;
+            tuManager.EventStartNewEpisode += SpawnNewTeam;
         }
 		
 		private void OnDisable()
 		{
+            tuManager.EventStartNewEpisode -= ResetSquadsNum;
             tuManager.EventStartNewEpisode -= SpawnNewTeam;
         }
 		public void OnAgentDestroyed(Transform killer)
 		{
 			activeAgentsCount--;
 
-			if (!isTargetGroup)
+            if (activeAgentsCount < 1 &&
+				squadsNum < maxSquads)
+			{
+				squadsNum++;
+				SpawnNewTeam();
+            }
+
+            if (!isTargetGroup)
 				return;
 
-			tuManager.CallEventAddGroupReward(oppositeAgentTeamGroupID, 0.075f);
+			tuManager.CallEventAddGroupReward(oppositeAgentTeamGroupID, 0.1f);
 
 			if (activeAgentsCount < 1)
 				tuManager.CallEventEndEpisode(oppositeAgentTeamGroupID, 2);
@@ -58,5 +68,9 @@ namespace URPMk2
                 agent.GetComponent<IStateManager>().SetWaypoints(path.waypoints);
             }
 		}
+		private void ResetSquadsNum()
+		{
+			squadsNum = 1;
+        }
 	}
 }

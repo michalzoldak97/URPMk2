@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace URPMk2
 {
-	public class MLStateManager : MonoBehaviour, IStateManager
+    public class MLStateManager : MonoBehaviour, IStateManager
     {
         [SerializeField] private FSMSettingsSO FSMSettings;
         public FSMSettingsSO GetFSMSettings() { return FSMSettings; }
@@ -16,7 +16,7 @@ namespace URPMk2
         public Transform PursueTarget { get; set; }
         public NPCMaster MyNPCMaster { get; private set; }
         public NavMeshAgent MyNavMeshAgent { get; private set; }
-        public MLAgentObservations AgentObservations { get; set; }
+        // public IMLAgentObservations AgentObservations {get; set;}
         public void SetWaypoints(Transform[] waypoints) { }
 
         public IMLState currentState;
@@ -30,14 +30,8 @@ namespace URPMk2
         private WaitForSeconds waitForRecover, waitForNextAlliesInform;
         private DamagableMaster dmgMaster;
         private FSMRotationController rotationController;
-        private IMLAgent mlAgent;
 
-        private void SetStateReferences()
-        {
-            exploreState = new MLExploreState(this);
-            alertState = new MLAlertState(this);
-            combatState = new MLCombatState(this);
-        }
+        protected virtual void SetBehaviorReferences() {}
         private void SetInit()
         {
             checkRate = Random.Range(
@@ -50,14 +44,12 @@ namespace URPMk2
             rotationController = GetComponent<FSMRotationController>();
             waitForRecover = new WaitForSeconds(FSMSettings.recoverFromDmgTime);
             waitForNextAlliesInform = new WaitForSeconds(FSMSettings.informAlliesPeriod);
-            AgentObservations = new MLAgentObservations();
-            mlAgent = GetComponent<IMLAgent>();
 
             currentState = exploreState;
         }
         private void OnEnable()
         {
-            SetStateReferences();
+            SetBehaviorReferences();
             SetInit();
             dmgMaster.EventReceivedDamage += ActivateStruckState;
         }
@@ -85,14 +77,11 @@ namespace URPMk2
         }
         private void RunUpdateActions()
         {
-            float t = Time.time;
-            if (t <= nextCheck)
+            if (Time.time <= nextCheck)
                 return;
 
-            nextCheck = checkRate + t;
+            nextCheck = checkRate + Time.time;
             currentState.UpdateState();
-
-            mlAgent.PassReward();
         }
         private void Update()
         {

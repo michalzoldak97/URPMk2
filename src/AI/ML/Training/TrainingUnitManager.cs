@@ -12,9 +12,6 @@ namespace URPMk2
         public delegate void TrainingUnitAgentDestructionHandler(Transform killer, Transform agent);
         public event TrainingUnitAgentDestructionHandler EventAgentDestroyed;
 
-        public delegate void TrainingUnitAgentDamageEventHandler(Transform origin, Transform damaged, float dmg);
-        public event TrainingUnitAgentDamageEventHandler EventAgentDamaged;
-
         public delegate void TrainingUnitRewardEventManager(int groupID, float reward);
         public event TrainingUnitRewardEventManager EventAddGroupReward;
 
@@ -84,10 +81,6 @@ namespace URPMk2
         public void CallEventAddGroupReward(int groupID, float reward)
         {
             EventAddGroupReward?.Invoke(groupID, reward);
-        }
-        public void CallEventAgentDamaged(Transform origin, Transform damaged, float dmg)
-        {
-            //EventAgentDamaged?.Invoke(origin, damaged, dmg);
         }
         private IEnumerator ResetEpisode()
         {

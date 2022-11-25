@@ -5,14 +5,10 @@ namespace URPMk2
 {
 	public class MLCombatState : IMLState
 	{
-		private int numOfEnemies;
-		private ITeamMember target;
-        private readonly MLStateManager mlManager;
-		public MLCombatState(MLStateManager mlManager)
-		{
-			this.mlManager = mlManager;
-        }
-		private void Look()
+        protected int numOfEnemies;
+        protected ITeamMember target;
+        protected MLStateManager mlManager;
+        private void Look()
 		{
 			bool shouldAssignTarget = target?.ObjTransform == null;
 
@@ -57,23 +53,7 @@ namespace URPMk2
             mlManager.LaunchWeaponSystem();
             mlManager.AlertAllies(target.ObjTransform);
         }
-		private void UpdateObservations()
-		{
-			mlManager.AgentObservations.numOfVisibleEnemies = numOfEnemies > 0 ?
-				(numOfEnemies / mlManager.GetFSMSettings().enemiesBufferSize) : 0;
-
-			bool targetExists = target != null;
-
-            mlManager.AgentObservations.distanceToEnemy =
-                targetExists ?
-                Vector3.Distance(target.ObjTransform.position, mlManager.AgentTransform.position) / mlManager.GetFSMSettings().sightRange :
-                -1f;
-
-            mlManager.AgentObservations.enemyDirection =
-                targetExists ?
-                (target.ObjTransform.position - mlManager.AgentTransform.position).normalized :
-                 new Vector3(-1f, -1f, -1f);
-        }
+		protected virtual void UpdateObservations() {}
         public void UpdateState()
 		{
 			Look();

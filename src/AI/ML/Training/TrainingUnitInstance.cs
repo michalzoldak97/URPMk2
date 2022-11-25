@@ -18,19 +18,13 @@ namespace URPMk2
 		private void OnEnable()
 		{
 			SetInit();
-			dmgMaster.EventReceivedDamage += OnObjectDamage;
 			dmgMaster.EventDestroyObject += OnObjectDestroy;
         }
 		
 		private void OnDisable()
 		{
-            dmgMaster.EventReceivedDamage -= OnObjectDamage;
             dmgMaster.EventDestroyObject -= OnObjectDestroy;
         }
-		private void OnObjectDamage(Transform origin, float dmg)
-		{
-			tuManager.CallEventAgentDamaged(origin, transform, dmg);
-		}
 		private void OnObjectDestroy(Transform killer)
 		{
 			tuManager.CallEventAgentDestroyed(killer, transform);
