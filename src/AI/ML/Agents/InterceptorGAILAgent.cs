@@ -83,56 +83,32 @@ namespace URPMk2
                 navAgent.SetDestination(navHit.position);
             }
         }
-        private void SetOnMapPosition()
+        private Vector3 GetOnMapPosition(Vector3 inVec)
         {
-            Vector3 aPos = mlManager.AgentTransform.position;
-            if (aPos != lastAgentMapPos)
-            {
-                mlManager.AgentObservations.AgentMapPosition = new Vector3(
-                     aPos.x / maxPos.x,
-                     aPos.y / maxPos.y,
-                     aPos.z / maxPos.z
-                );
-                lastAgentMapPos = aPos;
-            }
+            if (inVec == emptyInput)
+                return inVec;
 
-            Vector3 ePos = mlManager.AgentObservations.EnemyMapPosition;
-            if (ePos != emptyInput &&
-                ePos != lastEnemyMapPos)
-            {
-                mlManager.AgentObservations.EnemyMapPosition = new Vector3(
-                    ePos.x / maxPos.x,
-                    ePos.y / maxPos.y,
-                    ePos.z / maxPos.z
+            Vector3 outVec = new Vector3(
+                    inVec.x / maxPos.x,
+                    inVec.y / maxPos.y,
+                    inVec.z / maxPos.z
                 );
-                lastEnemyMapPos = ePos;
-            }
-            Vector3 sPos = mlManager.AgentObservations.SpottedEnemyMapPosition;
-            if (sPos != emptyInput &&
-                sPos != lastSpottedMapPos)
-            {
-                mlManager.AgentObservations.SpottedEnemyMapPosition = new Vector3(
-                    sPos.x / maxPos.x,
-                    sPos.y / maxPos.y,
-                    sPos.z / maxPos.z
-                );
-                lastSpottedMapPos = sPos;
-            }
+
+            return outVec;
         }
         public override void CollectObservations(VectorSensor sensor)
         {
-            SetOnMapPosition();
-
             sensor.AddObservation(health / initHealth);
-            sensor.AddObservation(mlManager.AgentObservations.AgentMapPosition);
-            sensor.AddObservation(mlManager.AgentObservations.EnemyMapPosition);
-            sensor.AddObservation(mlManager.AgentObservations.SpottedEnemyMapPosition);
+            sensor.AddObservation(GetOnMapPosition(mlManager.AgentTransform.position));
+            sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition));
+            sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPosition));
 
-            gManager.UpdateObservations(
-                mlManager.AgentObservations.AgentMapPosition, 
-                mlManager.AgentObservations.EnemyMapPosition, 
-                mlManager.AgentObservations.SpottedEnemyMapPosition,
-                health / initHealth);
+            if (isHeuristic)
+                gManager.UpdateObservations(
+                    GetOnMapPosition(mlManager.AgentObservations.AgentMapPosition),
+                    GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition),
+                    GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPosition),
+                    health / initHealth);
         }
         private float GetLastInflictedDamage()
         {
@@ -182,16 +158,14 @@ namespace URPMk2
                 hDestination = hit.point;
 
             if (NavMesh.SamplePosition(hDestination, out NavMeshHit navHit, 1f, NavMesh.AllAreas))
-            {
-                Debug.Log("nav pos is: " + navHit.position);
                 navAgent.SetDestination(navHit.position);
-            }
 
             isMoveAction = false;
         }
-        private void FixedUpdate()
+        public void OnAgentWon()
         {
-            Debug.Log("Agent dest: " + navAgent.destination + " is stopped " + navAgent.isStopped + " is stale " + navAgent.isPathStale);
+            AddReward(1f);
+            EndEpisode();
         }
     }
 }
