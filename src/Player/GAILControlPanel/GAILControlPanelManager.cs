@@ -1,6 +1,8 @@
 using TMPro;
+using Unity.MLAgents;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Timeline;
 
 namespace URPMk2
 {
@@ -8,11 +10,14 @@ namespace URPMk2
 	{
         [SerializeField] private GameObject agentPrefab;
         [SerializeField] private GameObject GAILPanel;
-		[SerializeField] private Transform GAILCamera;
-        [SerializeField] private Transform agentSpawnPos;
+		[SerializeField] private Transform GAILCameraTransform;
+        [SerializeField] private Transform marker;
+        [SerializeField] private Transform[] agentSpawnPos;
         [SerializeField] private TMP_Text[] observations;
 
-        private bool isGAILPanelActive;
+        private bool isGAILPanelActive, isClickOff;
+        private Transform currentAgent;
+        private Camera GAILCamera;
         private InterceptorGAILAgent igAgent;
         private DamagableMaster dmgMaster;
 
@@ -29,19 +34,30 @@ namespace URPMk2
             observations[8].text = spottedPos.z.ToString();
             observations[9].text = health.ToString();
         }
-        private void StartNewEpisode()
+        private void SetGAILCameraPosition()
         {
-            GameObject agent = Instantiate(agentPrefab, agentSpawnPos.position, agentSpawnPos.rotation);
+            Vector3 aPos = currentAgent.position;
+            aPos.y = GAILCameraTransform.transform.position.y;
+            GAILCameraTransform.transform.position = aPos;
+        }
+        private void SpawnNewAgent()
+        {
+            Transform spawnPos = agentSpawnPos[Random.Range(0, agentSpawnPos.Length - 1)];
+            GameObject agent = Instantiate(agentPrefab, spawnPos.position, spawnPos.rotation);
+            currentAgent = agent.transform;
             igAgent = agent.GetComponent<InterceptorGAILAgent>();
             dmgMaster = agent.GetComponent<DamagableMaster>();
             igAgent.SetGAILManager(this);
-            Vector3 aPos = agent.transform.position;
-            aPos.y = GAILCamera.transform.position.y;
-            GAILCamera.transform.position = aPos;
+            SetGAILCameraPosition();
+        }
+        private void StartNewEpisode(Transform killer)
+        {
+            SpawnNewAgent();
         }
         private void SetInit()
 		{
-            StartNewEpisode();
+            GAILCamera = GAILCameraTransform.GetComponent<Camera>();
+            StartNewEpisode(transform);
         }
         private void OnEnable()
 		{
@@ -50,6 +66,8 @@ namespace URPMk2
             InputManager.playerInputActions.Humanoid.ToggleGAILPanel.Enable();
             InputManager.playerInputActions.UI.ToggleGAILPanel.performed += DisableGAILPanelUI;
             InputManager.playerInputActions.UI.ToggleGAILPanel.Enable();
+            InputManager.playerInputActions.UI.Click.performed += SetAgentDestination;
+            dmgMaster.EventDestroyObject += StartNewEpisode;
         }
 		
 		private void OnDisable()
@@ -58,8 +76,29 @@ namespace URPMk2
             InputManager.playerInputActions.Humanoid.ToggleGAILPanel.Disable();
             InputManager.playerInputActions.UI.ToggleGAILPanel.performed -= DisableGAILPanelUI;
             InputManager.playerInputActions.UI.ToggleGAILPanel.Disable();
+            InputManager.playerInputActions.UI.Click.performed -= SetAgentDestination;
+            dmgMaster.EventDestroyObject -= StartNewEpisode;
         }
+        private void SetAgentDestination(InputAction.CallbackContext obj)
+        {
+            if (isClickOff)
+            {
+                isClickOff = !isClickOff;
+                return;
+            }
 
+            Ray fromCamera = GAILCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            if (Physics.Raycast(fromCamera, out RaycastHit hit))
+            {
+                Vector3 dirToPass = hit.point;
+                dirToPass.y = 1f;
+                Debug.Log("Dir to pass is: " + dirToPass);
+                marker.position = dirToPass;
+                igAgent.SetHDestination(dirToPass);
+            }
+
+            isClickOff = !isClickOff;
+        }
 		private void ToggleGAILPanelUI()
 		{
             CursorManager.ToggleCursorState(isGAILPanelActive);
@@ -81,7 +120,7 @@ namespace URPMk2
             GAILCamera.gameObject.SetActive(isGAILPanelActive);
 
             if (isGAILPanelActive)
-                CurrentMainCameraManager.SetCurrentCamera(GAILCamera);
+                CurrentMainCameraManager.SetCurrentCamera(GAILCameraTransform);
             else
                 CurrentMainCameraManager.RestoreMainCamera();
 
@@ -96,6 +135,12 @@ namespace URPMk2
         {
             isGAILPanelActive = !isGAILPanelActive;
             ToggleGAILPanelUI();
+        }
+        private void FixedUpdate()
+        {
+            if (isGAILPanelActive &&
+                currentAgent != null)
+                SetGAILCameraPosition();
         }
     }
 }

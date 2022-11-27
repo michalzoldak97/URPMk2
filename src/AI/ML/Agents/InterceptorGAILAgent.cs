@@ -3,16 +3,19 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 using UnityEngine.AI;
+
 namespace URPMk2
 {
     public class InterceptorGAILAgent : Agent
     {
         [SerializeField] private bool isTrainingMode;
+        [SerializeField] private bool isHeuristic;
         [SerializeField] private Vector3 maxPos;
+        private bool isMoveAction;
         private float dmgInflicted, health, initHealth;
         private const float rangeMultiply = 128f;
         private string dmgKey;
-        private Vector3 lastPos, lastAgentMapPos, lastEnemyMapPos, lastSpottedMapPos, emptyInput;
+        private Vector3 lastPos, lastAgentMapPos, lastEnemyMapPos, lastSpottedMapPos, emptyInput, hDestination;
         private NavMeshAgent navAgent;
         private InterceptorStateManager mlManager;
         private GAILControlPanelManager gManager;
@@ -57,7 +60,7 @@ namespace URPMk2
         }
         private void OnAgentDestroy(Transform killer)
         {
-
+            EndEpisode();
         }
         private bool IsChangeRelevant(Vector3 newPos)
         {
@@ -78,27 +81,6 @@ namespace URPMk2
             if (NavMesh.SamplePosition(pos, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
             {
                 navAgent.SetDestination(navHit.position);
-            }
-        }
-        public override void OnEpisodeBegin()
-        {
-            bool isSearchPos = true;
-            int numAttempts = 0;
-            while (isSearchPos && numAttempts < 100)
-            {
-                Vector3 rndPos = new Vector3(
-                    Random.Range(5f, 128f),
-                    1f,
-                    Random.Range(5f, 128f)
-                );
-                if (Physics.Raycast(rndPos, -Vector3.up * rndPos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
-                    rndPos = hit.point;
-                if (NavMesh.SamplePosition(rndPos, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
-                {
-                    navAgent.SetDestination(navHit.position);
-                    isSearchPos = false;
-                }
-                numAttempts++;
             }
         }
         private void SetOnMapPosition()
@@ -177,11 +159,39 @@ namespace URPMk2
         }
         public override void OnActionReceived(ActionBuffers actions)
         {
-            ActionSegment<float> conActions = actions.ContinuousActions;
+            if (!isHeuristic)
+            {
+                ActionSegment<float> conActions = actions.ContinuousActions;
 
-            Vector3 moveDir = new Vector3(conActions[0], conActions[1], conActions[2]) * (rangeMultiply * conActions[3]);
-            SetAgentDestination(moveDir);
+                Vector3 moveDir = new Vector3(conActions[0], conActions[1], conActions[2]) * (rangeMultiply * conActions[3]);
+                SetAgentDestination(moveDir);
+            }
             CalculateReward();
+        }
+        public void SetHDestination(Vector3 des)
+        {
+            hDestination = des;
+            isMoveAction = true;
+        }
+        public override void Heuristic(in ActionBuffers actionsOut)
+        {
+            if (!isMoveAction)
+                return;
+
+            if (Physics.Raycast(hDestination, -Vector3.up * hDestination.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
+                hDestination = hit.point;
+
+            if (NavMesh.SamplePosition(hDestination, out NavMeshHit navHit, 1f, NavMesh.AllAreas))
+            {
+                Debug.Log("nav pos is: " + navHit.position);
+                navAgent.SetDestination(navHit.position);
+            }
+
+            isMoveAction = false;
+        }
+        private void FixedUpdate()
+        {
+            Debug.Log("Agent dest: " + navAgent.destination + " is stopped " + navAgent.isStopped + " is stale " + navAgent.isPathStale);
         }
     }
 }
