@@ -36,15 +36,26 @@ namespace URPMk2
                 return;
             }
 
-            if (agentPos.x < enemyPos.x)
+            if (agentPos.x > enemyPos.x)
+            {
                 directionImages[2].color = Color.red;
+                directionImages[6].color = Color.white;
+            }
             else
+            {
+                directionImages[2].color = Color.white;
                 directionImages[6].color = Color.red;
-
-            if (agentPos.z < enemyPos.z)
+            }
+            if (agentPos.z > enemyPos.z)
+            {
                 directionImages[0].color = Color.red;
+                directionImages[4].color = Color.white;
+            }
             else
+            {
+                directionImages[0].color = Color.white;
                 directionImages[4].color = Color.red;
+            }
         }
         public void UpdateObservations(Vector3 agentPos, Vector3 enemyPos, Vector3 spottedPos, float health)
         {

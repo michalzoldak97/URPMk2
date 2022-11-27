@@ -105,7 +105,7 @@ namespace URPMk2
 
             if (isHeuristic)
                 gManager.UpdateObservations(
-                    GetOnMapPosition(mlManager.AgentObservations.AgentMapPosition),
+                    GetOnMapPosition(mlManager.AgentTransform.position),
                     GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition),
                     GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPosition),
                     health / initHealth);
