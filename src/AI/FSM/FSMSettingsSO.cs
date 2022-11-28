@@ -19,6 +19,7 @@ namespace URPMk2
 		public Teams[] healthRecoverTeams;
 		public Teams[] ammoRecoverTeams;
 		public Teams[] teamsToDefend;
+		public Teams[] teamsToAlert;
 		public float checkRate;
 		public float checkRateOffset;
 		public float recoverFromDmgTime;

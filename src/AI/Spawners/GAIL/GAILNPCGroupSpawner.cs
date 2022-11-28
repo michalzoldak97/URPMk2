@@ -23,7 +23,7 @@ namespace URPMk2
 		{
 			agentsCount--;
 
-			if (agentsCount >= 0)
+			if (agentsCount > 0)
 				return;
 
 			SpawnNewGroup();

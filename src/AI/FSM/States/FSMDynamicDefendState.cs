@@ -89,7 +89,8 @@ namespace URPMk2
 					}
 				}
 			}
-			fManager.RotateTowardsTarget();
+            fManager.AlertAllies();
+            fManager.RotateTowardsTarget();
 			fManager.LaunchWeaponSystem();
 		}
 		public void UpdateState()
