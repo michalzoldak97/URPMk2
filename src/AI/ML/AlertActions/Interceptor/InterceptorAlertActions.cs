@@ -33,7 +33,6 @@ namespace URPMk2
         }
         private void OnAlertReceived(Transform target)
         {
-            Debug.Log("Received an alert");
             mlManager.AgentObservations.SpottedEnemyMapPosition = target.position;
             StopAllCoroutines();
             StartCoroutine(ClearSpottedEnemyInfo());

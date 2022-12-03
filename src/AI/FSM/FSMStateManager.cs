@@ -163,7 +163,6 @@ namespace URPMk2
 
 			isInformingAllies = true;
 
-			Debug.Log("Start to alert teams: " + FSMSettings.teamsToAlert[0].ToString());
 			List<ITeamMember> teamMembersInRange = TeamMembersManager.GetTeamMembersInRange(FSMSettings.teamsToAlert, myTransform.position, FSMSettings.informAlliesRangePow);
 
 			int numAllies = teamMembersInRange.Count;

@@ -7,6 +7,7 @@ namespace URPMk2
 	public class GAILControlPanelController : MonoBehaviour, IPointerClickHandler
 	{
 		[SerializeField] private Camera GAILPanelCamera;
+		[SerializeField] private GAILControlPanelManager gcpManager;
 		public Vector3 ScreenClickPoint { get; private set; }
 
 		private RawImage screenImage;
@@ -25,7 +26,9 @@ namespace URPMk2
 
 			if (Physics.Raycast(worldRay, out RaycastHit hit, 1000f))
                 ScreenClickPoint = hit.point;
-		}
+
+			gcpManager.SetAgentDestination(ScreenClickPoint);
+        }
 		public void OnPointerClick(PointerEventData eventData)
 		{
 			Vector2 cursorPos = new Vector2(0f, 0f);

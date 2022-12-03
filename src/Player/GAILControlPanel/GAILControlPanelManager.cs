@@ -16,12 +16,13 @@ namespace URPMk2
         [SerializeField] private Image[] directionImages;
         [SerializeField] private GAILControlPanelController panelController;
 
-        private bool isGAILPanelActive, isClickOff;
+        private bool isGAILPanelActive;
         private Transform currentAgent;
         private Camera GAILCamera;
         private InterceptorGAILAgent igAgent;
         private DamagableMaster dmgMaster;
 
+        public delegate void AgentDirectionSetManager();
 
         private void UpdateDirectionImage(Vector3 agentPos, Vector3 enemyPos)
         {
@@ -57,7 +58,7 @@ namespace URPMk2
                 directionImages[4].color = Color.red;
             }
         }
-        public void UpdateObservations(Vector3 agentPos, Vector3 enemyPos, Vector3 spottedPos, float health)
+        public void UpdateObservations(Vector3 agentPos, Vector3 enemyPos, Vector3 spottedPos, float health, float reward)
         {
             observations[0].text = agentPos.x.ToString();
             observations[1].text = agentPos.y.ToString();
@@ -69,6 +70,7 @@ namespace URPMk2
             observations[7].text = spottedPos.y.ToString();
             observations[8].text = spottedPos.z.ToString();
             observations[9].text = health.ToString();
+            observations[10].text = reward.ToString();
 
             UpdateDirectionImage(agentPos, enemyPos);
         }
@@ -113,7 +115,6 @@ namespace URPMk2
             InputManager.playerInputActions.Humanoid.ToggleGAILPanel.Enable();
             InputManager.playerInputActions.UI.ToggleGAILPanel.performed += DisableGAILPanelUI;
             InputManager.playerInputActions.UI.ToggleGAILPanel.Enable();
-            InputManager.playerInputActions.UI.Click.performed += SetAgentDestination;
         }
 		
 		private void OnDisable()
@@ -122,21 +123,11 @@ namespace URPMk2
             InputManager.playerInputActions.Humanoid.ToggleGAILPanel.Disable();
             InputManager.playerInputActions.UI.ToggleGAILPanel.performed -= DisableGAILPanelUI;
             InputManager.playerInputActions.UI.ToggleGAILPanel.Disable();
-            InputManager.playerInputActions.UI.Click.performed -= SetAgentDestination;
         }
-        private void SetAgentDestination(InputAction.CallbackContext obj)
+        public void SetAgentDestination(Vector3 toSetPos)
         {
-            if (isClickOff)
-            {
-                isClickOff = !isClickOff;
-                return;
-            }
-
-            Vector3 toSetPos = panelController.ScreenClickPoint;
             igAgent.SetHDestination(toSetPos);
             marker.position = toSetPos;
-            
-            isClickOff = !isClickOff;
         }
 		private void ToggleGAILPanelUI()
 		{

@@ -12,7 +12,7 @@ namespace URPMk2
         [SerializeField] private bool isHeuristic;
         [SerializeField] private Vector3 maxPos;
         private bool isMoveAction;
-        private float dmgInflicted, health, initHealth;
+        private float dmgInflicted, health, initHealth, reward;
         private const float rangeMultiply = 128f;
         private string dmgKey;
         private Vector3 lastPos, lastAgentMapPos, lastEnemyMapPos, lastSpottedMapPos, emptyInput, hDestination;
@@ -108,7 +108,8 @@ namespace URPMk2
                     GetOnMapPosition(mlManager.AgentTransform.position),
                     GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition),
                     GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPosition),
-                    health / initHealth);
+                    health / initHealth,
+                    reward);
         }
         private float GetLastInflictedDamage()
         {
@@ -129,9 +130,15 @@ namespace URPMk2
             float dmg = GetLastInflictedDamage();
 
             if (dmg <= 0f)
+            {
                 AddReward(-0.00001f);
+                reward -= 0.00001f;
+            }
             else
+            {
                 AddReward(dmg * 0.01f);
+                reward += dmg * 0.01f;
+            }
         }
         public override void OnActionReceived(ActionBuffers actions)
         {
