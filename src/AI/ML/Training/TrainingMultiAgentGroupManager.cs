@@ -39,11 +39,12 @@ namespace URPMk2
                 aObj.GetComponent<TrainingUnitInstance>().SetTrainingUnitManager(tuManager);
                 IMultiAgentGroupMember agent = new MultiAgentGroupMember(groupID, aObj.transform, aObj.GetComponent<Agent>());
                 tuManager.RegisterAgent(agent);
-                MultiAgentGroup.RegisterAgent(agent.Agent);
+                //MultiAgentGroup.RegisterAgent(agent.Agent);
             }
         }
         private void StartGroupEpisode()
         {
+            Debug.Log("Start new episode");
             InstantiateNewAgentGroup();
         }
         private void GetGroupReward(int groupID, float reward)

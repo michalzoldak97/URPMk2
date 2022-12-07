@@ -13,9 +13,9 @@ namespace URPMk2
         [SerializeField] private Vector3 maxPos;
         private bool isMoveAction;
         private float dmgInflicted, health, initHealth, reward;
-        private const float rangeMultiply = 128f;
+        private const float rangeMultiply = 256f;
         private string dmgKey;
-        private Vector3 lastPos, lastAgentMapPos, lastEnemyMapPos, lastSpottedMapPos, emptyInput, hDestination;
+        private Vector3 lastPos, emptyInput, hDestination;
         private NavMeshAgent navAgent;
         private InterceptorStateManager mlManager;
         private GAILControlPanelManager gManager;
@@ -171,7 +171,6 @@ namespace URPMk2
         }
         public void OnAgentWon()
         {
-            AddReward(1f);
             EndEpisode();
         }
     }
