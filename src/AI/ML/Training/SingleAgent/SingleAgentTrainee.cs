@@ -8,23 +8,21 @@ namespace URPMk2
 		public SingleAgentTrainee(int sIdx, GameObject agentObj, SingleAgentTrainingManager saManager)
 		{
             spawnIdx = sIdx;
+            AgentObj = agentObj;
             agent = agentObj.GetComponent<Agent>();
             dmgMaster = agentObj.GetComponent<DamagableMaster>();
             this.saManager = saManager;
-            dmgInfo = new DamageInfo(DamageType.Gun, saManager.transform);
-            dmgInfo.dmg = 999;
             dmgMaster.EventDestroyObject += InformManager;
         }
+        public GameObject AgentObj { get; private set; }
 		private readonly int spawnIdx;
         private readonly Agent agent;
         private readonly DamagableMaster dmgMaster;
 		private readonly SingleAgentTrainingManager saManager;
-        private readonly DamageInfo dmgInfo;
 
         public void RemoveAgent()
         {
             agent.EndEpisode();
-            dmgMaster.CallEventHitByGun(dmgInfo);
         }
         private void InformManager(Transform killer)
         {

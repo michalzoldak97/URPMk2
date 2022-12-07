@@ -46,9 +46,19 @@ namespace URPMk2
                     );
             }
         }
+		private void RemoveAgent(int idx)
+		{
+            agents[idx].RemoveAgent();
+
+			if (agents[idx].AgentObj == null)
+				return;
+
+			agents[idx].AgentObj.SetActive(false);
+			Destroy(agents[idx].AgentObj, GameConfig.secToDestroy);
+        }
         private void OnAgentDestroyed(int idx)
 		{
-			agents[idx].RemoveAgent();
+			RemoveAgent(idx);
             GameObject agent = Instantiate(
                     agentPrefab,
                     spawnPositions[idx].position,
@@ -62,7 +72,7 @@ namespace URPMk2
 		{
 			for (int i = 0; i < spawnPositions.Length; i++)
 			{
-				agents[i].RemoveAgent();
+                RemoveAgent(i);
             }
 			agents.Clear();
         }
