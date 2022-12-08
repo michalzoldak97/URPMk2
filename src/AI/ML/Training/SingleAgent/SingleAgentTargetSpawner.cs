@@ -34,7 +34,7 @@ namespace URPMk2
             targetsCount--;
 
 			if (isMainTarget &&
-                targetsCount >= 0)
+                targetsCount <= 0)
 				saManager.CallEventFinishEpisode();
 		}
 		private void OnEpisodeStart()
@@ -45,11 +45,12 @@ namespace URPMk2
 				targets.Add(new SingleAgentTarget(target, this));
                 targetsCount++;
 			}
-			Debug.Log("Instantiated " + targetsCount + " targets");
 		}
 		private void OnEpisodeFinish()
 		{
-			foreach (SingleAgentTarget target in targets)
+			targetsCount = 0;
+
+            foreach (SingleAgentTarget target in targets)
 			{
 				if (target.Agent == null)
 					continue;

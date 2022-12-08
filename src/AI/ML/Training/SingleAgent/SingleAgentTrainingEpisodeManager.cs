@@ -26,7 +26,7 @@ namespace URPMk2
         }
 		private IEnumerator TimeoutEpisode()
 		{
-			yield return new WaitForSeconds(1500);
+			yield return new WaitForSeconds(2000);
 			Debug.Log("Episode timeout");
 			saManager.CallEventFinishEpisode();
 		}

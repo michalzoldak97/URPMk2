@@ -13,7 +13,7 @@ namespace URPMk2
         [SerializeField] private Vector3 maxPos;
         private bool isMoveAction;
         private float dmgInflicted, health, initHealth, reward;
-        private const float rangeMultiply = 256f;
+        private const float rangeMultiply = 512f;
         private string dmgKey;
         private Vector3 lastPos, emptyInput, hDestination;
         private NavMeshAgent navAgent;
@@ -62,15 +62,13 @@ namespace URPMk2
         {
             EndEpisode();
         }
-        private bool IsChangeRelevant(Vector3 newPos)
+        private void SetAgentDestination(Vector2 dir)
         {
-            return (lastPos - newPos).sqrMagnitude > 9f;
-        }
-        private void SetAgentDestination(Vector3 dir)
-        {
-            Vector3 pos = (dir + mlManager.AgentTransform.position);
+            Vector3 pos = mlManager.AgentTransform.position;
+            pos.x += dir.x;
+            pos.z += dir.y;
 
-            if (!IsChangeRelevant(pos))
+            if ((lastPos - pos).sqrMagnitude < 1f)
                 return;
 
             lastPos = pos;
@@ -83,14 +81,13 @@ namespace URPMk2
                 navAgent.SetDestination(navHit.position);
             }
         }
-        private Vector3 GetOnMapPosition(Vector3 inVec)
+        private Vector2 GetOnMapPosition(Vector3 inVec)
         {
             if (inVec == emptyInput)
                 return inVec;
 
-            Vector3 outVec = new Vector3(
+            Vector2 outVec = new Vector2(
                     inVec.x / maxPos.x,
-                    inVec.y / maxPos.y,
                     inVec.z / maxPos.z
                 );
 
@@ -131,8 +128,8 @@ namespace URPMk2
 
             if (dmg <= 0f)
             {
-                AddReward(-0.00001f);
-                reward -= 0.00001f;
+                AddReward(-0.0002f);
+                reward -= 0.0002f;
             }
             else
             {
@@ -142,13 +139,11 @@ namespace URPMk2
         }
         public override void OnActionReceived(ActionBuffers actions)
         {
-            if (!isHeuristic)
-            {
-                ActionSegment<float> conActions = actions.ContinuousActions;
+            ActionSegment<float> conActions = actions.ContinuousActions;
 
-                Vector3 moveDir = new Vector3(conActions[0], conActions[1], conActions[2]) * (rangeMultiply * conActions[3]);
-                SetAgentDestination(moveDir);
-            }
+            Vector2 moveDir = new Vector2(conActions[0], conActions[1]) * rangeMultiply;
+            SetAgentDestination(moveDir);
+
             CalculateReward();
         }
         public void SetHDestination(Vector3 des)
@@ -161,11 +156,10 @@ namespace URPMk2
             if (!isMoveAction)
                 return;
 
-            if (Physics.Raycast(hDestination, -Vector3.up * hDestination.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
-                hDestination = hit.point;
+            ActionSegment<float> continuousActionsOut = actionsOut.ContinuousActions;
 
-            if (NavMesh.SamplePosition(hDestination, out NavMeshHit navHit, 1f, NavMesh.AllAreas))
-                navAgent.SetDestination(navHit.position);
+            continuousActionsOut[0] = hDestination.x;
+            continuousActionsOut[1] = hDestination.z;
 
             isMoveAction = false;
         }
