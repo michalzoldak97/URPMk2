@@ -24,9 +24,9 @@ namespace URPMk2
 
         public delegate void AgentDirectionSetManager();
 
-        private void UpdateDirectionImage(Vector3 agentPos, Vector3 enemyPos)
+        private void UpdateDirectionImage(Vector2 agentPos, Vector2 enemyPos)
         {
-            Vector3 pos = new Vector3(-1f, -1f, -1f);
+            Vector2 pos = new Vector2(-1f, -1f);
             if (enemyPos == pos)
             {
                 foreach (Image img in directionImages)
@@ -47,7 +47,7 @@ namespace URPMk2
                 directionImages[2].color = Color.white;
                 directionImages[6].color = Color.red;
             }
-            if (agentPos.z > enemyPos.z)
+            if (agentPos.y > enemyPos.y)
             {
                 directionImages[0].color = Color.red;
                 directionImages[4].color = Color.white;
@@ -58,17 +58,17 @@ namespace URPMk2
                 directionImages[4].color = Color.red;
             }
         }
-        public void UpdateObservations(Vector3 agentPos, Vector3 enemyPos, Vector3 spottedPos, float health, float reward)
+        public void UpdateObservations(Vector2 agentPos, Vector2 enemyPos, Vector2 spottedPos, float health, float reward)
         {
             observations[0].text = agentPos.x.ToString();
             observations[1].text = agentPos.y.ToString();
-            observations[2].text = agentPos.z.ToString();
+            // observations[2].text = agentPos.z.ToString();
             observations[3].text = enemyPos.x.ToString();
             observations[4].text = enemyPos.y.ToString();
-            observations[5].text = enemyPos.z.ToString();
+            // observations[5].text = enemyPos.z.ToString();
             observations[6].text = spottedPos.x.ToString();
             observations[7].text = spottedPos.y.ToString();
-            observations[8].text = spottedPos.z.ToString();
+            //observations[8].text = spottedPos.z.ToString();
             observations[9].text = health.ToString();
             observations[10].text = reward.ToString();
 
@@ -80,6 +80,13 @@ namespace URPMk2
             aPos.y = GAILCameraTransform.transform.position.y;
             aPos.z -= 20f;
             GAILCameraTransform.transform.position = aPos;
+        }
+        public void SetNewAgent(GameObject agent)
+        {
+            currentAgent = agent.transform;
+            igAgent = agent.GetComponent<InterceptorGAILAgent>();
+            igAgent.SetGAILManager(this);
+            SetGAILCameraPosition();
         }
         private void SpawnNewAgent()
         {
@@ -106,7 +113,7 @@ namespace URPMk2
         private void SetInit()
 		{
             GAILCamera = GAILCameraTransform.GetComponent<Camera>();
-            StartNewEpisode(transform);
+            //StartNewEpisode(transform);
         }
         private void OnEnable()
 		{

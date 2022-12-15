@@ -44,6 +44,7 @@ namespace URPMk2
                         agent,
                         saManager)
                     );
+                saManager.CallEventNewAgentSpawned(agent);
             }
         }
 		private void RemoveAgent(int idx)
@@ -67,6 +68,7 @@ namespace URPMk2
 						idx,
 						agent,
 						saManager);
+			saManager.CallEventNewAgentSpawned(agent);
         }
 		private void OnEpisodeFinish()
 		{

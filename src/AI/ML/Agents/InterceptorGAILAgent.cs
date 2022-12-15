@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -11,7 +12,7 @@ namespace URPMk2
         [SerializeField] private bool isTrainingMode;
         [SerializeField] private bool isHeuristic;
         [SerializeField] private Vector3 maxPos;
-        private bool isMoveAction;
+        private int idleCount;
         private float dmgInflicted, health, initHealth, reward;
         private const float rangeMultiply = 512f;
         private string dmgKey;
@@ -62,6 +63,50 @@ namespace URPMk2
         {
             EndEpisode();
         }
+        private void SetRandomDestination()
+        {
+            bool isSearchPos = true;
+            int numAttempts = 0;
+            while (isSearchPos && numAttempts < 100)
+            {
+                Vector3 rndPos = new Vector3(
+                    Random.Range(5f, 128f),
+                    1f,
+                    Random.Range(5f, 128f)
+                );
+                if (Physics.Raycast(rndPos, -Vector3.up * rndPos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
+                    rndPos = hit.point;
+                if (NavMesh.SamplePosition(rndPos, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
+                {
+                    navAgent.SetDestination(navHit.position);
+                    isSearchPos = false;
+                }
+                numAttempts++;
+            }
+        }
+        private void SetAvilableDestination(Vector3 pos)
+        {
+            if (Physics.Raycast(pos, -Vector3.up * pos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
+            {
+                pos = hit.point;
+                if (NavMesh.SamplePosition(pos, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
+                {
+                    navAgent.SetDestination(navHit.position);
+                    idleCount = 0;
+                    return;
+                }
+                else
+                    idleCount++;
+            }
+            else
+                idleCount++;
+
+            if (idleCount > 100)
+            {
+                SetRandomDestination();
+                idleCount = 0;
+            }
+        }
         private void SetAgentDestination(Vector2 dir)
         {
             Vector3 pos = mlManager.AgentTransform.position;
@@ -73,13 +118,7 @@ namespace URPMk2
 
             lastPos = pos;
 
-            if (Physics.Raycast(pos, -Vector3.up * pos.y, out RaycastHit hit, mlManager.GetFSMSettings().sightRange))
-                pos = hit.point;
-
-            if (NavMesh.SamplePosition(pos, out NavMeshHit navHit, GameConfig.wanderTargetRandomRadius, NavMesh.AllAreas))
-            {
-                navAgent.SetDestination(navHit.position);
-            }
+            SetAvilableDestination(pos);
         }
         private Vector2 GetOnMapPosition(Vector3 inVec)
         {
@@ -149,19 +188,14 @@ namespace URPMk2
         public void SetHDestination(Vector3 des)
         {
             hDestination = des;
-            isMoveAction = true;
         }
         public override void Heuristic(in ActionBuffers actionsOut)
         {
-            if (!isMoveAction)
-                return;
-
+            Vector3 pos = mlManager.AgentTransform.position;
             ActionSegment<float> continuousActionsOut = actionsOut.ContinuousActions;
 
-            continuousActionsOut[0] = hDestination.x;
-            continuousActionsOut[1] = hDestination.z;
-
-            isMoveAction = false;
+            continuousActionsOut[0] = (hDestination.x  - pos.x)/ rangeMultiply;
+            continuousActionsOut[1] = (hDestination.z - pos.z) / rangeMultiply;
         }
         public void OnAgentWon()
         {

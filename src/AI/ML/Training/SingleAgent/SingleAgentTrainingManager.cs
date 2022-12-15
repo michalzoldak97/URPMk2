@@ -12,6 +12,9 @@ namespace URPMk2
         public delegate void SingleAgentEventHandler(int idx);
         public event SingleAgentEventHandler EventAgentDestroyed;
 
+		public delegate void SingleAgentImitationLearningEventhandler(GameObject agent);
+		public event SingleAgentImitationLearningEventhandler EventNewAgentSpawned;
+
 
         public void CallEventStartEpisode()
 		{
@@ -24,6 +27,10 @@ namespace URPMk2
 		public void CallEventAgentDestroyed(int idx)
 		{
 			EventAgentDestroyed?.Invoke(idx);
+        }
+		public void CallEventNewAgentSpawned(GameObject agent)
+		{
+			EventNewAgentSpawned?.Invoke(agent);
         }
     }
 }
