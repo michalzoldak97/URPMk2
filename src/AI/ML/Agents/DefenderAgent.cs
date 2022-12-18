@@ -6,9 +6,8 @@ using UnityEngine.AI;
 
 namespace URPMk2
 {
-    public class InterceptorGAILAgent : Agent
-    {
-        [SerializeField] private bool isTrainingMode;
+	public class DefenderAgent : Agent
+	{
         [SerializeField] private bool isHeuristic;
         [SerializeField] private Vector3 maxPos;
         private int idleCount;
@@ -193,7 +192,7 @@ namespace URPMk2
             Vector3 pos = mlManager.AgentTransform.position;
             ActionSegment<float> continuousActionsOut = actionsOut.ContinuousActions;
 
-            continuousActionsOut[0] = (hDestination.x  - pos.x)/ rangeMultiply;
+            continuousActionsOut[0] = (hDestination.x - pos.x) / rangeMultiply;
             continuousActionsOut[1] = (hDestination.z - pos.z) / rangeMultiply;
         }
         public void OnAgentWon()
