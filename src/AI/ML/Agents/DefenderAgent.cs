@@ -132,7 +132,7 @@ namespace URPMk2
         }
         public override void CollectObservations(VectorSensor sensor)
         {
-            sensor.AddObservation(health / initHealth);
+            sensor.AddObservation(mlManager.AgentObservations.NumOfVisibleEnemies);
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentTransform.position));
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition));
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPosition));
