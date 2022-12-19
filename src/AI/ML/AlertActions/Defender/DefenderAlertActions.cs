@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace URPMk2
 {
-	public class DefenderlertActions : MonoBehaviour
+	public class DefenderAlertActions : MonoBehaviour
 	{
         private WaitForSeconds waitForAlertRestore;
-        private InterceptorStateManager mlManager;
+        private DefenderStateManager mlManager;
         private NPCMaster npcMaster;
         private void SetInit()
         {
-            mlManager = GetComponent<InterceptorStateManager>();
+            mlManager = GetComponent<DefenderStateManager>();
             npcMaster = GetComponent<NPCMaster>();
             waitForAlertRestore = new WaitForSeconds(mlManager.GetFSMSettings().informAlliesPeriod);
         }
@@ -28,7 +28,7 @@ namespace URPMk2
         private IEnumerator ClearSpottedEnemyInfo()
         {
             yield return waitForAlertRestore;
-            int observationsCount = mlManager.AgentObservations.SpottedEnemyMapPositions;
+            int observationsCount = mlManager.AgentObservations.SpottedEnemyMapPositions.Length;
             for (int i = 0; i < observationsCount; i++)
             {
                 mlManager.AgentObservations.SpottedEnemyMapPositions[i] = new Vector3(-1f, -1f, -1f);
@@ -36,11 +36,12 @@ namespace URPMk2
         }
         private void OnAlertReceived(Transform target)
         {
-            int observationsCount = mlManager.AgentObservations.SpottedEnemyMapPositions;
+            int observationsCount = mlManager.AgentObservations.SpottedEnemyMapPositions.Length;
             Vector3 emptyObservation = new Vector3(-1f, -1f, -1f);
             for (int i = 0; i < observationsCount; i++)
             {
-                if (mlManager.AgentObservations.SpottedEnemyMapPositions[i] != emptyObservation)
+                if (mlManager.AgentObservations.SpottedEnemyMapPositions[i] != emptyObservation ||
+                    mlManager.AgentObservations.SpottedEnemyMapPositions[i] == target.position)
                     continue;
 
                 mlManager.AgentObservations.SpottedEnemyMapPositions[i] = target.position;

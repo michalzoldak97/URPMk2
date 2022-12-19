@@ -4,8 +4,8 @@ namespace URPMk2
 {
     public class DefenderExploreState : MLExploreState
     {
-        private readonly ActiveDefenderStateManager stateManager;
-        public DefenderExploreState(ActiveDefenderStateManager mlManager)
+        private readonly DefenderStateManager stateManager;
+        public DefenderExploreState(DefenderStateManager mlManager)
         {
             this.mlManager = mlManager;
             this.stateManager = mlManager;

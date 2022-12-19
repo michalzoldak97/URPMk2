@@ -11,12 +11,13 @@ namespace URPMk2
         [SerializeField] private bool isHeuristic;
         [SerializeField] private Vector3 maxPos;
         private int idleCount;
-        private float dmgInflicted, health, initHealth, reward;
+        private float dmgInflicted, reward;
         private const float rangeMultiply = 512f;
         private string dmgKey;
         private Vector3 lastPos, emptyInput, hDestination;
+        private Transform cargoParent;
         private NavMeshAgent navAgent;
-        private InterceptorStateManager mlManager;
+        private DefenderStateManager mlManager;
         private GAILControlPanelManager gManager;
         private DamagableMaster dmgMaster;
 
@@ -24,39 +25,33 @@ namespace URPMk2
         {
             this.gManager = gManager;
         }
+        public void SetCargoParent(Transform cargoParent)
+        {
+            this.cargoParent = cargoParent;
+        }
+        public void OnCargoParentDamage(float dmg)
+        {
+            AddReward(dmg * -0.025f);
+        }
         private void Awake()
         {
-            mlManager = GetComponent<InterceptorStateManager>();
+            mlManager = GetComponent<DefenderStateManager>();
             navAgent = GetComponent<NavMeshAgent>();
             dmgKey = transform.name + transform.GetInstanceID();
             dmgMaster = GetComponent<DamagableMaster>();
-            initHealth = 100f;
-            health = 100f;
             emptyInput = new Vector3(-1f, -1f, -1f);
-        }
-        private void Start()
-        {
-            initHealth = dmgMaster.GetHealth();
-            health = dmgMaster.GetHealth();
         }
         protected override void OnEnable()
         {
             base.OnEnable();
-            dmgMaster.EventReceivedDamage += OnAgentDamage;
             dmgMaster.EventDestroyObject += OnAgentDestroy;
         }
         protected override void OnDisable()
         {
             base.OnDisable();
-            dmgMaster.EventReceivedDamage -= OnAgentDamage;
             dmgMaster.EventDestroyObject -= OnAgentDestroy;
         }
-        private void OnAgentDamage(Transform origin, float dmg)
-        {
-            health -= dmg;
-            if (health <= 0)
-                health = 1f;
-        }
+
         private void OnAgentDestroy(Transform killer)
         {
             EndEpisode();
@@ -133,16 +128,22 @@ namespace URPMk2
         public override void CollectObservations(VectorSensor sensor)
         {
             sensor.AddObservation(mlManager.AgentObservations.NumOfVisibleEnemies);
+            sensor.AddObservation(GetOnMapPosition(cargoParent.position));
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentTransform.position));
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition));
-            sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPosition));
+            int spottedEnemyCount = mlManager.AgentObservations.SpottedEnemyMapPositions.Length;
+            for (int i = 0; i < spottedEnemyCount; i++)
+            {
+                sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPositions[i]));
+            }
+            
 
             if (isHeuristic)
                 gManager.UpdateObservations(
                     GetOnMapPosition(mlManager.AgentTransform.position),
                     GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition),
-                    GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPosition),
-                    health / initHealth,
+                    GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPositions[0]),
+                    1f,
                     reward);
         }
         private float GetLastInflictedDamage()
@@ -163,15 +164,18 @@ namespace URPMk2
         {
             float dmg = GetLastInflictedDamage();
 
-            if (dmg <= 0f)
-            {
-                AddReward(-0.0002f);
-                reward -= 0.0002f;
-            }
-            else
+            if (dmg > 0f)
             {
                 AddReward(dmg * 0.01f);
                 reward += dmg * 0.01f;
+            }
+
+            if (Vector3.Distance(
+                cargoParent.position,
+                mlManager.AgentTransform.position) < 15f)
+            {
+                AddReward(0.0001f);
+                reward += 0.0001f;
             }
         }
         public override void OnActionReceived(ActionBuffers actions)
