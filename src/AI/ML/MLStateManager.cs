@@ -16,7 +16,6 @@ namespace URPMk2
         public Transform PursueTarget { get; set; }
         public NPCMaster MyNPCMaster { get; private set; }
         public NavMeshAgent MyNavMeshAgent { get; private set; }
-        // public IMLAgentObservations AgentObservations {get; set;}
         public void SetWaypoints(Transform[] waypoints) { }
 
         public IMLState currentState;
