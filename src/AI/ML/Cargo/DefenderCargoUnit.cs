@@ -4,20 +4,22 @@ namespace URPMk2
 {
 	public class DefenderCargoUnit : MonoBehaviour, ICargoUnit
 	{
-		private DefenderAgent defenderAgent;
+		private Transform cargoParentDMGMaster;
+		private DefenderStateManager dsManager;
 
-		private void Awake()
+		private void Start()
 		{
-			defenderAgent = GetComponent<DefenderAgent>();
+			agentObservations = GetComponent<DefenderStateManager>();
 		}
 
 		public void SetCargoParent(Transform cargoParent)
 		{
-			defenderAgent.SetCargoParent(cargoParent);
-			// TODO: connect with cargo dmg master
-			// on dmg add negative reward use observations
-			// on destroy serach new parent use observations
-			// or go to the final dest
+			dsManager.SetCargoParent(cargoParent);
+			cargoParentDMGMaster = cargoParent.GetComponent<DamagableMaster>();
+			cargoParentDMGMaster.EveentDamageObject += OnCargoParentDamage;
+			cargoParentDMGMaster.EventDestroyObject += OnCargoParentDestroy;
+			//TODO: on destroy set parent
+			// states should determine observed parent position
 		}
 	}
 }
