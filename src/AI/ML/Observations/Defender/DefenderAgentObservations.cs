@@ -9,8 +9,9 @@ namespace URPMk2
             SpottedEnemyMapPositions = new Vector3[3];
         }
         public float NumOfVisibleEnemies { get; set; }
-        public Vector3 CargoParentMapPosition { get; set; }
+        public float CargoParentDamage { get; set; }
         public Vector3 AgentMapPosition { get; set; }
+        public Vector3 CargoParentMapPosition { get; set; }
         public Vector3[] SpottedEnemyMapPositions { get; set; }
         public Vector3 EnemyMapPosition { get; set; }
     }

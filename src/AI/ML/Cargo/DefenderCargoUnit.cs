@@ -15,8 +15,8 @@ namespace URPMk2
 		{
 			defenderAgent.SetCargoParent(cargoParent);
 			// TODO: connect with cargo dmg master
-			// on dmg add negative reward
-			// on destroy serach new parent
+			// on dmg add negative reward use observations
+			// on destroy serach new parent use observations
 			// or go to the final dest
 		}
 	}

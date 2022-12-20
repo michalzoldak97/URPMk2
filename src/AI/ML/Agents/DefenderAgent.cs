@@ -25,14 +25,6 @@ namespace URPMk2
         {
             this.gManager = gManager;
         }
-        public void SetCargoParent(Transform cargoParent)
-        {
-            this.cargoParent = cargoParent;
-        }
-        public void OnCargoParentDamage(float dmg)
-        {
-            AddReward(dmg * -0.025f);
-        }
         private void Awake()
         {
             mlManager = GetComponent<DefenderStateManager>();
@@ -128,7 +120,7 @@ namespace URPMk2
         public override void CollectObservations(VectorSensor sensor)
         {
             sensor.AddObservation(mlManager.AgentObservations.NumOfVisibleEnemies);
-            sensor.AddObservation(GetOnMapPosition(cargoParent.position));
+            sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.CargoParentMapPosition));
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentTransform.position));
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition));
             int spottedEnemyCount = mlManager.AgentObservations.SpottedEnemyMapPositions.Length;
@@ -171,11 +163,18 @@ namespace URPMk2
             }
 
             if (Vector3.Distance(
-                cargoParent.position,
-                mlManager.AgentTransform.position) < 15f)
+                    mlManager.AgentObservations.CargoParentMapPosition,
+                    mlManager.AgentTransform.position) < 15f)
             {
                 AddReward(0.0001f);
                 reward += 0.0001f;
+            }
+
+            float cargoDmg = mlManager.AgentObservations.CargoParentDamage;
+            if (cargoDmg > 0)
+            {
+                AddReward(cargoDmg * -0.025f);
+                mlManager.AgentObservations.CargoParentDamage = 0f;
             }
         }
         public override void OnActionReceived(ActionBuffers actions)
