@@ -173,7 +173,7 @@ namespace URPMk2
             float cargoDmg = mlManager.AgentObservations.CargoParentDamage;
             if (cargoDmg > 0)
             {
-                AddReward(cargoDmg * -0.025f);
+                AddReward(cargoDmg * -0.0025f);
                 mlManager.AgentObservations.CargoParentDamage = 0f;
             }
         }

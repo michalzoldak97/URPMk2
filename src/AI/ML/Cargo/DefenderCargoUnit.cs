@@ -8,6 +8,17 @@ namespace URPMk2
 		private Transform cargoParent;
 		private DefenderAgentObservations agentObservations;
 
+		private void OnCargoParentDamage(Transform o, float dmg)
+		{
+			agentObservations.CargoParentDamage = dmg;
+		}
+
+		private void OnCargoParentDestroy(Transform o)
+		{
+			SubscribeToCargoParentEvents(false);
+			SearchCargoParent();
+		}
+
 		private void SubscribeToCargoParentEvents(bool shouldSubscribe)
 		{
 			if (cargoParent == null)
@@ -16,12 +27,12 @@ namespace URPMk2
 			DamagableMaster cargoParentDMGMaster = cargoParent.GetComponent<DamagableMaster>();
 			if (shouldSubscribe)
 			{
-				cargoParentDMGMaster.EventDamageObject += OnCargoParentDamage;
+				cargoParentDMGMaster.EventReceivedDamage += OnCargoParentDamage;
 				cargoParentDMGMaster.EventDestroyObject += OnCargoParentDestroy;
 			}
 			else
 			{
-				cargoParentDMGMaster.EventDamageObject -= OnCargoParentDamage;
+				cargoParentDMGMaster.EventReceivedDamage -= OnCargoParentDamage;
 				cargoParentDMGMaster.EventDestroyObject -= OnCargoParentDestroy;
 			}
 		}
@@ -42,12 +53,6 @@ namespace URPMk2
 
 			int defendTargetIdx = Random.Range(0, possibleDefendTargets.Count);
 			SetCargoParent(possibleDefendTargets[defendTargetIdx].ObjTransform);
-		}
-
-		private void OnCargoParentDestroy()
-		{
-			SubscribeToCargoParentEvents(false);
-			SearchCargoParent();
 		}
 
 		public void SetCargoParent(Transform cargoParent)
