@@ -6,15 +6,18 @@ namespace URPMk2
 	public class CargoController : MonoBehaviour
 	{
 		[SerializeField] private CargoSettingsSO cargoSettings;
-		[SerializeField] private Transform[] waypoints;
+		[SerializeField] private AIWaypoints[] allWaypoints;
 		public CargoSettingsSO GetCargoSettings { get { return cargoSettings; } }
 
 		private int currentWaypoint;
 		private float nextCheck;
+		private Transform[] waypoints;
 		private NavMeshAgent navAgent;
 
 		private void Start()
 		{
+			int pathID = Random.Range(0, allWaypoints.Length);
+			waypoints = allWaypoints[pathID].waypoints;
 			navAgent = GetComponent<NavMeshAgent>();
 			navAgent.SetDestination(waypoints[0].position);
 			currentWaypoint = 0;

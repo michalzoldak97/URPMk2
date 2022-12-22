@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace URPMk2
 {
 	public class DefenderStateManager : MLStateManager

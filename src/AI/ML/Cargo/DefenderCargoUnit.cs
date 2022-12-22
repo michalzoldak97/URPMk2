@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Unity.MLAgents;
 using UnityEngine;
 
 namespace URPMk2
@@ -5,7 +7,7 @@ namespace URPMk2
 	public class DefenderCargoUnit : MonoBehaviour, ICargoUnit
 	{
 		private float checkRate, nextCheck; 
-		private Transform cargoParent;
+		private Transform cargoParent, finalDest;
 		private DefenderAgentObservations agentObservations;
 
 		private void OnCargoParentDamage(Transform o, float dmg)
@@ -15,8 +17,16 @@ namespace URPMk2
 
 		private void OnCargoParentDestroy(Transform o)
 		{
-			SubscribeToCargoParentEvents(false);
-			SearchCargoParent();
+			/*SubscribeToCargoParentEvents(false);
+			SearchCargoParent();*/
+			// training
+			float distTofinal = Vector3.Distance(cargoParent.position, finalDest.position);
+			float reward = distTofinal < 10 ? 1f : -1f;
+			GetComponent<Agent>().AddReward(reward);
+			GetComponent<Agent>().EndEpisode();
+			Destroy(gameObject, GameConfig.secToDestroy);
+			GetComponent<DamagableMaster>().CallEventDestroyObject(transform);
+			gameObject.SetActive(false);
 		}
 
 		private void SubscribeToCargoParentEvents(bool shouldSubscribe)
@@ -39,10 +49,11 @@ namespace URPMk2
 
 		private void SearchCargoParent()
 		{
-			List<ITeamMember> possibleDefendTargets = 
+            DefenderStateManager dsManager = GetComponent<DefenderStateManager>();
+            List<ITeamMember> possibleDefendTargets = 
 			TeamMembersManager.GetTeamMembersInRange(
-				fManager.GetFSMSettings().teamsToDefend, 
-				fTransform.position, 
+                dsManager.GetFSMSettings().teamsToDefend,
+                dsManager.AgentTransform.position, 
 				250000);
 
 			if (possibleDefendTargets.Count < 1)
@@ -52,18 +63,19 @@ namespace URPMk2
 			}
 
 			int defendTargetIdx = Random.Range(0, possibleDefendTargets.Count);
-			SetCargoParent(possibleDefendTargets[defendTargetIdx].ObjTransform);
+			SetCargoParent(possibleDefendTargets[defendTargetIdx].ObjTransform, finalDest);
 		}
 
-		public void SetCargoParent(Transform cargoParent)
+		public void SetCargoParent(Transform cargoParent, Transform finalDest)
 		{
 			this.cargoParent = cargoParent;
+			this.finalDest = finalDest;
 			SubscribeToCargoParentEvents(true);
 		}
 
 		private void Start()
 		{
-			dsManager = GetComponent<DefenderStateManager>();
+            DefenderStateManager dsManager = GetComponent<DefenderStateManager>();
 			agentObservations = dsManager.AgentObservations;
 			checkRate = dsManager.GetCheckRate();
 		}

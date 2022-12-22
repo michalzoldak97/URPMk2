@@ -9,6 +9,10 @@ namespace URPMk2
 		private void SetInit()
 		{
 			saManager = GetComponent<SingleAgentTrainingManager>();
+			if (gManager != null)
+				return;
+
+			gManager = GameObject.FindGameObjectWithTag("Player").GetComponent<GAILControlPanelManager>();
         }
 		
 		private void OnEnable()
