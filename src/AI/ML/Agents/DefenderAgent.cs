@@ -133,8 +133,8 @@ namespace URPMk2
                 gManager.UpdateObservations(
                     GetOnMapPosition(mlManager.AgentTransform.position),
                     GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition),
-                    GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPositions[0]),
-                    1f,
+                    GetOnMapPosition(mlManager.AgentObservations.CargoParentMapPosition),
+                    mlManager.AgentObservations.NumOfVisibleEnemies,
                     reward);
         }
         private float GetLastInflictedDamage()
