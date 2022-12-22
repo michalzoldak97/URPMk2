@@ -19,7 +19,7 @@ namespace URPMk2
         private bool isGAILPanelActive;
         private Transform currentAgent;
         private Camera GAILCamera;
-        private InterceptorGAILAgent igAgent;
+        private IGAILAgent igAgent;
         private DamagableMaster dmgMaster;
 
         public delegate void AgentDirectionSetManager();
@@ -84,7 +84,7 @@ namespace URPMk2
         public void SetNewAgent(GameObject agent)
         {
             currentAgent = agent.transform;
-            igAgent = agent.GetComponent<InterceptorGAILAgent>();
+            igAgent = agent.GetComponent<IGAILAgent>();
             igAgent.SetGAILManager(this);
             SetGAILCameraPosition();
         }
@@ -93,7 +93,7 @@ namespace URPMk2
             Transform spawnPos = agentSpawnPos[Random.Range(0, agentSpawnPos.Length - 1)];
             GameObject agent = Instantiate(agentPrefab, spawnPos.position, spawnPos.rotation);
             currentAgent = agent.transform;
-            igAgent = agent.GetComponent<InterceptorGAILAgent>();
+            igAgent = agent.GetComponent<IGAILAgent>();
             dmgMaster = agent.GetComponent<DamagableMaster>();
             dmgMaster.EventDestroyObject += StartNewEpisode;
             igAgent.SetGAILManager(this);

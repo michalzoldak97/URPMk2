@@ -9,10 +9,14 @@ namespace URPMk2
 		private float checkRate, nextCheck; 
 		private Transform cargoParent, finalDest;
 		private DefenderAgentObservations agentObservations;
+		private DamagableMaster dmgMaster;
+		DamagableMaster cargoParentDMGMaster;
 
-		private void OnCargoParentDamage(Transform o, float dmg)
+
+        private void OnCargoParentDamage(Transform o, float dmg)
 		{
-			agentObservations.CargoParentDamage = dmg;
+            agentObservations.CargoParentDamage = dmg;
+			Debug.Log("Parent dmg set to: " + dmg);
 		}
 
 		private void OnCargoParentDestroy(Transform o)
@@ -25,18 +29,19 @@ namespace URPMk2
 			GetComponent<Agent>().AddReward(reward);
 			GetComponent<Agent>().EndEpisode();
 			Destroy(gameObject, GameConfig.secToDestroy);
-			GetComponent<DamagableMaster>().CallEventDestroyObject(transform);
+            dmgMaster.CallEventDestroyObject(transform);
 			gameObject.SetActive(false);
 		}
 
 		private void SubscribeToCargoParentEvents(bool shouldSubscribe)
 		{
-			if (cargoParent == null)
+			if (cargoParent == null ||
+				!cargoParent.gameObject.activeSelf)
 				return;
 			
-			DamagableMaster cargoParentDMGMaster = cargoParent.GetComponent<DamagableMaster>();
 			if (shouldSubscribe)
 			{
+				Debug.Log("Subscribing to dmg");
 				cargoParentDMGMaster.EventReceivedDamage += OnCargoParentDamage;
 				cargoParentDMGMaster.EventDestroyObject += OnCargoParentDestroy;
 			}
@@ -45,7 +50,12 @@ namespace URPMk2
 				cargoParentDMGMaster.EventReceivedDamage -= OnCargoParentDamage;
 				cargoParentDMGMaster.EventDestroyObject -= OnCargoParentDestroy;
 			}
-		}
+        }
+		private void OnDisable()
+		{
+            cargoParentDMGMaster.EventReceivedDamage -= OnCargoParentDamage;
+            cargoParentDMGMaster.EventDestroyObject -= OnCargoParentDestroy;
+        }
 
 		private void SearchCargoParent()
 		{
@@ -68,13 +78,17 @@ namespace URPMk2
 
 		public void SetCargoParent(Transform cargoParent, Transform finalDest)
 		{
+			Debug.Log("Cargo unit receives parent");
 			this.cargoParent = cargoParent;
 			this.finalDest = finalDest;
-			SubscribeToCargoParentEvents(true);
+			cargoParentDMGMaster = cargoParent.GetComponent<DamagableMaster>();
+
+            SubscribeToCargoParentEvents(true);
 		}
 
 		private void Start()
 		{
+			dmgMaster = GetComponent<DamagableMaster>();
             DefenderStateManager dsManager = GetComponent<DefenderStateManager>();
 			agentObservations = dsManager.AgentObservations;
 			checkRate = dsManager.GetCheckRate();
@@ -84,7 +98,7 @@ namespace URPMk2
 		{
 			if (cargoParent == null)
 			{
-				SearchCargoParent();
+				// SearchCargoParent();
 				return;
 			}
 

@@ -6,7 +6,11 @@ namespace URPMk2
 	public class CargoController : MonoBehaviour
 	{
 		[SerializeField] private CargoSettingsSO cargoSettings;
-		[SerializeField] private AIWaypoints[] allWaypoints;
+		private AIWaypoints[] allWaypoints;
+		public void SetAIWaypoints(AIWaypoints[] toSet)
+		{
+			allWaypoints = toSet;
+		}
 		public CargoSettingsSO GetCargoSettings { get { return cargoSettings; } }
 
 		private int currentWaypoint;

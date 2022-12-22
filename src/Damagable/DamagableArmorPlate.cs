@@ -46,7 +46,6 @@ namespace URPMk2
             dmgInfoToPass.pen = dmgInfo.pen - myArmor;
             dmgInfoToPass.dmg = dmg;
 
-            Debug.Log("Passing armour damage: " + dmg);
             parentDmgMaster.CallEventHitByGun(dmgInfoToPass);
 
         }

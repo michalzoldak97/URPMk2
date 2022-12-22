@@ -6,6 +6,7 @@ namespace URPMk2
 	{
         [SerializeField] private GameObject cargoPrefab;
         [SerializeField] private Transform[] spawnPositions;
+        [SerializeField] private AIWaypoints[] allWaypoints;
         private SingleAgentTrainingManager saManager;
         private void SetInit()
         {
@@ -36,6 +37,7 @@ namespace URPMk2
             {
                 GameObject cargo = Instantiate(cargoPrefab, spawnPositions[i].position, spawnPositions[i].rotation);
                 cargo.GetComponent<DamagableMaster>().EventDestroyObject += CallAgentDestroyed;
+                cargo.GetComponent<CargoController>().SetAIWaypoints(allWaypoints);
             }
         }
         private void OnAgentDestroyed(int i)
@@ -43,6 +45,7 @@ namespace URPMk2
             int spawnID = Random.Range(0, spawnPositions.Length);
             GameObject cargo = Instantiate(cargoPrefab, spawnPositions[spawnID].position, spawnPositions[spawnID].rotation);
             cargo.GetComponent<DamagableMaster>().EventDestroyObject += CallAgentDestroyed;
+            cargo.GetComponent<CargoController>().SetAIWaypoints(allWaypoints);
         }
         private void OnEpisodeFinish()
         {

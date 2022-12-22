@@ -6,8 +6,8 @@ using UnityEngine.AI;
 
 namespace URPMk2
 {
-	public class DefenderAgent : Agent
-	{
+	public class DefenderAgent : Agent, IGAILAgent
+    {
         [SerializeField] private bool isHeuristic;
         [SerializeField] private Vector3 maxPos;
         private int idleCount;
@@ -15,7 +15,6 @@ namespace URPMk2
         private const float rangeMultiply = 512f;
         private string dmgKey;
         private Vector3 lastPos, emptyInput, hDestination;
-        private Transform cargoParent;
         private NavMeshAgent navAgent;
         private DefenderStateManager mlManager;
         private GAILControlPanelManager gManager;
@@ -174,6 +173,7 @@ namespace URPMk2
             if (cargoDmg > 0)
             {
                 AddReward(cargoDmg * -0.0025f);
+                reward += cargoDmg * -0.0025f;
                 mlManager.AgentObservations.CargoParentDamage = 0f;
             }
         }

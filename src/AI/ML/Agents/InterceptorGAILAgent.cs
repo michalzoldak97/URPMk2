@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 namespace URPMk2
 {
-    public class InterceptorGAILAgent : Agent
+    public class InterceptorGAILAgent : Agent, IGAILAgent
     {
         [SerializeField] private bool isTrainingMode;
         [SerializeField] private bool isHeuristic;
