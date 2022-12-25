@@ -46,6 +46,14 @@ namespace URPMk2
             {
 				weaponMaster.CallEventHitByGun(hit);
             }
+			Debug.DrawRay(myTransform.TransformPoint(shootStartPos),
+				myTransform.TransformDirection(
+					Random.Range(-recoil, recoil),
+					Random.Range(-recoil, recoil),
+					shootStartPos.z),
+					Color.red,
+					10f
+				);
         }
 	}
 }

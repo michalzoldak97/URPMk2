@@ -16,7 +16,6 @@ namespace URPMk2
         private void OnCargoParentDamage(Transform o, float dmg)
 		{
             agentObservations.CargoParentDamage = dmg;
-			Debug.Log("Parent dmg set to: " + dmg);
 		}
 
 		private void OnCargoParentDestroy(Transform o)
@@ -41,7 +40,6 @@ namespace URPMk2
 			
 			if (shouldSubscribe)
 			{
-				Debug.Log("Subscribing to dmg");
 				cargoParentDMGMaster.EventReceivedDamage += OnCargoParentDamage;
 				cargoParentDMGMaster.EventDestroyObject += OnCargoParentDestroy;
 			}
@@ -78,7 +76,6 @@ namespace URPMk2
 
 		public void SetCargoParent(Transform cargoParent, Transform finalDest)
 		{
-			Debug.Log("Cargo unit receives parent");
 			this.cargoParent = cargoParent;
 			this.finalDest = finalDest;
 			cargoParentDMGMaster = cargoParent.GetComponent<DamagableMaster>();

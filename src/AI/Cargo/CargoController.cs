@@ -28,16 +28,17 @@ namespace URPMk2
         }
 		private void MoveToWaypoints()
 		{
-            if (navAgent.remainingDistance > 1f &&
-				navAgent.remainingDistance > navAgent.stoppingDistance)
+            if ((navAgent.remainingDistance > 1f &&
+				navAgent.remainingDistance > navAgent.stoppingDistance) ||
+				navAgent.pathPending)
 				return;
 
 			if (currentWaypoint + 1 < waypoints.Length)
 				currentWaypoint++;
 
-            navAgent.isStopped = false;
             navAgent.SetDestination(waypoints[currentWaypoint].position);
-		}
+            navAgent.isStopped = false;
+        }
 		private void Update()
 		{
 			if (Time.time <= nextCheck)
