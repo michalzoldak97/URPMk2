@@ -9,10 +9,15 @@ namespace URPMk2
 		private float checkRate, nextCheck;
 		private Transform target;
 		private NPCMaster npcMaster;
-        private FSMRotationController rotationController;
-        private void Start()
+        private NPCTurrentRotationController rotationController;
+
+		public float GetCheckRate()
 		{
-			rotationController = GetComponent<FSMRotationController>();
+			return checkRate;
+		}
+        private void Awake()
+		{
+			rotationController = GetComponent<NPCTurrentRotationController>();
             npcMaster = GetComponent<NPCMaster>();
 			checkRate = npcMaster.GetFSMSettings().checkRate;
             checkRate = Random.Range(
@@ -52,7 +57,8 @@ namespace URPMk2
 		
 		private void AttackTarget()
 		{
-			npcMaster.CallEventAttackTarget(target);
+			rotationController.StartRotateTowardsTransform(target);
+            npcMaster.CallEventAttackTarget(target);
 		}
 		private void Update()
 		{
