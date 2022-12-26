@@ -76,7 +76,7 @@ namespace URPMk2
             isInformingAllies = true;
 
             List<ITeamMember> teamMembersInRange = TeamMembersManager.GetTeamMembersInRange(
-				npcMaster.GetFSMSettings().teamID, 
+				npcMaster.GetFSMSettings().teamsToAlert, 
 				transform.position, 
 				npcMaster.GetFSMSettings().informAlliesRangePow);
 
@@ -85,8 +85,11 @@ namespace URPMk2
             for (int i = 0; i < numAllies; i++)
             {
                 if (teamMembersInRange[i].Object.activeSelf &&
-                    teamMembersInRange[i].Object != gameObject)
+                    teamMembersInRange[i].Object != gameObject &&
+                    teamMembersInRange[i].NMaster != null)
+				{
                     teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(target);
+                }
             }
 
             StartCoroutine(ResetInformState());

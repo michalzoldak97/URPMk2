@@ -37,7 +37,6 @@ namespace URPMk2
                     agentPrefab,
                     spawnPositions[i].position,
                     spawnPositions[i].rotation);
-
                 agents.Add(
                     new SingleAgentTrainee(
                         i,

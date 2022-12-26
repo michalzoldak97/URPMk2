@@ -9,7 +9,6 @@ namespace URPMk2
 		private float checkRate, nextCheck; 
 		private Transform cargoParent, finalDest;
 		private DefenderAgentObservations agentObservations;
-		private DamagableMaster dmgMaster;
 		DamagableMaster cargoParentDMGMaster;
 
 
@@ -28,7 +27,6 @@ namespace URPMk2
 			GetComponent<Agent>().AddReward(reward);
 			GetComponent<Agent>().EndEpisode();
 			Destroy(gameObject, GameConfig.secToDestroy);
-            dmgMaster.CallEventDestroyObject(transform);
 			gameObject.SetActive(false);
 		}
 
@@ -85,7 +83,6 @@ namespace URPMk2
 
 		private void Start()
 		{
-			dmgMaster = GetComponent<DamagableMaster>();
             DefenderStateManager dsManager = GetComponent<DefenderStateManager>();
 			agentObservations = dsManager.AgentObservations;
 			checkRate = dsManager.GetCheckRate();

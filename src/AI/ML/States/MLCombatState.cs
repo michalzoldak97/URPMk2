@@ -5,7 +5,7 @@ namespace URPMk2
 {
 	public class MLCombatState : IMLState
 	{
-        protected int numOfEnemies;
+        protected float numOfEnemies;
         protected ITeamMember target;
         protected MLStateManager mlManager;
         private void Look()

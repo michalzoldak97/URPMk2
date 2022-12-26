@@ -3,6 +3,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace URPMk2
 {
@@ -31,6 +32,15 @@ namespace URPMk2
             dmgKey = transform.name + transform.GetInstanceID();
             dmgMaster = GetComponent<DamagableMaster>();
             emptyInput = new Vector3(-1f, -1f, -1f);
+        }
+        private void Start()
+        {
+            int observationsCount = mlManager.AgentObservations.SpottedEnemyMapPositions.Length;
+            Vector3 emptyObservation = new Vector3(-1f, -1f, -1f);
+            for (int i = 0; i < observationsCount; i++)
+            {
+                mlManager.AgentObservations.SpottedEnemyMapPositions[i] = emptyObservation;
+            }
         }
         protected override void OnEnable()
         {
