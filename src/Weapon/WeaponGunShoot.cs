@@ -34,26 +34,18 @@ namespace URPMk2
 		}
 		private void OnShoot()
         {
-			if (Physics.Raycast(
-				myTransform.TransformPoint(shootStartPos), 
-				myTransform.TransformDirection(
-					Random.Range(-recoil, recoil), 
-					Random.Range(-recoil, recoil), 
-					shootStartPos.z), 
+            if (Physics.Raycast(
+				myTransform.TransformPoint(shootStartPos),
+                myTransform.TransformDirection(
+                    Random.Range(-recoil, recoil),
+                    Random.Range(-recoil, recoil),
+                    shootStartPos.z), 
 				out RaycastHit hit, 
 				shootRange,
 				layersToHit))
             {
 				weaponMaster.CallEventHitByGun(hit);
             }
-			Debug.DrawRay(myTransform.TransformPoint(shootStartPos),
-				myTransform.TransformDirection(
-					Random.Range(-recoil, recoil),
-					Random.Range(-recoil, recoil),
-					shootStartPos.z),
-					Color.red,
-					10f
-				);
         }
 	}
 }

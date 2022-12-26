@@ -74,8 +74,6 @@ namespace URPMk2
         }
 		private void PullTrigger()
 		{
-            // Debug.Log("Gun input shoot: is reloadin: " + weaponMaster.isReloading + " is not loaded: " + !weaponMaster.isWeaponLoaded + " is shooting burst " + weaponMaster.isShootingBurst);
-
             if (weaponMaster.isReloading ||
 				!weaponMaster.isWeaponLoaded ||
 				weaponMaster.isShootingBurst)

@@ -26,11 +26,11 @@ namespace URPMk2
 		{
 			npcMaster.EventAttackTarget -= OnAttackTarget;
 		}
-		private float CalculateDotProd(Transform target)
+        protected float CalculateDotProd(Transform target)
 		{
 			return Vector3.Dot((target.position - myTransform.position).normalized, myTransform.forward);
 		}
-		protected void AttemptToShoot(Transform target, INPCWeaponController weaponController)
+		protected virtual void AttemptToShoot(Transform target, INPCWeaponController weaponController)
         {
             if (CalculateDotProd(target) > .99f &&
 				shootFieldValidator.IsShootFieldClean(transform))

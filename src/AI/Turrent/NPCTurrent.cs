@@ -49,7 +49,7 @@ namespace URPMk2
             ITeamMember[] enemiesInRange = npcMaster.NpcLook.GetEnemiesInRange();
 			for (int i = 0; i < enemiesBuffLen; i++)
 			{
-				if (enemiesInRange[i].ObjTransform != null)
+				if (enemiesInRange[i] != null)
 				{
 					target = enemiesInRange[i].ObjTransform;
 					return;
@@ -106,7 +106,8 @@ namespace URPMk2
 
 			ScanForEnemies();
 
-			if (isEnemyLocked)
+			if (isEnemyLocked &&
+				target != null)
                 AttackTarget(); 
 		}
 	}
