@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 namespace URPMk2
 {
-    public class MLStateManager : MonoBehaviour, IStateManager
+    public class MLStateManager : MonoBehaviour, IStateManager, ISpawnable
     {
         [SerializeField] private FSMSettingsSO FSMSettings;
         public FSMSettingsSO GetFSMSettings() { return FSMSettings; }

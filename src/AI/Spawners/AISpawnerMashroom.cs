@@ -51,7 +51,7 @@ namespace URPMk2
                     currentSpawnPos.x += Random.Range(-5f, 5f);
                     currentSpawnPos.z += Random.Range(-5f, 5f);
                     GameObject agent = Instantiate(aType.agent, currentSpawnPos, transform.rotation);
-                    agent.GetComponent<IStateManager>().SetWaypoints(path.waypoints);
+                    agent.GetComponent<ISpawnable>().SetWaypoints(path.waypoints);
                     spawnedObjects.Add(agent);
                     yield return new WaitForSeconds(
                         Random.Range(

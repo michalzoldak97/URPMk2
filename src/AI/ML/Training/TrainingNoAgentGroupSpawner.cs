@@ -65,7 +65,7 @@ namespace URPMk2
 					continue;
 
                 AIWaypoints path = agentPaths[Random.Range(0, agentPaths.Length)];
-                agent.GetComponent<IStateManager>().SetWaypoints(path.waypoints);
+                agent.GetComponent<ISpawnable>().SetWaypoints(path.waypoints);
             }
 		}
 		private void ResetSquadsNum()

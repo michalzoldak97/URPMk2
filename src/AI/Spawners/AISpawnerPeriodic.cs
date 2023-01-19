@@ -57,7 +57,7 @@ namespace URPMk2
                 for (int i = 0; i < aType.numToSpawn; i++)
                 {
                     GameObject agent = Instantiate(aType.agent, SampleSpawnPosition(), transform.rotation);
-                    agent.GetComponent<IStateManager>().SetWaypoints(path.waypoints);
+                    agent.GetComponent<ISpawnable>().SetWaypoints(path.waypoints);
                     if (isThreshold)
                         spawnedObjects.Add(agent);
                     yield return new WaitForSeconds(
