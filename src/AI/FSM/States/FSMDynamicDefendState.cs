@@ -6,8 +6,8 @@ namespace URPMk2
 	public class FSMDynamicDefendState : IFSMState
 	{
 		private Vector3 targetPoint, shiftVec;
-		private Transform fTransform;
-		private FSMStateManager fManager;
+		private readonly Transform fTransform;
+		private readonly FSMStateManager fManager;
 		public FSMDynamicDefendState(FSMStateManager fManager)
         {
 			this.fManager = fManager;
@@ -18,13 +18,12 @@ namespace URPMk2
 	
 		private bool IsDefendTargetLost()
         {
-			if (fManager.MyFollowTarget == null)
-			{
-				targetPoint = Vector3.zero;
-				shiftVec = Vector3.zero;
-				return true;
-			}
-			return false;
+			if (fManager.MyFollowTarget != null)
+                return false;
+
+			targetPoint = Vector3.zero;
+			shiftVec = Vector3.zero;
+			return true;
 		}
 		private bool PickDynamicDefendTarget()
         {
@@ -32,7 +31,7 @@ namespace URPMk2
 				TeamMembersManager.GetTeamMembersInRange(
 					fManager.GetFSMSettings().teamsToDefend, 
 					fTransform.position, 
-					250000);
+					999999);
 
 			if (possibleDefendTargets.Count < 1)
             {

@@ -74,7 +74,13 @@ namespace URPMk2
             for (int i = 1; i < spawnerSettings.maxSquads; i++)
             {
                 yield return new WaitForSeconds(spawnerSettings.squadSpawnPeriod);
-                if (isThreshold && IsThresholdSatisfied())
+                if (!isThreshold)
+                {
+                    StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
+                    continue;
+                }
+
+                if (IsThresholdSatisfied()) 
                     StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
             }
         }

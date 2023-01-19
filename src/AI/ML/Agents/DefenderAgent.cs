@@ -128,24 +128,30 @@ namespace URPMk2
         }
         public override void CollectObservations(VectorSensor sensor)
         {
-            sensor.AddObservation(mlManager.AgentObservations.NumOfVisibleEnemies);
+            //sensor.AddObservation(mlManager.AgentObservations.NumOfVisibleEnemies);
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.CargoParentMapPosition));
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentTransform.position));
             sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition));
+            /*Vector2[] sPos = new Vector2[3];
             int spottedEnemyCount = mlManager.AgentObservations.SpottedEnemyMapPositions.Length;
             for (int i = 0; i < spottedEnemyCount; i++)
             {
                 sensor.AddObservation(GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPositions[i]));
-            }
+                sPos[i] = GetOnMapPosition(mlManager.AgentObservations.SpottedEnemyMapPositions[i]);
+            }*/
             
 
             if (isHeuristic)
+            {
                 gManager.UpdateObservations(
                     GetOnMapPosition(mlManager.AgentTransform.position),
                     GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition),
                     GetOnMapPosition(mlManager.AgentObservations.CargoParentMapPosition),
                     mlManager.AgentObservations.NumOfVisibleEnemies,
-                    reward);
+                    reward);/*
+                Debug.Log("Num: " + mlManager.AgentObservations.NumOfVisibleEnemies + " Cp: " + GetOnMapPosition(mlManager.AgentObservations.CargoParentMapPosition) + 
+                    " Mp: " + GetOnMapPosition(mlManager.AgentTransform.position) + " Ep: " + GetOnMapPosition(mlManager.AgentObservations.EnemyMapPosition) + " Spos: " + sPos);*/
+            }
         }
         private float GetLastInflictedDamage()
         {
@@ -167,23 +173,27 @@ namespace URPMk2
 
             if (dmg > 0f)
             {
-                AddReward(dmg * 0.01f);
-                reward += dmg * 0.01f;
+                AddReward(dmg * 0.0001f);
+                reward += dmg * 0.0001f;
             }
 
             if (Vector3.Distance(
                     mlManager.AgentObservations.CargoParentMapPosition,
-                    mlManager.AgentTransform.position) < 15f)
+                    mlManager.AgentTransform.position) < 25f)
             {
-                AddReward(0.0001f);
-                reward += 0.0001f;
+                AddReward(0.01f);
+                reward += 0.01f;
+            }
+            else
+            {
+                AddReward(-0.001f);
             }
 
             float cargoDmg = mlManager.AgentObservations.CargoParentDamage;
             if (cargoDmg > 0)
             {
-                AddReward(cargoDmg * -0.0025f);
-                reward += cargoDmg * -0.0025f;
+                AddReward(cargoDmg * -0.005f);
+                reward += cargoDmg * -0.005f;
                 mlManager.AgentObservations.CargoParentDamage = 0f;
             }
         }
@@ -200,10 +210,25 @@ namespace URPMk2
         {
             hDestination = des;
         }
+        public float GetReward()
+        {
+            return reward;
+        }
+        private void ArtificialClick()
+        {
+            Vector3 cargoPos = mlManager.AgentObservations.CargoParentMapPosition;
+            float xShift = Random.Range(-20f, 20f);
+            float zShift = Random.Range(-10f, 25f);
+            cargoPos.x += xShift;
+            cargoPos.z += zShift;
+            hDestination = cargoPos;
+        }
         public override void Heuristic(in ActionBuffers actionsOut)
         {
             Vector3 pos = mlManager.AgentTransform.position;
             ActionSegment<float> continuousActionsOut = actionsOut.ContinuousActions;
+
+            ArtificialClick();
 
             continuousActionsOut[0] = (hDestination.x - pos.x) / rangeMultiply;
             continuousActionsOut[1] = (hDestination.z - pos.z) / rangeMultiply;

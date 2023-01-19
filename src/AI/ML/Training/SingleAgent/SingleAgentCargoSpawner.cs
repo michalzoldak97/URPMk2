@@ -12,7 +12,11 @@ namespace URPMk2
         {
             saManager = GetComponent<SingleAgentTrainingManager>();
         }
-
+        /*private void Start()
+        {
+            QualitySettings.vSyncCount = 1;
+            Application.targetFrameRate = 60;
+        }*/
         private void OnEnable()
         {
             SetInit();

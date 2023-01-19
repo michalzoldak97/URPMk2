@@ -23,9 +23,8 @@ namespace URPMk2
 			SearchCargoParent();*/
 			// training
 			float distTofinal = Vector3.Distance(cargoParent.position, finalDest.position);
-			float reward = distTofinal < 10 ? 1f : -1f;
+			float reward = distTofinal < 15 ? 1f : -1f;
 			GetComponent<Agent>().AddReward(reward);
-			GetComponent<Agent>().EndEpisode();
 			Destroy(gameObject, GameConfig.secToDestroy);
 			gameObject.SetActive(false);
 		}

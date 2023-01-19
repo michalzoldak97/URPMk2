@@ -11,7 +11,7 @@ namespace URPMk2
 		{
 			allWaypoints = toSet;
 		}
-		public CargoSettingsSO GetCargoSettings { get { return cargoSettings; } }
+		public CargoSettingsSO CargoSettings { get { return cargoSettings; } }
 
 		private int currentWaypoint;
 		private float nextCheck;
