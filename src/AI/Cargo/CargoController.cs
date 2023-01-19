@@ -3,13 +3,17 @@ using UnityEngine.AI;
 
 namespace URPMk2
 {
-	public class CargoController : MonoBehaviour
+	public class CargoController : MonoBehaviour, ISpawnable
 	{
 		[SerializeField] private CargoSettingsSO cargoSettings;
 		private AIWaypoints[] allWaypoints;
 		public void SetAIWaypoints(AIWaypoints[] toSet)
 		{
 			allWaypoints = toSet;
+		}
+		public void SetWaypoints(Transform[] toSet) 
+		{
+			waypoints = toSet;
 		}
 		public CargoSettingsSO CargoSettings { get { return cargoSettings; } }
 
@@ -18,11 +22,20 @@ namespace URPMk2
 		private Transform[] waypoints;
 		private NavMeshAgent navAgent;
 
+		private void SetWaypoints()
+		{
+			if (allWaypoints == null || 
+				allWaypoints.Length < 0)
+				return;
+
+            int pathID = Random.Range(0, allWaypoints.Length);
+            waypoints = allWaypoints[pathID].waypoints;
+        }
+
 		private void Start()
 		{
-			int pathID = Random.Range(0, allWaypoints.Length);
-			waypoints = allWaypoints[pathID].waypoints;
-			navAgent = GetComponent<NavMeshAgent>();
+			SetWaypoints();
+            navAgent = GetComponent<NavMeshAgent>();
 			navAgent.SetDestination(waypoints[0].position);
 			currentWaypoint = 0;
         }

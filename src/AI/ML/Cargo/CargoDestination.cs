@@ -6,7 +6,7 @@ namespace URPMk2
 	{
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.gameObject.GetComponent<SingleAgentCargoParent>() == null)
+			if (other.gameObject.GetComponent<CargoController>() == null)
 				return;
 
 			other.gameObject.GetComponent<DamagableMaster>().CallEventDestroyObject(transform);

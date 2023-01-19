@@ -12,6 +12,7 @@ namespace URPMk2
 
         private List<GameObject> spawnedObjects = new List<GameObject>();
 
+        private int squadsSpawned;
         private bool IsThresholdSatisfied()
         {
 
@@ -71,17 +72,21 @@ namespace URPMk2
         }
         private IEnumerator SpawnSquadPeriodic(AIWaypoints[] paths)
         {
-            for (int i = 1; i < spawnerSettings.maxSquads; i++)
+            while (squadsSpawned < spawnerSettings.maxSquads)
             {
                 yield return new WaitForSeconds(spawnerSettings.squadSpawnPeriod);
                 if (!isThreshold)
                 {
                     StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
+                    squadsSpawned++;
                     continue;
                 }
 
-                if (IsThresholdSatisfied()) 
+                if (IsThresholdSatisfied())
+                {
                     StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
+                    squadsSpawned++;
+                }
             }
         }
         public void StartSpawnProcess(AIWaypoints[] paths)

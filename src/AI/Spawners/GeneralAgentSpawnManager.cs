@@ -11,6 +11,9 @@ namespace URPMk2
         
         private void Start()
         {
+            QualitySettings.vSyncCount = 1;
+            Application.targetFrameRate = 60;
+
             foreach (Transform iSpawner in inceptorSpawners)
             {
                 iSpawner.GetComponent<IAISpawner>().StartSpawnProcess(inceptorPaths);
