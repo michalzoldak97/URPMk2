@@ -5,7 +5,7 @@ namespace SD
 {
 	public class SquadCargoMaster : MonoBehaviour
 	{
-		public delegate void SquadCargoEventsHandler(int dmg);
+		public delegate void SquadCargoEventsHandler(float dmg);
 		public event SquadCargoEventsHandler EventCargoDamaged;
         public event SquadCargoEventsHandler EventCargoOnTarget;
         public event SquadCargoEventsHandler EventCargoDestroyed;
@@ -26,16 +26,16 @@ namespace SD
             agentGroup.AddGroupReward(-1f);
             agentGroup.EndGroupEpisode();
         }
-		public void CallEventCargoDamaged(int dmg)
+		public void CallEventCargoDamaged(float dmg)
 		{
 			EventCargoDamaged?.Invoke(dmg);
         }
-		public void CallEventCargoOnTarget(int dmg)
+		public void CallEventCargoOnTarget(float dmg)
 		{
 			OnTargetReached();
             EventCargoOnTarget?.Invoke(dmg);
         }
-		public void CallEventCargoDestroyed(int dmg)
+		public void CallEventCargoDestroyed(float dmg)
 		{
 			OnCargoDestroyed();
             EventCargoDestroyed?.Invoke(dmg);

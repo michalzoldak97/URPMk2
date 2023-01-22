@@ -29,6 +29,7 @@ namespace SD
 
             bot.GetComponent<IStateManager>().MyFollowTarget = gameObject.transform;
             spawnedAgents.Add(bot, bot.GetComponent<Agent>());
+            cargoMaster.RegisterAgent(bot.GetComponent<Agent>());
         }
         private void SpawnBoarding(int remaining)
         {
@@ -89,7 +90,7 @@ namespace SD
             cargoMaster.EventCargoOnTarget -= OnEpisodeEnd;
             cargoMaster.EventCargoDestroyed -= OnEpisodeEnd;
         }
-        private void OnCargoDamaged(int dmg)
+        private void OnCargoDamaged(float dmg)
         {
             foreach (KeyValuePair<GameObject, Agent> agent in spawnedAgents)
             {
@@ -100,7 +101,7 @@ namespace SD
                 }
             }
         }
-        private void OnEpisodeEnd(int _)
+        private void OnEpisodeEnd(float _)
         {
             foreach (KeyValuePair<GameObject, Agent> agent in spawnedAgents)
             {
