@@ -100,21 +100,20 @@ namespace URPMk2
         }
         private Vector2 GetCargoPosition()
         {
-            Vector3 cPos = mlManager.MyFollowTarget.position;
-            Vector3 mPos = mlManager.AgentTransform.position;
+            Vector3 rPos = (mlManager.MyFollowTarget.position - mlManager.AgentTransform.position);
             return new Vector2(
-                Vector3.Dot(cPos, mPos),
-                (cPos - mPos).sqrMagnitude);
+                Vector3.Dot(rPos.normalized, mlManager.AgentTransform.forward),
+                (rPos.magnitude / rangeMultiply));
         }
         private Vector2 GetEnemyPosition(Vector3 tPos)
         {
             if (tPos == emptyObservation)
                 return new Vector2(-1f, -1f);
 
-            Vector3 mPos = mlManager.AgentTransform.position;
+            Vector3 rPos = (tPos - mlManager.AgentTransform.position);
             return new Vector2(
-                Vector3.Dot(tPos, mPos),
-                (tPos - mPos).sqrMagnitude);
+                Vector3.Dot(rPos.normalized, mlManager.AgentTransform.forward),
+                (rPos.magnitude / rangeMultiply));
         }
         public override void CollectObservations(VectorSensor sensor)
         {
@@ -122,11 +121,11 @@ namespace URPMk2
             sensor.AddObservation(GetEnemyPosition(mlManager.AgentObservations.AttackTarget));
             sensor.AddObservation(GetEnemyPosition(mlManager.AgentObservations.SpottedTarget));
 
-            Debug.Log("Cargo Pos "
-                + GetCargoPosition()
-                + " Enemy Pos " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget)
-                + " Spotted Pos " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget)
-                + " reward " + GetCumulativeReward());
+            /*Debug.Log("Cargo Pos "
+                + GetCargoPosition().x + ", " + GetCargoPosition().y
+                + " Enemy Pos " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget).x + ", " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget).y
+                + " Spotted Pos " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget).x + ", " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget).y
+                + " reward " + GetCumulativeReward());*/
         }
         private void CalculateReward()
         {

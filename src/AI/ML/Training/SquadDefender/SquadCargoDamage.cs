@@ -5,11 +5,15 @@ namespace SD
 {
 	public class SquadCargoDamage : MonoBehaviour
 	{
-		private SquadCargoMaster cargoMaster;
+        private Vector3 target;
+
+        private SquadCargoMaster cargoMaster;
 		private DamagableMaster dmgMaster;
 		private void SetInit()
 		{
-			cargoMaster= GetComponent<SquadCargoMaster>();
+            target = GameObject.FindGameObjectWithTag("FinalDest").transform.position;
+
+            cargoMaster = GetComponent<SquadCargoMaster>();
 			dmgMaster = GetComponent<DamagableMaster>();
 		}
 		
@@ -25,13 +29,21 @@ namespace SD
 			dmgMaster.EventReceivedDamage -= OnCargoDamage;
             dmgMaster.EventDestroyObject -= OnCargoDestroy;
         }
-		private void OnCargoDamage(Transform _, float dmg)
+		private void OnCargoDamage(Transform t, float dmg)
 		{
 			cargoMaster.CallEventCargoDamaged(dmg);
 		}
-		private void OnCargoDestroy(Transform _)
+        private void EvaluateDestruction()
+        {
+            if (Vector3.Distance(transform.position, target) > 30f)
+                cargoMaster.OnCargoDestroyed();
+            else
+                cargoMaster.OnTargetReached();
+        }
+        private void OnCargoDestroy(Transform t)
 		{
-			cargoMaster.CallEventCargoDestroyed(0f);
+			EvaluateDestruction();
+            cargoMaster.CallEventCargoDestroyed(0f);
 		}
 	}
 }

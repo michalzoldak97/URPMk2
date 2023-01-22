@@ -7,7 +7,6 @@ namespace SD
 	{
 		public delegate void SquadCargoEventsHandler(float dmg);
 		public event SquadCargoEventsHandler EventCargoDamaged;
-        public event SquadCargoEventsHandler EventCargoOnTarget;
         public event SquadCargoEventsHandler EventCargoDestroyed;
 
         private SimpleMultiAgentGroup agentGroup = new SimpleMultiAgentGroup();
@@ -18,11 +17,13 @@ namespace SD
         }
 		public void OnTargetReached()
 		{
-			agentGroup.AddGroupReward(1f);
+            Debug.Log("Group Reward");
+            agentGroup.AddGroupReward(1f);
 			agentGroup.EndGroupEpisode();
 		}
 		public void OnCargoDestroyed()
 		{
+			Debug.Log("Group Punishment");
             agentGroup.AddGroupReward(-1f);
             agentGroup.EndGroupEpisode();
         }
@@ -30,14 +31,8 @@ namespace SD
 		{
 			EventCargoDamaged?.Invoke(dmg);
         }
-		public void CallEventCargoOnTarget(float dmg)
-		{
-			OnTargetReached();
-            EventCargoOnTarget?.Invoke(dmg);
-        }
 		public void CallEventCargoDestroyed(float dmg)
 		{
-			OnCargoDestroyed();
             EventCargoDestroyed?.Invoke(dmg);
 		}
     }

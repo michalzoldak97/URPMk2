@@ -80,14 +80,12 @@ namespace SD
 		{
 			SetInit();
             cargoMaster.EventCargoDamaged += OnCargoDamaged;
-            cargoMaster.EventCargoOnTarget += OnEpisodeEnd;
             cargoMaster.EventCargoDestroyed += OnEpisodeEnd;
 		}
 		
 		private void OnDisable()
 		{
             cargoMaster.EventCargoDamaged -= OnCargoDamaged;
-            cargoMaster.EventCargoOnTarget -= OnEpisodeEnd;
             cargoMaster.EventCargoDestroyed -= OnEpisodeEnd;
         }
         private void OnCargoDamaged(float dmg)
@@ -101,12 +99,16 @@ namespace SD
                 }
             }
         }
-        private void OnEpisodeEnd(float _)
+        private void OnEpisodeEnd(float dummy)
         {
             foreach (KeyValuePair<GameObject, Agent> agent in spawnedAgents)
             {
-                Destroy(agent.Key, GameConfig.secToDestroy);
-                agent.Key.SetActive(false);
+                if (agent.Key != null &&
+                    agent.Key.activeSelf)
+                {
+                    Destroy(agent.Key, GameConfig.secToDestroy);
+                    agent.Key.SetActive(false);
+                }
             }
         }
 	}
