@@ -13,6 +13,7 @@ namespace URPMk2
         public float GetCheckRate() { return checkRate; }
         public Transform AgentTransform { get; private set; }
         public Transform PursueTarget { get; set; }
+        public Transform MyFollowTarget { get; set; }
         public NPCMaster MyNPCMaster { get; private set; }
         public NavMeshAgent MyNavMeshAgent { get; private set; }
         public void SetWaypoints(Transform[] waypoints) { }

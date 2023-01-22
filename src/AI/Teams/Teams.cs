@@ -9,6 +9,8 @@ namespace URPMk2
 		HeavyFriendly = 4,
 		LightCargo = 5,
 		MediumCargo = 6,
-		HeavyCargo = 7
+		HeavyCargo = 7,
+		MediumEnemy = 8,
+		HeavyEnemy = 9
 	}
 }

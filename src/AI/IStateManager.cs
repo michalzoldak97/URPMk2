@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 namespace URPMk2
 {
 	public interface IStateManager	
@@ -6,6 +8,6 @@ namespace URPMk2
 		public float GetCheckRate();
 
         public FSMSettingsSO GetFSMSettings();
-
+        public Transform MyFollowTarget { get; set; }
     }
 }
