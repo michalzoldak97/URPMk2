@@ -110,7 +110,7 @@ namespace URPMk2
 			if (targetCol.GetComponent<Rigidbody>() != null)
 				targetCol.transform.GetComponent<Rigidbody>().AddExplosionForce(realForce, pos, e.expRadius);
 
-			if (!((e.layersToDamage.value & (1 << targetCol.transform.gameObject.layer)) > 0))
+			if (!((e.layersToDamage.value & (1 << targetCol.gameObject.layer)) > 0))
 				return;
 
             dmgInfo.dmg = distToTarget <= e.dmgThresholdPow ? e.expDamage : 

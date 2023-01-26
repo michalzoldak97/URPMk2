@@ -32,9 +32,12 @@ namespace URPMk2
             dRotAngles.x = angle;
 
             myTransform.localRotation = Quaternion.Euler(dRotAngles);
+            float[] offset = weaponMaster.GetWeaponSettings().gunSettings.shootStartPos;
+            Vector3 startPos = offset.Length == 3 ? myTransform.position + Utils.GetVector3FromFloat(offset) : 
+                myTransform.position;
             GameObject projectile = Instantiate(
                     weaponMaster.GetWeaponSettings().projectileObj,
-                    myTransform.position,
+                    startPos,
                     myTransform.rotation
                     );
             projectile.GetComponent<Rigidbody>().AddForce(myTransform.forward * force, ForceMode.Impulse);

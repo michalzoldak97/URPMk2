@@ -17,13 +17,11 @@ namespace SD
         }
 		public void OnTargetReached()
 		{
-            Debug.Log("Group Reward");
             agentGroup.AddGroupReward(1f);
 			agentGroup.EndGroupEpisode();
 		}
 		public void OnCargoDestroyed()
 		{
-			Debug.Log("Group Punishment");
             agentGroup.AddGroupReward(-1f);
             agentGroup.EndGroupEpisode();
         }

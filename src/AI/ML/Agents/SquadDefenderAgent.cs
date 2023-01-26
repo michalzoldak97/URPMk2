@@ -129,11 +129,12 @@ namespace URPMk2
         }
         private void CalculateReward()
         {
-            if (Vector3.Distance(
-                    mlManager.AgentObservations.CargoPosition,
-                    mlManager.AgentTransform.position) < 25f)
+            float dist = Vector3.Distance(
+                    mlManager.MyFollowTarget.position,
+                    mlManager.AgentTransform.position);
+            if (dist < 35f)
             {
-                AddReward(0.001f);
+                AddReward(0.005f);
             }
         }
         public override void OnActionReceived(ActionBuffers actions)

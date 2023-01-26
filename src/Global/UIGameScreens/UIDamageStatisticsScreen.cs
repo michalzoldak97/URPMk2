@@ -85,6 +85,8 @@ namespace URPMk2
             {
                 summaryText.text += "Team " + tf.Key.ToString() + " Damage: " + tf.Value.ToString() + "\n";
             }
+
+            summaryText.text += "Attacker Team Score: " + GameScore.AttackersTeamScore + "\n";
         }
         public void BuildDmgScreen()
         {
