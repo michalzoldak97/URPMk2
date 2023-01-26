@@ -20,6 +20,9 @@ namespace URPMk2
         public void FinalDestinationReached()
         {
             GameScore.AddAttackersScore(GeScore());
+
+            Destroy(gameObject, GameConfig.secToDestroy);
+            gameObject.SetActive(false);
         }
     }
 }
