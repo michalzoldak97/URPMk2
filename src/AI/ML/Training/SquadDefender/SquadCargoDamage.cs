@@ -3,16 +3,13 @@ using URPMk2;
 
 namespace SD
 {
-	public class SquadCargoDamage : MonoBehaviour
+	public class SquadCargoDamage : MonoBehaviour, IFinalDestinationEnjoyer
 	{
-        private Vector3 target;
-
         private SquadCargoMaster cargoMaster;
 		private DamagableMaster dmgMaster;
+
 		private void SetInit()
 		{
-            target = GameObject.FindGameObjectWithTag("FinalDest").transform.position;
-
             cargoMaster = GetComponent<SquadCargoMaster>();
 			dmgMaster = GetComponent<DamagableMaster>();
 		}
@@ -33,17 +30,15 @@ namespace SD
 		{
 			cargoMaster.CallEventCargoDamaged(dmg);
 		}
-        private void EvaluateDestruction()
-        {
-            if (Vector3.Distance(transform.position, target) > 30f)
-                cargoMaster.OnCargoDestroyed();
-            else
-                cargoMaster.OnTargetReached();
-        }
         private void OnCargoDestroy(Transform t)
 		{
-			EvaluateDestruction();
+            cargoMaster.OnCargoDestroyed();
             cargoMaster.CallEventCargoDestroyed(0f);
+		}
+
+		public void FinalDestinationReached()
+		{
+			cargoMaster.OnTargetReached();
 		}
 	}
 }

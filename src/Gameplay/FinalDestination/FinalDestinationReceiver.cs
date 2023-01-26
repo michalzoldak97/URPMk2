@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace URPMk2
 {
-	public class FinalDestinationReceiver : MonoBehaviour
+	public class FinalDestinationReceiver : MonoBehaviour, IFinalDestinationEnjoyer
 	{
         [SerializeField] private GameScoreType scoreType;
         private float GeScore()
