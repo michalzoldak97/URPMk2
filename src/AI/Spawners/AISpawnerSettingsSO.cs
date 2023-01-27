@@ -5,6 +5,7 @@ namespace URPMk2
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/AISpawnerSettings", order = 9)]
     public class AISpawnerSettingsSO : ScriptableObject
     {
+        public int agentsThreshold;
         public int maxSquads;
         public float spawnRadius;
         public float squadSpawnPeriod;

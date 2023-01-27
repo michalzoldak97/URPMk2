@@ -7,7 +7,6 @@ namespace URPMk2
 	{
         [SerializeField] private AISpawnerSettingsSO spawnerSettings;
         [SerializeField] private Transform[] possibleSpawnPositions;
-        [SerializeField] private int threshold;
 
         private Vector3 currentSpawnPos;
         private List<GameObject> spawnedObjects = new List<GameObject>();
@@ -21,7 +20,7 @@ namespace URPMk2
                     spawnedObjects.RemoveAt(i);
             }
 
-            if (spawnedObjects.Count > threshold)
+            if (spawnedObjects.Count > spawnerSettings.agentsThreshold)
                 return false;
 
             return true;

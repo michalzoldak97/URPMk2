@@ -8,7 +8,6 @@ namespace URPMk2
     {
         [SerializeField] private AISpawnerSettingsSO spawnerSettings;
         [SerializeField] private bool isThreshold;
-        [SerializeField] private int threshold;
 
         private List<GameObject> spawnedObjects = new List<GameObject>();
 
@@ -25,7 +24,7 @@ namespace URPMk2
                  
             }
 
-            if (spawnedObjects.Count > threshold)
+            if (spawnedObjects.Count > spawnerSettings.agentsThreshold)
                 return false;
 
             return true;

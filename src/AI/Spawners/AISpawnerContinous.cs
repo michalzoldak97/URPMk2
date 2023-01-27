@@ -8,7 +8,8 @@ namespace URPMk2
         // subscribe to created agents
         [SerializeField] private AISpawnerSettingsSO spawnerSettings;
 
-        private int spawnedAgentsCount;
+        private int activeAgentsCount, spawnedSquadsCount;
+        private AIWaypoints[] paths;
 
         private Vector3 SampleSpawnPosition()
         {
@@ -32,9 +33,15 @@ namespace URPMk2
             return transform.position;
         }
 
-        private void MonitorSpawnProcess()
+        private void MonitorSpawnProcess(Transform t)
         {
+            activeAgentsCount--;
 
+            if (activeAgentsCount > spawnerSettings.agentsThreshold ||
+                spawnedSquadsCount >= spawnerSettings.maxSquads)
+                return;
+
+            SpawnSquad(paths[Random.Range(0, paths.Length)]);
         }
 
         private void SpawnSquad(AIWaypoints path)
@@ -45,12 +52,15 @@ namespace URPMk2
                 {
                     GameObject agent = Instantiate(aType.agent, SampleSpawnPosition(), transform.rotation);
                     agent.GetComponent<ISpawnable>().SetWaypoints(path.waypoints);
-
+                    agent.GetComponent<DamagableMaster>().EventDestroyObject += MonitorSpawnProcess;
+                    activeAgentsCount++;
                 }
             }
+            spawnedSquadsCount++;
         }
         public void StartSpawnProcess(AIWaypoints[] paths)
         {
+            this.paths = paths;
             SpawnSquad(paths[Random.Range(0, paths.Length)]);
         }
     }

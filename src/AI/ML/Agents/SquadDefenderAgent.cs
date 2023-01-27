@@ -10,6 +10,8 @@ namespace URPMk2
 	{
         private int idleCount;
         private const float rangeMultiply = 512f;
+        private float dmgInflicted = 0f;
+        private string dmgKey;
         private Vector3 lastPos, emptyObservation;
         private NavMeshAgent navAgent;
         private SquadDefenderStateManager mlManager;
@@ -21,6 +23,7 @@ namespace URPMk2
             navAgent = GetComponent<NavMeshAgent>();
             dmgMaster = GetComponent<DamagableMaster>();
             emptyObservation = new Vector3(-1f, -1f, -1f);
+            dmgKey = transform.name + transform.GetInstanceID();
         }
         private void Start()
         {
@@ -115,17 +118,43 @@ namespace URPMk2
                 Vector3.Dot(rPos.normalized, mlManager.AgentTransform.forward),
                 (rPos.magnitude / rangeMultiply));
         }
+        private float GetFollowTargetHealth()
+        {
+            if (mlManager.MyFollowTarget == null ||
+                !mlManager.MyFollowTarget.gameObject.activeSelf)
+                return 0f;
+
+            return mlManager.MyFollowTarget.GetComponent<DamagableMaster>().GetHealth();
+        }
+        private float GetLastInflictedDamage()
+        {
+            float currentDmg = GlobalDamageMaster.GetDamageForEntity(dmgKey);
+
+            if (currentDmg <= dmgInflicted)
+            {
+                dmgInflicted = currentDmg;
+                return 0f;
+            }
+
+            float dmg = currentDmg - dmgInflicted;
+            dmgInflicted = currentDmg;
+            return dmg;
+        }
         public override void CollectObservations(VectorSensor sensor)
         {
             sensor.AddObservation(GetCargoPosition());
             sensor.AddObservation(GetEnemyPosition(mlManager.AgentObservations.AttackTarget));
             sensor.AddObservation(GetEnemyPosition(mlManager.AgentObservations.SpottedTarget));
+            sensor.AddObservation(GetFollowTargetHealth() / 1200f);
+            sensor.AddObservation(GetLastInflictedDamage() * 0.01f);
 
-            /*Debug.Log("Cargo Pos "
+            Debug.Log("Cargo Pos "
                 + GetCargoPosition().x + ", " + GetCargoPosition().y
                 + " Enemy Pos " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget).x + ", " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget).y
                 + " Spotted Pos " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget).x + ", " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget).y
-                + " reward " + GetCumulativeReward());*/
+                + " health " + GetFollowTargetHealth()
+                + " dmg " + GetLastInflictedDamage()
+                + " reward " + GetCumulativeReward());
         }
         private void CalculateReward()
         {
@@ -141,7 +170,10 @@ namespace URPMk2
         {
             ActionSegment<float> conActions = actions.ContinuousActions;
 
-            Vector2 moveDir = new Vector2(conActions[0], conActions[1]) * rangeMultiply;
+            Vector2 moveDir;
+            moveDir.x = conActions[0] * rangeMultiply;
+            moveDir.y = conActions[1] * rangeMultiply;
+
             SetAgentDestination(moveDir);
 
             CalculateReward();
