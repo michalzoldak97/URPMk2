@@ -3,7 +3,7 @@ using URPMk2;
 
 namespace SD
 {
-	public class SquadCargoDamage : MonoBehaviour, IFinalDestinationEnjoyer
+	public class SquadCargoDamage : MonoBehaviour
 	{
         private SquadCargoMaster cargoMaster;
 		private DamagableMaster dmgMaster;
@@ -32,13 +32,8 @@ namespace SD
 		}
         private void OnCargoDestroy(Transform t)
 		{
-            cargoMaster.OnCargoDestroyed();
+			cargoMaster.OnCargoDestroyed();
             cargoMaster.CallEventCargoDestroyed(0f);
-		}
-
-		public void FinalDestinationReached()
-		{
-			cargoMaster.OnTargetReached();
 		}
 	}
 }

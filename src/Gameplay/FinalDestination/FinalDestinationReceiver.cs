@@ -1,3 +1,4 @@
+using SD;
 using UnityEngine;
 
 namespace URPMk2
@@ -5,7 +6,7 @@ namespace URPMk2
 	public class FinalDestinationReceiver : MonoBehaviour, IFinalDestinationEnjoyer
 	{
         [SerializeField] private GameScoreType scoreType;
-        private float GeScore()
+        private float GetScore()
         {
             if (GetComponent<DamagableMaster>() == null)
                 return 0f;
@@ -19,9 +20,17 @@ namespace URPMk2
         }
         public void FinalDestinationReached()
         {
-            GameScore.AddAttackersScore(GeScore());
+            float score = GetScore();
+            if (score == 0f)
+                return;
+
+            GameScore.AddAttackersScore(score);
+
+            if (GetComponent<SquadCargoMaster>() != null) // squad training chack, don't do this at home
+                GetComponent<SquadCargoMaster>().OnTargetReached();
 
             Destroy(gameObject, GameConfig.secToDestroy);
+            GetComponent<DamagableMaster>().CallEventDestroyObject(null);
             gameObject.SetActive(false);
         }
     }

@@ -9,6 +9,13 @@ namespace URPMk2
             if (other.gameObject.GetComponent<IFinalDestinationEnjoyer>() == null)
                 return;
 
+            other.gameObject.GetComponent<FinalDestinationReceiver>().FinalDestinationReached();
+        }
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.gameObject.GetComponent<IFinalDestinationEnjoyer>() == null)
+                return;
+
             other.gameObject.GetComponent<IFinalDestinationEnjoyer>().FinalDestinationReached();
         }
     }

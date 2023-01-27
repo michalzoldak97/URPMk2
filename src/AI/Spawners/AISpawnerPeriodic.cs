@@ -15,11 +15,14 @@ namespace URPMk2
         private int squadsSpawned;
         private bool IsThresholdSatisfied()
         {
-
-            for (int i = spawnedObjects.Count - 1; i >= 0; i--)
+            int sLen = spawnedObjects.Count - 1;
+            for (int i = sLen; i >= 0; i--)
             {
                 if (spawnedObjects[i] == null || !spawnedObjects[i].activeSelf)
+                {
                     spawnedObjects.RemoveAt(i);
+                }
+                 
             }
 
             if (spawnedObjects.Count > threshold)
@@ -75,6 +78,8 @@ namespace URPMk2
             while (squadsSpawned < spawnerSettings.maxSquads)
             {
                 yield return new WaitForSeconds(spawnerSettings.squadSpawnPeriod);
+                //Debug.Log(gameObject.name + " Finished waiting" + spawnerSettings.squadSpawnPeriod + " sec The treshold satisfied == " + IsThresholdSatisfied());
+
                 if (!isThreshold)
                 {
                     StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));

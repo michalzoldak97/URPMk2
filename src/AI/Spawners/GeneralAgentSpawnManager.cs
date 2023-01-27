@@ -11,8 +11,8 @@ namespace URPMk2
         
         private void Start()
         {
-            QualitySettings.vSyncCount = 1;
-            Application.targetFrameRate = 60;
+           /* QualitySettings.vSyncCount = 1;
+            Application.targetFrameRate = 60;*/
 
             foreach (Transform iSpawner in inceptorSpawners)
             {
