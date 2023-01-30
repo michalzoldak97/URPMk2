@@ -28,7 +28,9 @@ namespace URPMk2
 		}
 		private static void CreateTeamsMembers()
         {
-			foreach (Teams teamID in Enum.GetValues(typeof(Teams)))
+			teamMembers.Clear();
+
+            foreach (Teams teamID in Enum.GetValues(typeof(Teams)))
 			{
 				teamMembers.Add(teamID, new List<ITeamMember>());
 			}

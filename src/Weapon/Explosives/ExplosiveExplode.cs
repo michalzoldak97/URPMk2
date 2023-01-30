@@ -35,7 +35,10 @@ namespace URPMk2
 			if (Physics.Raycast(pos, checkDir, out RaycastHit hit, range, checklayers))
 			{
 				if (hit.transform == target)
-					return true;
+				{
+                    Debug.Log("Found: " + hit.transform.name);
+                    return true;
+                }
 			}
 			return false;
 		}
@@ -112,6 +115,8 @@ namespace URPMk2
 
 			if (!((e.layersToDamage.value & (1 << targetCol.gameObject.layer)) > 0))
 				return;
+
+			Debug.Log(targetCol.name + " is in layer");
 
             dmgInfo.dmg = distToTarget <= e.dmgThresholdPow ? e.expDamage : 
 				Mathf.Abs((1 - (distToTarget / (e.expRadius * e.expRadius))) * e.expDamage);

@@ -9,6 +9,7 @@ namespace URPMk2
         {
             InputManager.Start();
             TeamMembersManager.Start();
+            GlobalDamageMaster.Start();
             CurrentMainCameraManager.RestoreMainCamera();
         }
     }

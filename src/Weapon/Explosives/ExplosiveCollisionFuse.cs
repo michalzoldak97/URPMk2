@@ -9,7 +9,7 @@ namespace URPMk2
         private void Start()
 		{
             explosiveMaster = GetComponent<ExplosiveMaster>();
-			layersToHit = explosiveMaster.GetExplosiveSettings().layersToHit;
+			layersToHit = explosiveMaster.GetExplosiveSettings().layersTriggeringExplosion;
         }
         private void OnCollisionEnter(Collision col)
         {

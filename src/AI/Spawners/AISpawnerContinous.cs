@@ -38,7 +38,7 @@ namespace URPMk2
             activeAgentsCount--;
 
             if (activeAgentsCount > spawnerSettings.agentsThreshold ||
-                spawnedSquadsCount >= spawnerSettings.maxSquads)
+                (spawnerSettings.maxSquads != 0 && spawnedSquadsCount >= spawnerSettings.maxSquads))
                 return;
 
             SpawnSquad(paths[Random.Range(0, paths.Length)]);

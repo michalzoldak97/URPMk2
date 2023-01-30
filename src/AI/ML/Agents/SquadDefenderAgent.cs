@@ -103,6 +103,10 @@ namespace URPMk2
         }
         private Vector2 GetCargoPosition()
         {
+
+            if (mlManager.MyFollowTarget == null)
+                return new Vector2(-1f, -1f);
+
             Vector3 rPos = (mlManager.MyFollowTarget.position - mlManager.AgentTransform.position);
             return new Vector2(
                 Vector3.Dot(rPos.normalized, mlManager.AgentTransform.forward),
@@ -146,15 +150,17 @@ namespace URPMk2
             sensor.AddObservation(GetEnemyPosition(mlManager.AgentObservations.AttackTarget));
             sensor.AddObservation(GetEnemyPosition(mlManager.AgentObservations.SpottedTarget));
             sensor.AddObservation(GetFollowTargetHealth() / 1200f);
-            sensor.AddObservation(GetLastInflictedDamage() * 0.01f);
+            float lastDmg = GetLastInflictedDamage() * 0.01f;
+            sensor.AddObservation(lastDmg);
 
-            Debug.Log("Cargo Pos "
-                + GetCargoPosition().x + ", " + GetCargoPosition().y
-                + " Enemy Pos " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget).x + ", " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget).y
-                + " Spotted Pos " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget).x + ", " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget).y
-                + " health " + GetFollowTargetHealth()
-                + " dmg " + GetLastInflictedDamage()
-                + " reward " + GetCumulativeReward());
+            /*if (lastDmg != 0f)
+                Debug.Log("Cargo Pos "
+                    + GetCargoPosition().x + ", " + GetCargoPosition().y
+                    + " Enemy Pos " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget).x + ", " + GetEnemyPosition(mlManager.AgentObservations.AttackTarget).y
+                    + " Spotted Pos " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget).x + ", " + GetEnemyPosition(mlManager.AgentObservations.SpottedTarget).y
+                    + " health " + GetFollowTargetHealth()
+                    + " dmg " + lastDmg
+                    + " reward " + GetCumulativeReward());*/
         }
         private void CalculateReward()
         {

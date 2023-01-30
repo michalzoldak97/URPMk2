@@ -11,6 +11,9 @@ namespace URPMk2
 		MediumCargo = 6,
 		HeavyCargo = 7,
 		MediumEnemy = 8,
-		HeavyEnemy = 9
+		HeavyEnemy = 9,
+		LightEnemyStatic = 10,
+		MediumEnemyStatic = 11,
+		HeavyEnemyStatic = 12
 	}
 }

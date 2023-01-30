@@ -53,6 +53,9 @@ namespace URPMk2
         }
         public static void RegisterDamage(Transform origin, float dmg)
         {
+            if (origin == null)
+                return;
+
             string key = origin.name + origin.GetInstanceID();
             if (!dmgStatistics.ContainsKey(key))
             {
@@ -75,6 +78,10 @@ namespace URPMk2
                 return 0f;
 
             return dmgStatistics[key].dmg;
+        }
+        public static void Start()
+        {
+            dmgStatistics.Clear();
         }
     }
 }

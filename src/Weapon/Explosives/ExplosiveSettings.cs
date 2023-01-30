@@ -21,6 +21,7 @@ namespace URPMk2
 		public int[] minMaxShradRange;
 		public LayerMask layersToHit;
 		public LayerMask layersToDamage;
+		public LayerMask layersTriggeringExplosion;
 		public Vector3 effectOffset;
 		public GameObject explosionEffect;
     }

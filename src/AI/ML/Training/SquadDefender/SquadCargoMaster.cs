@@ -1,5 +1,6 @@
 using Unity.MLAgents;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using URPMk2;
 
 namespace SD
@@ -23,7 +24,6 @@ namespace SD
 			float reward = GetComponent<DamagableMaster>().GetHealth() / 1200f;
             agentGroup.AddGroupReward(reward);
 			agentGroup.EndGroupEpisode();
-			Debug.Log("Target reached reward " + reward);
 		}
 		public void OnCargoDestroyed()
 		{
@@ -32,7 +32,6 @@ namespace SD
 
             agentGroup.AddGroupReward(-1f);
             agentGroup.EndGroupEpisode();
-            Debug.Log("Fail");
         }
 		public void CallEventCargoDamaged(float dmg)
 		{
@@ -41,6 +40,7 @@ namespace SD
 		public void CallEventCargoDestroyed(float dmg)
 		{
             EventCargoDestroyed?.Invoke(dmg);
-		}
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
