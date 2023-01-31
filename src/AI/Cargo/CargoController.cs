@@ -28,18 +28,8 @@ namespace URPMk2
 				allWaypoints.Length < 0)
 				return;
 
-			int waypointsLen = allWaypoints[0].waypoints.Length;
-
-            waypoints = new Transform[waypointsLen];
-			for (int i = 0; i < waypointsLen - 1; i++)
-			{
-				int pathID = Random.Range(0, allWaypoints.Length);
-				int waypointID = Random.Range(0, waypointsLen - 1);
-                waypoints[i] = allWaypoints[pathID].waypoints[waypointID];
-            }
-
-            Transform finalWaypoint = allWaypoints[0].waypoints[waypointsLen - 1];
-            waypoints[3] = finalWaypoint;
+            int pathID = Random.Range(0, allWaypoints.Length);
+            waypoints = allWaypoints[pathID].waypoints;
         }
 
 		private void Start()

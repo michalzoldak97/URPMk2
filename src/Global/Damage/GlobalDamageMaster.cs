@@ -79,6 +79,7 @@ namespace URPMk2
 
             return dmgStatistics[key].dmg;
         }
+        
         public static void Start()
         {
             dmgStatistics.Clear();

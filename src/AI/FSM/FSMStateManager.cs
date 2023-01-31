@@ -169,7 +169,8 @@ namespace URPMk2
 
 			for (int i = 0; i < numAllies; i++)
             {
-				teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(PursueTarget);
+				if (teamMembersInRange[i].NMaster != null)
+					teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(PursueTarget);
             }
 
 			StartCoroutine(ResetInformState());

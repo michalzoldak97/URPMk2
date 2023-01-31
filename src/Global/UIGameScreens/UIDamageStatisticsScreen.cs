@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace URPMk2
 {
@@ -72,7 +73,7 @@ namespace URPMk2
         }
         private void UpdateSummaryText()
         {
-            summaryText.text = "";
+            StringBuilder summary = new StringBuilder();
             Dictionary<Teams, float> teamStat = new Dictionary<Teams, float>();
             foreach (DamageObjectData d in GlobalDamageMaster.dmgStatistics.Values)
             {
@@ -83,10 +84,14 @@ namespace URPMk2
             }
             foreach (KeyValuePair<Teams, float> tf in teamStat)
             {
-                summaryText.text += "Team " + tf.Key.ToString() + " Damage: " + tf.Value.ToString() + "\n";
+                summary.AppendLine(string.Format("Team {0} Damage {1}", tf.Key, tf.Value));
             }
 
-            summaryText.text += "Attacker Team Score: " + GameScore.AttackersTeamScore + "\n";
+            summary.AppendLine(string.Format("Attacker Team Score: {0}", GameScore.AttackersTeamScore));
+
+            summary.AppendLine(string.Format("FPS: {0}", GetComponent<FPSCounter>().GetStats()));
+
+            summaryText.text = summary.ToString();
         }
         public void BuildDmgScreen()
         {

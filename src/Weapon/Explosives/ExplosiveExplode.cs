@@ -99,10 +99,10 @@ namespace URPMk2
 		}
 		private void ApplyImpact(Vector3 pos, Collider targetCol, ExplosiveSettings e)
 		{
-			if (!IsTargetVisible(pos, targetCol, targetCol.transform, e))
+            if (!IsTargetVisible(pos, targetCol, targetCol.transform, e))
 				return;
 
-			float distToTarget = (targetCol.ClosestPointOnBounds(pos) - pos).sqrMagnitude;
+            float distToTarget = (targetCol.ClosestPointOnBounds(pos) - pos).sqrMagnitude;
 
 			float realForce = distToTarget <= e.dmgThresholdPow ? e.expForce :
                 e.expForce / (distToTarget / e.dmgThresholdPow);
