@@ -164,6 +164,9 @@ namespace URPMk2
         }
         private void CalculateReward()
         {
+            if (mlManager.MyFollowTarget == null)
+                return;
+
             float dist = Vector3.Distance(
                     mlManager.MyFollowTarget.position,
                     mlManager.AgentTransform.position);

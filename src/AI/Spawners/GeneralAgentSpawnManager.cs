@@ -8,7 +8,14 @@ namespace URPMk2
 		[SerializeField] private AIWaypoints[] inceptorPaths;
         [SerializeField] private Transform[] convoSpawners;
         [SerializeField] private AIWaypoints[] convoPaths;
-        
+
+        public delegate void GeneralAgentSpawnManagerEventHandler();
+        public event GeneralAgentSpawnManagerEventHandler EventSquadSpawned;
+
+        public void CallEventSquadSpawned()
+        {
+            EventSquadSpawned?.Invoke();
+        }
         private void Start()
         {
            /* QualitySettings.vSyncCount = 1;
@@ -16,11 +23,11 @@ namespace URPMk2
 
             foreach (Transform iSpawner in inceptorSpawners)
             {
-                iSpawner.GetComponent<IAISpawner>().StartSpawnProcess(inceptorPaths);
+                iSpawner.GetComponent<IAISpawner>().StartSpawnProcess(inceptorPaths, this);
             }
             foreach (Transform cSpawner in convoSpawners)
             {
-                cSpawner.GetComponent<IAISpawner>().StartSpawnProcess(convoPaths);
+                cSpawner.GetComponent<IAISpawner>().StartSpawnProcess(convoPaths, this);
             }
         }
 	}

@@ -40,7 +40,7 @@ namespace URPMk2
 		}
 		private void AttempShoot()
 		{
-			weaponMaster.CallEventShoot();
+            weaponMaster.CallEventShoot();
 		}
 		private async void ResetTriggerLock()
 		{

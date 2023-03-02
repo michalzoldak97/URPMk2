@@ -2,6 +2,6 @@ namespace URPMk2
 {
     public interface IAISpawner
     {
-        public void StartSpawnProcess(AIWaypoints[] paths);
+        public void StartSpawnProcess(AIWaypoints[] paths, GeneralAgentSpawnManager spawnManager);
     }
 }

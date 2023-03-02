@@ -108,7 +108,8 @@ namespace URPMk2
             for (int i = 0; i < numAllies; i++)
             {
                 if (teamMembersInRange[i].Object.activeSelf &&
-                    teamMembersInRange[i].Object != gameObject)
+                    teamMembersInRange[i].Object != gameObject &&
+                    teamMembersInRange[i].NMaster != null)
                     teamMembersInRange[i].NMaster.CallEventAlertAboutEnemy(target);
             }
 

@@ -71,7 +71,7 @@ namespace URPMk2
             }
         }
 
-        public void StartSpawnProcess(AIWaypoints[] paths)
+        public void StartSpawnProcess(AIWaypoints[] paths, GeneralAgentSpawnManager spawnManager)
         {
             StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
             StartCoroutine(SpawnSquadPeriodic(paths));

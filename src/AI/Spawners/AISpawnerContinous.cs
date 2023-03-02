@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 namespace URPMk2
 {
@@ -10,6 +11,7 @@ namespace URPMk2
 
         private int activeAgentsCount, spawnedSquadsCount;
         private AIWaypoints[] paths;
+        private GeneralAgentSpawnManager spawnManager;
 
         private Vector3 SampleSpawnPosition()
         {
@@ -37,9 +39,11 @@ namespace URPMk2
         {
             activeAgentsCount--;
 
+            
             if (activeAgentsCount > spawnerSettings.agentsThreshold ||
                 (spawnerSettings.maxSquads != 0 && spawnedSquadsCount >= spawnerSettings.maxSquads))
                 return;
+            
 
             SpawnSquad(paths[Random.Range(0, paths.Length)]);
         }
@@ -57,10 +61,14 @@ namespace URPMk2
                 }
             }
             spawnedSquadsCount++;
+
+            if (spawnManager != null)
+                spawnManager.CallEventSquadSpawned();
         }
-        public void StartSpawnProcess(AIWaypoints[] paths)
+        public void StartSpawnProcess(AIWaypoints[] paths, GeneralAgentSpawnManager spawnManager)
         {
             this.paths = paths;
+            this.spawnManager = spawnManager;
             SpawnSquad(paths[Random.Range(0, paths.Length)]);
         }
     }

@@ -48,7 +48,6 @@ namespace URPMk2
 		private void CallEventItemActivate(Transform item)
         {
 			inventoryMaster.CallEventItemActivate(item);
-
 		}
 		private void SetUpWeaponButton(GameObject itemButton, ItemSettings itemSettings)
         {

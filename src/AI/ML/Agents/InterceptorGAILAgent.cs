@@ -8,11 +8,10 @@ namespace URPMk2
 {
     public class InterceptorGAILAgent : Agent, IGAILAgent
     {
-        [SerializeField] private bool isTrainingMode;
         [SerializeField] private bool isHeuristic;
         [SerializeField] private Vector3 maxPos;
         private int idleCount;
-        private float dmgInflicted, health, initHealth, reward;
+        private float dmgInflicted, health, initHealth, reward, maxZ;
         private const float rangeMultiply = 512f;
         private string dmgKey;
         private Vector3 lastPos, emptyInput, hDestination;
@@ -33,6 +32,7 @@ namespace URPMk2
             dmgMaster = GetComponent<DamagableMaster>();
             initHealth = 100f;
             health = 100f;
+            maxZ = maxPos.z;
             emptyInput = new Vector3(-1f, -1f, -1f);
         }
         private void Start()
@@ -115,6 +115,12 @@ namespace URPMk2
             if ((lastPos - pos).sqrMagnitude < 1f)
                 return;
 
+            if (pos.z < maxZ) // encourage moving forward the map
+            {
+                AddReward(0.01f);
+                maxZ = pos.z;
+            }
+
             lastPos = pos;
 
             SetAvilableDestination(pos);
@@ -171,8 +177,8 @@ namespace URPMk2
             }
             else
             {
-                AddReward(dmg * 0.01f);
-                reward += dmg * 0.01f;
+                AddReward(dmg * 0.02f);
+                reward += dmg * 0.02f;
             }
         }
         public override void OnActionReceived(ActionBuffers actions)

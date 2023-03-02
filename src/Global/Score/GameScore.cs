@@ -10,5 +10,10 @@ namespace URPMk2
 		{
 			AttackersTeamScore += toAdd;
 		}
+
+		public static void Start()
+		{
+			AttackersTeamScore = 0.0f;
+        }
 	}
 }

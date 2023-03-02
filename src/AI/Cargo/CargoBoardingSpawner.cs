@@ -19,7 +19,7 @@ namespace URPMk2
                 spawnPositions[posIdx].position, 
                 spawnPositions[posIdx].rotation);
 
-            bot.GetComponent<FSMStateManager>().MyFollowTarget = gameObject.transform;
+            bot.GetComponent<IStateManager>().MyFollowTarget = gameObject.transform;
             spawnedAgents[botsSpawned] = bot;
         }
         private void SpawnBoarding(int remaining) 

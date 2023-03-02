@@ -24,6 +24,7 @@ namespace URPMk2
 		public float funcInter;
 		public float penCoeff;
 		public float penVar;
+		public float hitForce;
 		public LayerMask layersToDamage;
     }
 	[System.Serializable]

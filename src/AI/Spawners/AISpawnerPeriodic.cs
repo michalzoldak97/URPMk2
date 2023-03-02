@@ -71,6 +71,7 @@ namespace URPMk2
                     );
                 }
             }
+            squadsSpawned++;
         }
         private IEnumerator SpawnSquadPeriodic(AIWaypoints[] paths)
         {
@@ -82,18 +83,16 @@ namespace URPMk2
                 if (!isThreshold)
                 {
                     StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
-                    squadsSpawned++;
                     continue;
                 }
 
                 if (IsThresholdSatisfied())
                 {
                     StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
-                    squadsSpawned++;
                 }
             }
         }
-        public void StartSpawnProcess(AIWaypoints[] paths)
+        public void StartSpawnProcess(AIWaypoints[] paths, GeneralAgentSpawnManager spawnManager)
         {
             StartCoroutine(SpawnSquad(paths[Random.Range(0, paths.Length)]));
             StartCoroutine(SpawnSquadPeriodic(paths));

@@ -44,6 +44,11 @@ MonoBehaviour:
     itemLabelWidthHeight:
     - 200
     - 100
+  playerMiniMapSettings:
+    cameraInitHeight: 50
+    cameraMinHeight: 5
+    cameraMoveSpeed: 3
+    maxXYZcameraPos: 0014000000040000e02e0000
   playerAmmoStore:
   - ammoCode: 9X18_57-N-181S
     ammoQuantity: 8

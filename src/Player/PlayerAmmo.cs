@@ -31,6 +31,16 @@ namespace URPMk2
 		{
 			playerMaster.EventPlayerAmmoChange -= ChangePlayerAmmo;
 		}
+		private void ReloadAmmoUI()
+		{
+			PlayerInventoryManager inventoryManager = GetComponent<PlayerInventoryManager>();
+			if (inventoryManager == null ||
+                inventoryManager.selectedItem == null ||
+                inventoryManager.selectedItem.GetComponent<WeaponMaster>() == null)
+				return;
+
+			inventoryManager.selectedItem.GetComponent<WeaponMaster>().CallEventEventUpdateAmmoUI();
+		}
 		private void ChangePlayerAmmo(string ammoCode, int amount, WeaponAmmo origin)
         {
 			if (!playerAmmoStore.ContainsKey(ammoCode))
@@ -39,7 +49,10 @@ namespace URPMk2
 			if (amount > 0)
 			{
 				playerAmmoStore[ammoCode] += amount;
-				return;
+
+				ReloadAmmoUI();
+
+                return;
 			}
 
 			int availableAmount = playerAmmoStore[ammoCode] + amount >= 0 ? 

@@ -46,7 +46,8 @@ namespace URPMk2
         }
 		private void ActivateItem(Transform item)
         {
-			if (!inventoryItems.Contains(item))
+			if (!inventoryItems.Contains(item) ||
+				item == selectedItem)
 				return;
 
 			// deactivate current item
