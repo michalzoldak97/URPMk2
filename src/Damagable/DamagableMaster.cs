@@ -25,11 +25,11 @@ namespace URPMk2
         public event DamagableInformEventsHandler EventReceivedDamage;
 
         private bool receivedExplosionDmg;
-        private DamagableHealth dmgHealth;
+        private IDamagableHealth dmgHealth;
         private void Awake()
         {
 
-            dmgHealth = GetComponent<DamagableHealth>();
+            dmgHealth = GetComponent<IDamagableHealth>();
         }
         private void Start()
         {

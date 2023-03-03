@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace URPMk2
 {
-    public class DamagableHealth : MonoBehaviour
+    public class DamagableHealth : MonoBehaviour, IDamagableHealth
     {
         public float GetHealth() { return health; }
 
