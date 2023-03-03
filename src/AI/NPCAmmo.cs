@@ -38,9 +38,9 @@ namespace URPMk2
 			if (!NpcAmmoStore.ContainsKey(ammoCode))
 				return;
 
-			if (amount > 0)
+            if (amount > 0)
 			{
-				NpcAmmoStore[ammoCode] += amount;
+                NpcAmmoStore[ammoCode] += amount;
 				npcMaster.CallEventAmmoRecovered();
 				return;
 			}
@@ -48,13 +48,13 @@ namespace URPMk2
 			int availableAmount = NpcAmmoStore[ammoCode] + amount >= 0 ? -amount :
 				NpcAmmoStore[ammoCode];
 
-			if (ammoCode == primaryAmmoCode &&
+            if (ammoCode == primaryAmmoCode &&
 				availableAmount < 1)
-				npcMaster.CallEventAmmoFinished();
+                npcMaster.CallEventAmmoFinished();
 
 			NpcAmmoStore[ammoCode] -= availableAmount;
 
 			origin.ChangeAmmo(availableAmount);
-		}
+        }
 	}
 }

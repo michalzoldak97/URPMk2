@@ -31,7 +31,7 @@ namespace URPMk2
         public bool isWeaponLoaded { get; private set; }
         public void SetIsWeaponLoaded(bool isWeaponLoaded)
         {
-            //Debug.Log("Setting is weapon loaded to: " + isWeaponLoaded);
+            // Debug.Log(transform.root.name + ": Setting is weapon loaded to: " + isWeaponLoaded);
             this.isWeaponLoaded = isWeaponLoaded;
         }
         public WeaponFireMode fireMode;

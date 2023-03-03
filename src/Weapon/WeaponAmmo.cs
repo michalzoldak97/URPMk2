@@ -43,9 +43,9 @@ namespace URPMk2
 		public void ChangeAmmo(int amount)
         {
 			if (amount > 0)
-				currentAmmo += amount;
+                currentAmmo += amount;
 			else
-				currentAmmo = currentAmmo + amount >= 0 ? currentAmmo + amount : 0;
+				currentAmmo = currentAmmo + amount >= 0 ? (currentAmmo + amount) : 0;
 
 			weaponMaster.CallEventEventUpdateAmmoUI();
         }
@@ -66,15 +66,16 @@ namespace URPMk2
         {
 			weaponMaster.SetIsReloading(true);
 			weaponMaster.CallEventStartReload();
-			yield return new WaitForSeconds(weaponMaster.GetWeaponSettings().reloadTime);
-			
-			ammoMaster.CallEventAmmoChange(currentAmmoCode, -amountToRequest, this);
-			if (currentAmmo > 0)
+            yield return new WaitForSeconds(weaponMaster.GetWeaponSettings().reloadTime);
+
+            ammoMaster.CallEventAmmoChange(currentAmmoCode, -amountToRequest, this);
+
+            if (currentAmmo > 0)
                 weaponMaster.SetIsWeaponLoaded(true);
 
             weaponMaster.CallEventReload();
-            weaponMaster.SetIsReloading(false);
 
+            weaponMaster.SetIsReloading(false);
         }
 		protected virtual void OnReload()
         {

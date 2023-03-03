@@ -56,8 +56,10 @@ namespace URPMk2
 				weaponMaster.isAim ||
 				weaponMaster.isShootState ||
 				weaponMaster.isShootingBurst)
-				return;
-
+			{
+				// Debug.Log("Reload failed because: " + "is reloading: " + weaponMaster.isReloading + " is aim: " + weaponMaster.isAim + " isShootState: " + weaponMaster.isShootState + " isShootingBurst: " + weaponMaster.isShootingBurst);
+                return;
+            }
 			int amountToRequest = weaponMaster.GetWeaponSettings().ammoCapacity - currentAmmo;
 			if (amountToRequest < 1 || ammoMaster == null)
 				return;

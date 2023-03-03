@@ -12,6 +12,7 @@ namespace URPMk2
 		public void LaunchAtack(Transform origin)
         {
 			weaponMaster.SetDmgOrigin(origin);
+
 			weaponMaster.CallEventPullTrigger();
 		}
         public void LaunchHGAttack(float force, float angle, Transform origin) { }

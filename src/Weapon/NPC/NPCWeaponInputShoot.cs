@@ -75,9 +75,12 @@ namespace URPMk2
 		private void PullTrigger()
 		{
             if (weaponMaster.isReloading ||
-				!weaponMaster.isWeaponLoaded ||
+                !weaponMaster.isWeaponLoaded ||
 				weaponMaster.isShootingBurst)
-				return;
+			{
+				// Debug.Log(transform.root.name + transform.root.GetInstanceID() + ": Is reloading: " + weaponMaster.isReloading + " is loaded " + weaponMaster.isWeaponLoaded + " weaponMaster.isShootingBurst " + weaponMaster.isShootingBurst + " available ammo: " + GetComponent<WeaponAmmo>().currentAmmo);
+                return;
+            }
 
             weaponMaster.SetIsShootState(true);
 
