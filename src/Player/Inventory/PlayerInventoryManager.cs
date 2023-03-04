@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace URPMk2
 {
@@ -83,5 +84,10 @@ namespace URPMk2
 			currentItemMaster.CallEventItemThrow(origin);
 			inventoryMaster.CallEventItemThrow(item);
 		}
-	}
+
+        public void LoadSelectedScene(int idx)
+        {
+            SceneManager.LoadScene(idx);
+        }
+    }
 }
