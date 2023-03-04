@@ -99,8 +99,12 @@ namespace URPMk2
 		}
 		private void ApplyImpact(Vector3 pos, Collider targetCol, ExplosiveSettings e)
 		{
+			Debug.Log("Colliding with: " + targetCol.name);
+
             if (!IsTargetVisible(pos, targetCol, targetCol.transform, e))
 				return;
+
+            Debug.Log(targetCol.name + " is visible");
 
             float distToTarget = (targetCol.ClosestPointOnBounds(pos) - pos).sqrMagnitude;
 
@@ -108,8 +112,10 @@ namespace URPMk2
                 e.expForce / (distToTarget / e.dmgThresholdPow);
 
 			if (targetCol.GetComponent<Rigidbody>() != null)
-				targetCol.transform.GetComponent<Rigidbody>().AddExplosionForce(realForce, pos, e.expRadius);
-
+			{
+                Debug.Log(targetCol.name + " has rb adding "  + realForce + " force");
+                targetCol.transform.GetComponent<Rigidbody>().AddExplosionForce(realForce, pos, e.expRadius);
+            }
 			if (!((e.layersToDamage.value & (1 << targetCol.gameObject.layer)) > 0))
 				return;
 

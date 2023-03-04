@@ -15,7 +15,7 @@ namespace URPMk2
 		private void SetInit()
 		{
 			dmgMaster = GetComponent<DamagableMaster>();
-			waitForRestore = new WaitForSeconds(secToRestore);
+			waitForRestore = new WaitForSeconds(secToRestore / 20f);
         }
 		
 		private void OnEnable()
@@ -38,14 +38,21 @@ namespace URPMk2
 
 		private IEnumerator RestoreDamageScreen()
 		{
-			yield return waitForRestore;
+			float alphaStep = damageScreen.color.a / 20f;
+
+            for (int i = 0; i < 20; i++)
+			{
+                yield return waitForRestore;
+
+                SetImageAlpha(damageScreen.color.a - alphaStep);
+            }
             SetImageAlpha(0f);
         }
         private void SetDamageScreen(Transform dummy, float dmg)
 		{
 			float health = dmgMaster.GetHealth();
             float pDmg = dmg > health ? health : dmg;
-			float alphaToSet = ((pDmg / health) * maxAlpha) / maxAlpha;
+			float alphaToSet = Mathf.InverseLerp(0, health, pDmg) * maxAlpha;
 
 			SetImageAlpha(alphaToSet);
 

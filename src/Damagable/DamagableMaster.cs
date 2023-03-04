@@ -47,13 +47,13 @@ namespace URPMk2
         }
         public void CallEventHitByExplosion(DamageInfo dmgInfo)
         {
-            if (receivedExplosionDmg)
+            /*if (receivedExplosionDmg)
                 return;
             else
             {
                 receivedExplosionDmg = true;
                 StartCoroutine(ResetReceivedExplosion());
-            }
+            }*/
             EventHitByExplosion?.Invoke(dmgInfo);
         }
         public void CallEventDestroyObject(Transform killer)
